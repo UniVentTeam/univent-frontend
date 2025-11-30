@@ -1,0 +1,7 @@
+{
+  "welcome": "Welcome to UniVent",
+  "auth": {
+    "login": "Log in",
+    "logout": "Log out"
+  }
+}

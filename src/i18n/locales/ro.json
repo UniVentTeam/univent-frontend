@@ -1,0 +1,7 @@
+{
+  "welcome": "Bun venit la UniVent",
+  "auth": {
+    "login": "Autentificare",
+    "logout": "Deconectare"
+  }
+}
