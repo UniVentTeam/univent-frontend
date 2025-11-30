@@ -1,1 +1,179 @@
+/* 1. Import Fonturi (Inter pentru text, Jakarta pentru titluri) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+/* 2. Import Tailwind Core */
 @import "tailwindcss";
+
+/* =========================================
+   PALETA DE CULORI & VARIABILE
+   (Vizibile în WebStorm datorită sintaxei standard CSS)
+   ========================================= */
+:root {
+    /* --- Primitive (Culorile fixe din theme.ts) --- */
+    --color-blue-50: #E0ECFB;
+    --color-blue-500: #007AFF; /* Brand Primary */
+    --color-blue-600: #0A60F6; /* Hover state */
+
+    --color-green-500: #34C759;
+    --color-green-100: #DEF7E5;
+
+    --color-red-500: #FF3B30;
+    --color-red-100: #FFE5E5;
+
+    --color-yellow-500: #FF9500;
+    --color-yellow-100: #FFF3D5;
+
+    --color-white: #FFFFFF;
+    --color-black: #000000;
+
+    /* Grays (Adaptate din theme.ts) */
+    --color-gray-50: #F9FAFB;
+    --color-gray-100: #F3F4F6;
+    --color-gray-200: #E5E7EB;
+    --color-gray-300: #D1D5DB;
+    --color-gray-400: #9CA3AF;
+    --color-gray-500: #6B7280;
+    --color-gray-600: #4B5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1F2937;
+    --color-gray-900: #11182C;
+    --color-gray-950: #0d1117;
+
+    /* --- SEMANTIC COLORS (LIGHT MODE DEFAULT) --- */
+    /* Acestea le folosim în cod. Ele se schimbă automat pe dark mode. */
+
+    /* Backgrounds */
+    --bg-page: var(--color-gray-50);       /* Fundalul general al paginii */
+    --bg-card: var(--color-white);         /* Fundalul cardurilor/containerelor */
+    --bg-input: var(--color-gray-100);     /* Fundal input-uri */
+
+    /* Text */
+    --text-primary: var(--color-gray-900); /* Titluri, text principal */
+    --text-secondary: var(--color-gray-500); /* Descrieri, metadate */
+    --text-inverse: var(--color-white);    /* Text pe butoane albastre */
+
+    /* Borders */
+    --border-base: var(--color-gray-200);
+
+    /* Status (rămân de obicei la fel, dar putem ajusta fundalul) */
+    --status-success-bg: var(--color-green-100);
+    --status-success-text: var(--color-green-500);
+
+    --status-error-bg: var(--color-red-100);
+    --status-error-text: var(--color-red-500);
+}
+
+/* --- DARK MODE OVERRIDES --- */
+.dark {
+    /* Backgrounds devin întunecate */
+    --bg-page: var(--color-gray-950);
+    --bg-card: var(--color-gray-900); /* Sau gray-800 pentru contrast mai mic */
+    --bg-input: var(--color-gray-800);
+
+    /* Textul devine deschis */
+    --text-primary: var(--color-gray-50);
+    --text-secondary: var(--color-gray-400);
+
+    /* Bordurile se închid la culoare */
+    --border-base: var(--color-gray-800);
+}
+
+/* =========================================
+   TAILWIND CONFIGURATION (@theme)
+   Mapăm variabilele CSS la clase Tailwind
+   ========================================= */
+@theme {
+    /* Colors */
+    --color-primary: var(--color-blue-500);
+    --color-primary-hover: var(--color-blue-600);
+
+    /* Semantic Colors (Le folosim cu bg-page, text-main etc.) */
+    --color-page: var(--bg-page);
+    --color-card: var(--bg-card);
+    --color-input: var(--bg-input);
+
+    --color-main: var(--text-primary);
+    --color-muted: var(--text-secondary);
+    --color-inverse: var(--text-inverse);
+
+    --color-border: var(--border-base);
+
+    /* Fonts */
+    --font-sans: "Inter", sans-serif;           /* font-sans (Default text) */
+    --font-display: "Plus Jakarta Sans", sans-serif; /* font-display (Titluri) */
+
+    /* Spacing & Radius (din theme.ts) */
+    --radius-sm: 4px;
+    --radius-md: 8px;   /* Standard */
+    --radius-lg: 12px;  /* Cards */
+    --radius-xl: 16px;
+    --radius-2xl: 24px;
+}
+
+/* =========================================
+   CUSTOM UTILITY CLASSES (BEM-ish style)
+   Folosim @apply pentru a crea componente standard
+   ========================================= */
+
+@layer components {
+
+    /* --- LAYOUT CONTAINERS --- */
+    .layout-container {
+        @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full;
+    }
+
+    /* --- TYPOGRAPHY (Stiluri fixe pentru consistență) --- */
+    .text-h1 {
+        @apply font-display font-bold text-4xl sm:text-5xl text-main;
+    }
+    .text-h2 {
+        @apply font-display font-bold text-3xl text-main;
+    }
+    .text-h3 {
+        @apply font-display font-semibold text-2xl text-main;
+    }
+    .text-body {
+        @apply font-sans text-base text-main;
+    }
+    .text-body-sm {
+        @apply font-sans text-sm text-muted;
+    }
+    .text-caption {
+        @apply font-sans text-xs text-muted;
+    }
+
+    /* --- BUTTONS --- */
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
+    }
+
+    .btn-primary {
+        @apply bg-primary text-inverse hover:bg-primary-hover shadow-sm hover:shadow active:scale-[0.98];
+    }
+
+    .btn-secondary {
+        @apply bg-card border border-border text-main hover:bg-gray-50 dark:hover:bg-gray-800;
+    }
+
+    .btn-ghost {
+        @apply bg-transparent text-main hover:bg-gray-100 dark:hover:bg-gray-800;
+    }
+
+    .btn-danger {
+        @apply bg-red-500 text-white hover:bg-red-600;
+    }
+
+    /* --- CARDS --- */
+    .card {
+        @apply bg-card border border-border rounded-lg shadow-sm p-5;
+    }
+
+    /* --- FORMS --- */
+    .input-field {
+        @apply w-full bg-input border border-border rounded-md px-3 py-2 text-main placeholder-muted focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all;
+    }
+
+    .label {
+        @apply block text-sm font-medium text-main mb-1.5;
+    }
+}
