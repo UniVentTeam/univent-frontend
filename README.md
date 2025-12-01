@@ -200,23 +200,30 @@ Store-urile se află în `src/stores`. Pentru a folosi unul, importă hook-ul co
 ```tsx
 import { useAuthStore } from '@/stores/authStore';
 import { useTranslation } from 'react-i18next';
+import { LogOut } from 'lucide-react';
 
-function UserProfile() {
+function UserProfileCard() {
   // Selectezi ce date vrei din store
   const { user, isAuthenticated } = useAuthStore();
+  const logout = useAuthStore((state) => state.logout);
   const { t } = useTranslation();
 
   if (!isAuthenticated) {
-    return <p>{t('auth.pleaseLogin')}</p>;
+    // În practică, această componentă nu ar fi randată deloc
+    // dacă utilizatorul nu este autentificat.
+    return null; 
   }
 
-  // Poți accesa acțiuni direct din hook
-  const logout = useAuthStore((state) => state.logout);
-
   return (
-    <div>
-      <h1>{user?.fullName}</h1>
-      <button onClick={logout} className="btn">Logout</button>
+    <div className="card flex items-center justify-between">
+      <div>
+        <h3 className="text-h3">{user?.fullName}</h3>
+        <p className="text-body-sm">{user?.email}</p>
+      </div>
+      <button onClick={logout} className="btn btn-secondary gap-2">
+        <LogOut className="w-4 h-4" />
+        <span>{t('auth.logout')}</span>
+      </button>
     </div>
   );
 }

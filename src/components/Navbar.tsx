@@ -11,20 +11,17 @@ import {
   CalendarPlus
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
+import { useAuthStore } from '@/stores/authStore';
 
 export default function Navbar() {
-  const { i18n } = useTranslation(); // t e pentru traduceri, dacă le folosești
+  const { i18n } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
 
   // --- STATE ---
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isAuthenticated, logout: clearAuth } = useAuthStore();
 
-  // Verificăm Auth (Simulare cu localStorage)
-  // Nota: În producție, asta ar veni dintr-un AuthContext
-  const isAuthenticated = localStorage.getItem('token') !== null;
-
-  // Inițializare Dark Mode din localStorage
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') === 'dark' ||
@@ -34,8 +31,6 @@ export default function Navbar() {
   });
 
   // --- EFFECTS ---
-
-  // 1. Aplică clasa .dark pe <html> când se schimbă state-ul
   useEffect(() => {
     const root = window.document.documentElement;
     if (isDark) {
@@ -47,30 +42,23 @@ export default function Navbar() {
     }
   }, [isDark]);
 
-  // 2. Închide meniul de mobil automat când schimbăm pagina
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location.pathname]);
 
   // --- HANDLERS ---
-
   const toggleTheme = () => setIsDark(!isDark);
-
-  const toggleLang = () => {
-    const newLang = i18n.language === 'en' ? 'ro' : 'en';
-    i18n.changeLanguage(newLang);
-  };
+  const toggleLang = () => i18n.changeLanguage(i18n.language === 'en' ? 'ro' : 'en');
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    // Refresh forțat pentru a reseta toată aplicația la starea "nelogat"
-    window.location.href = "/";
+    clearAuth();
+    navigate('/');
   };
 
   // Helper pentru stilizarea link-urilor active
   const getLinkClass = (path: string) => cn(
-    "text-sm font-medium transition-colors duration-200 hover:text-primary",
-    location.pathname === path ? "text-primary font-bold" : "text-muted"
+    "text-sm font-medium transition-colors duration-200 hover:text-main",
+    location.pathname === path ? "text-main font-bold" : "text-muted"
   );
 
   return (
@@ -78,80 +66,56 @@ export default function Navbar() {
       <div className="layout-container flex items-center justify-between h-16">
 
         {/* === 1. LOGO === */}
-        <Link to="/" className="text-xl font-display font-bold text-primary flex items-center gap-2">
-          {/* Poți pune un icon mic aici */}
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
+        <Link to="/" className="text-xl font-display font-bold text-main flex items-center gap-2">
+          <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white">
             U
           </div>
           UniVent
         </Link>
 
-        {/* === 2. MENIU DESKTOP (Hidden on Mobile) === */}
+        {/* === 2. MENIU DESKTOP === */}
         <div className="hidden md:flex items-center gap-8">
-          <Link to="/" className={getLinkClass('/')}>
-            Home
-          </Link>
-          <Link to="/events" className={getLinkClass('/events')}>
-            Events
-          </Link>
-          <Link to="/events/calendar" className={getLinkClass('/events/calendar')}>
-            Calendar
-          </Link>
-
-          {/* Link-uri vizibile DOAR dacă ești logat */}
+          <Link to="/" className={getLinkClass('/')}>Home</Link>
+          <Link to="/events" className={getLinkClass('/events')}>Events</Link>
+          
           {isAuthenticated && (
             <>
-              <Link to="/tickets" className={getLinkClass('/tickets')}>
-                My Tickets
-              </Link>
-              <Link to="/statistics/raports" className={getLinkClass('/statistics/raports')}>
-                Reports
-              </Link>
-              <Link to="/events/create" className={getLinkClass('/events/create')}>
-                Create Event
-              </Link>
-              <Link to="/profile" className={getLinkClass('/profile')}>
-                Profile
-              </Link>
+              <Link to="/events/calendar" className={getLinkClass('/events/calendar')}>Calendar</Link>
+              <Link to="/tickets" className={getLinkClass('/tickets')}>My Tickets</Link>
+              <Link to="/profile" className={getLinkСlass('/profile')}>Profile</Link>
             </>
           )}
         </div>
 
         {/* === 3. CONTROALE DREAPTA (Desktop) === */}
-        <div className="hidden md:flex items-center gap-3">
-          {/* Buton Limbă */}
+        <div className="hidden md:flex items-center gap-2">
           <button
             onClick={toggleLang}
-            className="btn btn-ghost p-2 h-9 w-9 rounded-full"
-            title="Schimbă limba"
+            className="btn btn-ghost w-10 h-10"
+            title="Change language"
           >
             <span className="text-xs font-bold uppercase">{i18n.language}</span>
           </button>
-
-          {/* Buton Temă */}
           <button
             onClick={toggleTheme}
-            className="btn btn-ghost p-2 h-9 w-9 rounded-full text-main"
-            title="Schimbă tema"
+            className="btn btn-ghost w-10 h-10"
+            title="Change theme"
           >
             {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
 
-          <div className="w-px h-6 bg-border mx-1"></div>
+          <div className="w-px h-6 bg-border mx-2"></div>
 
-          {/* Auth Buttons */}
+          {/* Auth Buttons - REFACTORIZAT */}
           {isAuthenticated ? (
-            <button
-              onClick={handleLogout}
-              className="btn btn-ghost text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 gap-2"
-            >
+            <button onClick={handleLogout} className="btn btn-danger gap-2">
               <LogOut className="w-4 h-4" />
               <span>Logout</span>
             </button>
           ) : (
             <button
               onClick={() => navigate('/auth/login')}
-              className="btn btn-primary btn-sm"
+              className="btn btn-primary"
             >
               Login
             </button>
@@ -170,48 +134,40 @@ export default function Navbar() {
       {/* === 5. MENIU MOBIL (Dropdown) === */}
       {isMenuOpen && (
         <div className="md:hidden border-t border-border bg-card absolute w-full left-0 shadow-lg animate-in slide-in-from-top-2">
-          <div className="p-4 space-y-4 flex flex-col">
-
-            {/* Link-uri Mobil */}
-            <Link to="/" className="text-main py-2 border-b border-border/50">Home</Link>
+          <div className="p-4 space-y-2 flex flex-col">
+            <Link to="/" className="text-main font-medium py-3 border-b border-border/50">Home</Link>
+            <Link to="/events" className="text-main font-medium py-3 border-b border-border/50">Events</Link>
 
             {isAuthenticated && (
               <>
-                <Link to="/events" className="text-main py-2 border-b border-border/50">Events</Link>
-                <Link to="/events/calendar" className="text-main py-2 border-b border-border/50">Calendar</Link>
-                <Link to="/tickets" className="text-main py-2 border-b border-border/50">My Tickets</Link>
-                <Link to="/statistics/raports" className="text-main py-2 border-b border-border/50">Reports</Link>
-                <Link to="/events/create" className="text-main py-2 border-b border-border/50 flex items-center gap-2">
-                  <CalendarPlus className="w-4 h-4" /> Create Event
-                </Link>
-                <Link to="/profile" className="text-main py-2 border-b border-border/50 flex items-center gap-2">
+                <Link to="/events/calendar" className="text-main font-medium py-3 border-b border-border/50">Calendar</Link>
+                <Link to="/tickets" className="text-main font-medium py-3 border-b border-border/50">My Tickets</Link>
+                <Link to="/profile" className="flex items-center gap-2 text-main font-medium py-3 border-b border-border/50">
                   <User className="w-4 h-4" /> Profile
                 </Link>
               </>
             )}
 
-            {/* Controale Mobil */}
-            <div className="flex items-center justify-between pt-2">
-              <div className="flex gap-2">
-                <button onClick={toggleLang} className="btn btn-secondary text-xs px-3 py-1">
-                  {i18n.language.toUpperCase()}
-                </button>
-                <button onClick={toggleTheme} className="btn btn-secondary p-2">
-                  {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                </button>
-              </div>
-
+            <div className="pt-4">
               {isAuthenticated ? (
-                <button onClick={handleLogout} className="text-red-500 font-medium text-sm">
+                <button onClick={handleLogout} className="btn btn-danger w-full">
                   Deconectare
                 </button>
               ) : (
-                <button onClick={() => navigate('/auth/login')} className="btn btn-primary w-full max-w-[120px]">
+                <button onClick={() => navigate('/auth/login')} className="btn btn-primary w-full">
                   Intră în cont
                 </button>
               )}
             </div>
-
+            
+            <div className="flex items-center justify-center gap-2 pt-4">
+              <button onClick={toggleLang} className="btn btn-secondary flex-1">
+                {i18n.language.toUpperCase()}
+              </button>
+              <button onClick={toggleTheme} className="btn btn-secondary p-3">
+                {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
+            </div>
           </div>
         </div>
       )}
