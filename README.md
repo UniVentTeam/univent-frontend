@@ -146,45 +146,87 @@ const { t } = useTranslation();
 <h1>{t('auth.login.title')}</h1>
 ```
 
-### 5. API (Typed Fetch)
-Folosim `openapi-fetch` pentru **Type Safety** complet. Nu folosim Axios manual.
-Clientul știe automat rutele, parametrii și tipul datelor returnate.
+### 5. API Layer (Servicii)
+Pentru a menține o arhitectură curată și scalabilă, **NU chemăm clientul API (`api.ts`) direct din componentele React**. În schimb, folosim un **"Service Layer"**. Toată logica legată de un anumit domeniu al API-ului (ex: autentificare, evenimente) este încapsulată în propriul său fișier de serviciu în folderul `src/api/`.
 
-#### A. Actualizare Tipuri (Sync cu Backend)
-Când se modifică API-ul (backend), rulați comanda pentru a regenera definițiile TypeScript:
-```bash
-npm run gen:api
+**De ce?**
+*   **Separarea Responsabilităților:** Componentele se ocupă de UI, serviciile se ocupă de comunicarea cu API-ul.
+*   **Centralizarea Logicii:** Un singur loc unde se gestionează endpoint-uri, procesarea datelor și erorilor.
+*   **Cod Ușor de Reutilizat:** O funcție de serviciu (ex: `authService.login`) poate fi chemată din orice componentă, fără a rescrie cod.
+*   **Integrare cu Alte Sisteme:** Serviciile pot conține logică de business complexă, cum ar fi actualizarea unui store Zustand după un apel API reușit.
+
+#### A. Exemplu: Folosirea `authService`
+Am implementat deja `authService.ts` pentru autentificare. Iată cum se folosește într-o pagină de Login:
+
+```tsx
+// src/pages/Auth/Login.tsx
+import { authService } from '@/api/authService'; // 1. Importăm serviciul
+import { useState } from 'react';
+
+export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
+  const handleLogin = async () => {
+    try {
+      setError(null);
+      // 2. Chemăm funcția de serviciu. Componenta nu știe ce se întâmplă în spate.
+      await authService.login({ email, password });
+      // Notificarea și actualizarea store-ului sunt gestionate în serviciu!
+    } catch (err: any) {
+      // 3. Prindem eroarea aruncată de serviciu pentru a actualiza UI-ul.
+      setError(err.message);
+    }
+  };
+  
+  // ... restul componentei (JSX)
+}
 ```
 
-#### B. Utilizare în Componente
-Importați instanța api (nu client sau axios). Scrieți api. și lăsați VS Code să vă sugereze metodele și rutele.
+#### B. Cum creez un serviciu nou?
+Să zicem că vrei să gestionezi evenimentele.
+
+**1. Creează fișierul `src/api/eventService.ts`:**
+
+**2. Adaugă funcțiile necesare, urmând modelul din `authService`:**
 
 ```typescript
-import api from '@/api/client';
+// src/api/eventService.ts
+import api from './client';
+import { components } from '@/types/schema';
+import { toast } from 'sonner';
 
-const fetchEvents = async () => {
-  // 1. Rutele sunt sugerate automat ("ctrl+space" între ghilimele)
-  const { data, error } = await api.GET("/events", {
-    params: {
-      query: { 
-        page: 1, 
-        search: "Workshop" // 2. Parametrii sunt validați de TS
-      }
-    }
+type EventFilterQuery = components['schemas']['EventFilterQuery'];
+
+/**
+ * Preia lista de evenimente, cu posibilitate de filtrare.
+ */
+async function getEvents(filters: EventFilterQuery) {
+  const { data, error } = await api.GET('/events', {
+    params: { query: filters },
   });
 
   if (error) {
-    console.error(error); // Eroarea este tipizată
-    return;
+    toast.error('Failed to fetch events');
+    throw new Error('Could not retrieve events.');
   }
 
-  // 3. Data are structura corectă (EventPreview[])
-  console.log(data.data); 
+  return data; // Returnează datele pentru a fi folosite în componentă
+}
+
+export const eventService = {
+  getEvents,
+  // getEventById,
+  // createEvent,
 };
 ```
 
-#### C. Autentificare
-Nu trebuie să trimiteți token-ul manual. api are un middleware configurat care atașează automat Authorization: Bearer ... la fiecare request dacă userul este logat.
+#### C. Actualizare Tipuri (Sync cu Backend)
+Când se modifică API-ul (backend), rulează comanda pentru a regenera definițiile TypeScript din `schema.ts`. Serviciile tale vor beneficia automat de noile tipuri.
+```bash
+npm run gen:api
+```
 
 
 ### 6. Dark Mode

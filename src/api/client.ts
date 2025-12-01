@@ -3,7 +3,7 @@ import type { paths } from "../types/schema"; // Tipurile generate automat
 
 // 1. Inițializăm clientul cu tipurile 'paths'
 const api = createClient<paths>({
-  baseUrl: "https://api.univent.ro" // sau http://localhost:3000
+  baseUrl: "http://localhost:4000" // sau http://localhost:3000
 });
 
 // 2. Configurare Middleware (Echivalentul Interceptorilor din Axios)

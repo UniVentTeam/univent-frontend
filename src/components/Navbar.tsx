@@ -8,7 +8,6 @@ import {
   Moon,
   LogOut,
   User,
-  CalendarPlus
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/authStore';
@@ -82,7 +81,7 @@ export default function Navbar() {
             <>
               <Link to="/events/calendar" className={getLinkClass('/events/calendar')}>Calendar</Link>
               <Link to="/tickets" className={getLinkClass('/tickets')}>My Tickets</Link>
-              <Link to="/profile" className={getLinkСlass('/profile')}>Profile</Link>
+              <Link to="/profile" className={getLinkClass('/profile')}>Profile</Link>
             </>
           )}
         </div>
@@ -94,7 +93,7 @@ export default function Navbar() {
             className="btn btn-ghost w-10 h-10"
             title="Change language"
           >
-            <span className="text-xs font-bold uppercase">{i18n.language}</span>
+            <span className="text-sm font-bold uppercase">{i18n.language}</span>
           </button>
           <button
             onClick={toggleTheme}

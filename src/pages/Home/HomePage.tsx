@@ -35,7 +35,7 @@ export default function HomePage() {
       <main className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         {/* CARD 1: Acțiuni contextuale (logat vs. nelogat) */}
-        <section className="card space-y-4 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
+        <section className="card bg-card space-y-4">
           <div className="border-b border-border pb-2">
             <h2 className="text-h3">1. {t('welcome')}</h2>
           </div>
@@ -60,7 +60,7 @@ export default function HomePage() {
         </section>
 
         {/* CARD 2: Butoane și Interactivitate */}
-        <section className="card space-y-4">
+        <section className="card bg-card space-y-4">
           <div className="border-b border-border pb-2">
             <h2 className="text-h3">2. Butoane & cn()</h2>
           </div>
@@ -79,7 +79,7 @@ export default function HomePage() {
         </section>
 
         {/* CARD 3: Formulare (Rămâne neschimbat) */}
-        <section className="card md:col-span-2 space-y-4">
+        <section className="card bg-card md:col-span-2 space-y-4">
           <div className="border-b border-border pb-2">
             <h2 className="text-h3">3. Formulare (Input Fields)</h2>
           </div>

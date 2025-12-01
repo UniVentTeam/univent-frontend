@@ -1,10 +1,11 @@
 import { Outlet } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
+import { Toaster } from 'sonner';
 
 export default function DashboardLayout() {
   return (
     <div className="min-h-screen bg-page text-main transition-colors duration-300 flex flex-col">
-
+      <Toaster richColors position="top-right" />
       <Navbar />
 
       <main className="flex-1 w-full">

@@ -1,10 +1,13 @@
 import { Outlet } from 'react-router-dom';
+import { Toaster } from 'sonner';
 
 const AuthLayout = () => {
   return (
-    <div>
-      <h1>Auth Layout</h1>
-      <Outlet />
+    <div className="min-h-screen bg-page flex items-center justify-center p-4">
+      <Toaster richColors position="top-right" />
+      <main>
+        <Outlet />
+      </main>
     </div>
   );
 };

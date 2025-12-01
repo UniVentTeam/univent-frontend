@@ -168,7 +168,6 @@
 
     /* --- Card --- */
     .card {
-        background-color: var(--bg-card);
         border: 1px solid var(--border-base);
         @apply rounded-lg shadow-sm p-5;
     }
