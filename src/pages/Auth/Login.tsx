@@ -4,8 +4,10 @@ import { useAuthStore } from '@/stores/authStore';
 import { authService } from '@/api/authService';
 import { LogIn } from 'lucide-react';
 import { cn } from '@/utils/cn';
+import { useTranslation } from 'react-i18next';
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthStore();
 
@@ -24,14 +26,13 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-    setIsLoading(true);
 
     if (!email || !password) {
-      setError('Email and password are required.');
-      setIsLoading(false);
+      setError(t('auth.loginPage.requiredError'));
       return;
     }
-
+    
+    setIsLoading(true);
     try {
       await authService.login({ email, password });
       // The useEffect will handle the redirect
@@ -46,13 +47,13 @@ export default function LoginPage() {
     <div className="w-full max-w-md">
       <form onSubmit={handleSubmit} className="card bg-card p-8 space-y-6">
         <header className="text-center">
-          <h1 className="text-h2">Welcome Back</h1>
-          <p className="text-body-sm mt-1">Enter your credentials to access your account.</p>
+          <h1 className="text-h2">{t('auth.loginPage.title')}</h1>
+          <p className="text-body-sm mt-1">{t('auth.loginPage.subtitle')}</p>
         </header>
 
         <div>
           <label className="label" htmlFor="email">
-            Email Address
+            {t('auth.loginPage.emailLabel')}
           </label>
           <input
             id="email"
@@ -67,7 +68,7 @@ export default function LoginPage() {
 
         <div>
           <label className="label" htmlFor="password">
-            Password
+            {t('auth.loginPage.passwordLabel')}
           </label>
           <input
             id="password"
@@ -84,13 +85,13 @@ export default function LoginPage() {
 
         <button type="submit" className={cn("btn btn-primary w-full gap-2", isLoading && "cursor-wait")} disabled={isLoading}>
           <LogIn className={cn("transition-all", isLoading && "animate-pulse")} size={16} />
-          {isLoading ? 'Signing In...' : 'Sign In'}
+          {isLoading ? t('auth.loginPage.submitButtonLoading') : t('auth.loginPage.submitButton')}
         </button>
 
         <p className="text-center text-caption">
-          Don't have an account?{' '}
+          {t('auth.loginPage.registerPrompt')}{' '}
           <Link to="/auth/register" className="font-medium text-blue-500 hover:underline">
-            Sign Up
+            {t('auth.loginPage.registerLink')}
           </Link>
         </p>
       </form>

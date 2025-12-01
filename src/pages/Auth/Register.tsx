@@ -3,9 +3,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import { authService } from '@/api/authService';
 import { UserPlus } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 export default function RegisterPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [fullName, setFullName] = useState('');
@@ -17,18 +18,16 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-    setIsLoading(true);
-
+    
     if (!email || !password || !fullName) {
-      setError('All fields are required.');
-      setIsLoading(false);
+      setError(t('auth.registerPage.requiredError'));
       return;
     }
 
+    setIsLoading(true);
     try {
       await authService.register({ fullName, email, password });
       // The service shows a success toast
-      // Redirect to login page after a short delay to allow user to read the toast
       setTimeout(() => {
         navigate('/auth/login');
       }, 2000);
@@ -43,13 +42,13 @@ export default function RegisterPage() {
     <div className="w-full max-w-md">
       <form onSubmit={handleSubmit} className="card bg-card p-8 space-y-6">
         <header className="text-center">
-          <h1 className="text-h2">Create an Account</h1>
-          <p className="text-body-sm mt-1">Join UniVent to discover amazing events.</p>
+          <h1 className="text-h2">{t('auth.registerPage.title')}</h1>
+          <p className="text-body-sm mt-1">{t('auth.registerPage.subtitle')}</p>
         </header>
 
         <div>
           <label className="label" htmlFor="fullName">
-            Full Name
+            {t('auth.registerPage.fullNameLabel')}
           </label>
           <input
             id="fullName"
@@ -64,7 +63,7 @@ export default function RegisterPage() {
 
         <div>
           <label className="label" htmlFor="email">
-            Email Address
+            {t('auth.registerPage.emailLabel')}
           </label>
           <input
             id="email"
@@ -79,7 +78,7 @@ export default function RegisterPage() {
 
         <div>
           <label className="label" htmlFor="password">
-            Password
+            {t('auth.registerPage.passwordLabel')}
           </label>
           <input
             id="password"
@@ -96,13 +95,13 @@ export default function RegisterPage() {
 
         <button type="submit" className={cn("btn btn-primary w-full gap-2", isLoading && "cursor-wait")} disabled={isLoading}>
           <UserPlus className={cn("transition-all", isLoading && "animate-pulse")} size={16} />
-          {isLoading ? 'Creating Account...' : 'Create Account'}
+          {isLoading ? t('auth.registerPage.submitButtonLoading') : t('auth.registerPage.submitButton')}
         </button>
 
         <p className="text-center text-caption">
-          Already have an account?{' '}
+          {t('auth.registerPage.loginPrompt')}{' '}
           <Link to="/auth/login" className="font-medium text-blue-500 hover:underline">
-            Sign In
+            {t('auth.registerPage.loginLink')}
           </Link>
         </p>
       </form>

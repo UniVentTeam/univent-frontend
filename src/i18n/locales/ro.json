@@ -2,6 +2,29 @@
   "welcome": "Bun venit la UniVent",
   "auth": {
     "login": "Autentificare",
-    "logout": "Deconectare"
+    "logout": "Deconectare",
+    "loginPage": {
+      "title": "Bun venit înapoi",
+      "subtitle": "Introdu credențialele pentru a-ți accesa contul.",
+      "emailLabel": "Adresă de email",
+      "passwordLabel": "Parolă",
+      "requiredError": "Emailul și parola sunt obligatorii.",
+      "submitButton": "Intră în cont",
+      "submitButtonLoading": "Se conectează...",
+      "registerPrompt": "Nu ai un cont?",
+      "registerLink": "Înregistrează-te"
+    },
+    "registerPage": {
+      "title": "Creează un cont",
+      "subtitle": "Alătură-te UniVent pentru a descoperi evenimente inedite.",
+      "fullNameLabel": "Nume complet",
+      "emailLabel": "Adresă de email",
+      "passwordLabel": "Parolă",
+      "requiredError": "Toate câmpurile sunt obligatorii.",
+      "submitButton": "Creează contul",
+      "submitButtonLoading": "Se creează contul...",
+      "loginPrompt": "Ai deja un cont?",
+      "loginLink": "Intră în cont"
+    }
   }
 }

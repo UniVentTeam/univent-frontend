@@ -1,7 +1,30 @@
 {
   "welcome": "Welcome to UniVent",
   "auth": {
-    "login": "Log in",
-    "logout": "Log out"
+    "login": "Log In",
+    "logout": "Log Out",
+    "loginPage": {
+      "title": "Welcome Back",
+      "subtitle": "Enter your credentials to access your account.",
+      "emailLabel": "Email Address",
+      "passwordLabel": "Password",
+      "requiredError": "Email and password are required.",
+      "submitButton": "Sign In",
+      "submitButtonLoading": "Signing In...",
+      "registerPrompt": "Don't have an account?",
+      "registerLink": "Sign Up"
+    },
+    "registerPage": {
+      "title": "Create an Account",
+      "subtitle": "Join UniVent to discover amazing events.",
+      "fullNameLabel": "Full Name",
+      "emailLabel": "Email Address",
+      "passwordLabel": "Password",
+      "requiredError": "All fields are required.",
+      "submitButton": "Create Account",
+      "submitButtonLoading": "Creating Account...",
+      "loginPrompt": "Already have an account?",
+      "loginLink": "Sign In"
+    }
   }
 }
