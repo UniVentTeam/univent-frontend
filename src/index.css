@@ -6,38 +6,37 @@
 
 /* =========================================
    PALETA DE CULORI & VARIABILE
-   (Vizibile în WebStorm datorită sintaxei standard CSS)
    ========================================= */
 :root {
-    /* --- Primitive (Culorile fixe din theme.ts) --- */
-    --color-blue-50: #E0ECFB;
-    --color-blue-500: #007AFF; /* Brand Primary */
-    --color-blue-600: #0A60F6; /* Hover state */
+    /* --- Primitive --- */
+    /*--color-blue-50: #E0ECFB;*/
+    /*--color-blue-500: #007AFF; !* Brand Primary *!*/
+    /*--color-blue-600: #0A60F6; !* Hover state *!*/
 
-    --color-green-500: #34C759;
-    --color-green-100: #DEF7E5;
+    /*--color-green-500: #34C759;*/
+    /*--color-green-100: #DEF7E5;*/
 
-    --color-red-500: #FF3B30;
-    --color-red-100: #FFE5E5;
+    /*--color-red-500: #FF3B30;*/
+    /*--color-red-100: #FFE5E5;*/
 
-    --color-yellow-500: #FF9500;
-    --color-yellow-100: #FFF3D5;
+    /*--color-yellow-500: #FF9500;*/
+    /*--color-yellow-100: #FFF3D5;*/
 
-    --color-white: #FFFFFF;
-    --color-black: #000000;
+    /*--color-white: #FFFFFF;*/
+    /*--color-black: #000000;*/
 
-    /* Grays (Adaptate din theme.ts) */
-    --color-gray-50: #F9FAFB;
-    --color-gray-100: #F3F4F6;
-    --color-gray-200: #E5E7EB;
-    --color-gray-300: #D1D5DB;
-    --color-gray-400: #9CA3AF;
-    --color-gray-500: #6B7280;
-    --color-gray-600: #4B5563;
-    --color-gray-700: #374151;
-    --color-gray-800: #1F2937;
-    --color-gray-900: #11182C;
-    --color-gray-950: #0d1117;
+    /* Grays */
+    /*--color-gray-50: #F9FAFB;*/
+    /*--color-gray-100: #F3F4F6;*/
+    /*--color-gray-200: #E5E7EB;*/
+    /*--color-gray-300: #D1D5DB;*/
+    /*--color-gray-400: #9CA3AF;*/
+    /*--color-gray-500: #6B7280;*/
+    /*--color-gray-600: #4B5563;*/
+    /*--color-gray-700: #374151;*/
+    /*--color-gray-800: #1F2937;*/
+    /*--color-gray-900: #11182C;*/
+    /*--color-gray-950: #0d1117;*/
 
     /* --- SEMANTIC COLORS (LIGHT MODE DEFAULT) --- */
     /* Acestea le folosim în cod. Ele se schimbă automat pe dark mode. */
@@ -102,12 +101,12 @@
     --font-sans: "Inter", sans-serif;           /* font-sans (Default text) */
     --font-display: "Plus Jakarta Sans", sans-serif; /* font-display (Titluri) */
 
-    /* Spacing & Radius (din theme.ts) */
-    --radius-sm: 4px;
-    --radius-md: 8px;   /* Standard */
-    --radius-lg: 12px;  /* Cards */
-    --radius-xl: 16px;
-    --radius-2xl: 24px;
+    /* Spacing & Radius */
+    /*--radius-sm: 4px;*/
+    /*--radius-md: 8px;   !* Standard *!*/
+    /*--radius-lg: 12px;  !* Cards *!*/
+    /*--radius-xl: 16px;*/
+    /*--radius-2xl: 24px;*/
 }
 
 /* =========================================

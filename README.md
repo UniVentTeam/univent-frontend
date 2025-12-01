@@ -31,6 +31,7 @@ src/
 ├── assets/          # Resurse statice (imagini, logo-uri, fonturi)
 ├── components/      # Componente UI reutilizabile (Navbar, Button, Input)
 │                    # ⚠️ Componentele acceptă "className" prin utilitarul cn()
+├── constants/       # Valori constante globale (Regex, Configs, Enums)
 ├── i18n/            # Configurare internaționalizare
 │   ├── locales/     # Fișiere JSON cu traduceri (en.json, ro.json)
 │   └── index.ts     # Inițializare i18next
@@ -44,13 +45,13 @@ src/
 ├── router/          # Logica de navigare
 │   ├── index.tsx          # Definirea rutelor (Public vs Private)
 │   └── ProtectedRoute.tsx # Guard pentru rutele care necesită login
+├── stores/          # State management global (ex: UserStore, EventStore)
 ├── types/           # Definiții TypeScript globale (interfețe User, Event etc.)
 ├── utils/           # Funcții ajutătoare
 │   └── cn.ts        # Utilitar pentru combinarea claselor Tailwind
 ├── index.css        # Configurare Tailwind v4, Variabile CSS, Dark Mode
 └── main.tsx         # Punctul de intrare (Mount React + RouterProvider)
 ```
-
 ---
 
 ## 💡 Ghid de Dezvoltare (How-To)
@@ -145,6 +146,116 @@ const { t } = useTranslation();
 <h1>{t('auth.login.title')}</h1>
 ```
 
-### 5. Dark Mode
+### 5. API (Typed Fetch)
+Folosim `openapi-fetch` pentru **Type Safety** complet. Nu folosim Axios manual.
+Clientul știe automat rutele, parametrii și tipul datelor returnate.
+
+#### A. Actualizare Tipuri (Sync cu Backend)
+Când se modifică API-ul (backend), rulați comanda pentru a regenera definițiile TypeScript:
+```bash
+npm run gen:api
+```
+
+#### B. Utilizare în Componente
+Importați instanța api (nu client sau axios). Scrieți api. și lăsați VS Code să vă sugereze metodele și rutele.
+
+```typescript
+import api from '@/api/client';
+
+const fetchEvents = async () => {
+  // 1. Rutele sunt sugerate automat ("ctrl+space" între ghilimele)
+  const { data, error } = await api.GET("/events", {
+    params: {
+      query: { 
+        page: 1, 
+        search: "Workshop" // 2. Parametrii sunt validați de TS
+      }
+    }
+  });
+
+  if (error) {
+    console.error(error); // Eroarea este tipizată
+    return;
+  }
+
+  // 3. Data are structura corectă (EventPreview[])
+  console.log(data.data); 
+};
+```
+
+#### C. Autentificare
+Nu trebuie să trimiteți token-ul manual. api are un middleware configurat care atașează automat Authorization: Bearer ... la fiecare request dacă userul este logat.
+
+
+### 6. Dark Mode
 Este **automat**.
 Dacă folosiți variabilele semantice (ex: `bg-page`), componenta își va schimba culoarea singură când clasa `.dark` este activă pe `<html>`. Nu trebuie să scrieți `dark:bg-black` manual.
+
+### 7. State Management Global (Zustand)
+Folosim **Zustand** pentru a gestiona starea globală a aplicației (ex: datele utilizatorului logat). Este o soluție minimalistă, fără boilerplate.
+
+#### A. Cum folosesc un store?
+Store-urile se află în `src/stores`. Pentru a folosi unul, importă hook-ul corespunzător.
+
+```tsx
+import { useAuthStore } from '@/stores/authStore';
+import { useTranslation } from 'react-i18next';
+
+function UserProfile() {
+  // Selectezi ce date vrei din store
+  const { user, isAuthenticated } = useAuthStore();
+  const { t } = useTranslation();
+
+  if (!isAuthenticated) {
+    return <p>{t('auth.pleaseLogin')}</p>;
+  }
+
+  // Poți accesa acțiuni direct din hook
+  const logout = useAuthStore((state) => state.logout);
+
+  return (
+    <div>
+      <h1>{user?.fullName}</h1>
+      <button onClick={logout} className="btn">Logout</button>
+    </div>
+  );
+}
+```
+
+#### B. Cum creez un store nou?
+1.  Creează un fișier nou în `src/stores/`, de exemplu: `eventsStore.ts`.
+2.  Folosește acest template de bază:
+
+```typescript
+import { create } from 'zustand';
+
+// 1. Definește interfața pentru stare și acțiuni
+interface EventsState {
+  favoriteEvents: string[];
+  addFavorite: (eventId: string) => void;
+  removeFavorite: (eventId:string) => void;
+}
+
+// 2. Creează store-ul
+export const useEventsStore = create<EventsState>((set) => ({
+  // Starea inițială
+  favoriteEvents: [],
+  
+  // Acțiunile care modifică starea folosind `set()`
+  addFavorite: (eventId) =>
+    set((state) => ({
+      favoriteEvents: [...state.favoriteEvents, eventId],
+    })),
+    
+  removeFavorite: (eventId) =>
+    set((state) => ({
+      favoriteEvents: state.favoriteEvents.filter((id) => id !== eventId),
+    })),
+}));
+```
+
+#### C. Cum adaug o funcție/variabilă nouă într-un store existent?
+1.  Deschide fișierul store-ului (ex: `src/stores/authStore.ts`).
+2.  Adaugă proprietatea în interfața de stare (ex: `lastLogin: Date | null`).
+3.  Adaugă proprietatea și valoarea ei inițială în obiectul returnat de `create` (ex: `lastLogin: null`).
+4.  Dacă ai nevoie de o acțiune nouă, adaug-o în interfață și apoi implementeaz-o în obiect.

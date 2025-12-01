@@ -91,10 +91,22 @@ export default function Navbar() {
           <Link to="/" className={getLinkClass('/')}>
             Home
           </Link>
+          <Link to="/events" className={getLinkClass('/events')}>
+            Events
+          </Link>
+          <Link to="/events/calendar" className={getLinkClass('/events/calendar')}>
+            Calendar
+          </Link>
 
           {/* Link-uri vizibile DOAR dacă ești logat */}
           {isAuthenticated && (
             <>
+              <Link to="/tickets" className={getLinkClass('/tickets')}>
+                My Tickets
+              </Link>
+              <Link to="/statistics/raports" className={getLinkClass('/statistics/raports')}>
+                Reports
+              </Link>
               <Link to="/events/create" className={getLinkClass('/events/create')}>
                 Create Event
               </Link>
@@ -165,6 +177,10 @@ export default function Navbar() {
 
             {isAuthenticated && (
               <>
+                <Link to="/events" className="text-main py-2 border-b border-border/50">Events</Link>
+                <Link to="/events/calendar" className="text-main py-2 border-b border-border/50">Calendar</Link>
+                <Link to="/tickets" className="text-main py-2 border-b border-border/50">My Tickets</Link>
+                <Link to="/statistics/raports" className="text-main py-2 border-b border-border/50">Reports</Link>
                 <Link to="/events/create" className="text-main py-2 border-b border-border/50 flex items-center gap-2">
                   <CalendarPlus className="w-4 h-4" /> Create Event
                 </Link>
