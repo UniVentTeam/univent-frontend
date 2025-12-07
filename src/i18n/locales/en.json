@@ -6,6 +6,7 @@
     "loginPage": {
       "title": "Welcome Back",
       "subtitle": "Enter your credentials to access your account.",
+      "validationError": "Please enter a valid email and a password of at least 6 characters.",
       "emailLabel": "Email Address",
       "passwordLabel": "Password",
       "requiredError": "Email and password are required.",
@@ -21,6 +22,7 @@
       "emailLabel": "Email Address",
       "passwordLabel": "Password",
       "requiredError": "All fields are required.",
+      "validationError": "Invalid email or password too short (minimum 6 characters)",
       "submitButton": "Create Account",
       "submitButtonLoading": "Creating Account...",
       "loginPrompt": "Already have an account?",

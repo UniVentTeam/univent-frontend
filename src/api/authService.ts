@@ -1,4 +1,7 @@
 // src/api/authService.ts
+// Rămâne la fel, dar asigurăm că toast-urile sunt consistente și erorile bine gestionate.
+// Dacă ai nevoie de mai multe funcții (ex: refresh token), le poți adăuga aici.
+
 import api from './client';
 import { useAuthStore } from '@/stores/authStore';
 import type { components } from '@/types/schema';
@@ -57,7 +60,7 @@ async function register(details: RegisterRequest) {
 
   if (error) {
     console.error("Registration failed:", error);
-    const errorMessage = (error as any).message || 'An unknown error occurred.';
+    const errorMessage = (error as Error).message || 'An unknown error occurred.';
     toast.error('Registration Failed', {
       description: errorMessage,
     });
@@ -69,8 +72,6 @@ async function register(details: RegisterRequest) {
   });
 }
 
-// Exportăm toate funcțiile ca un singur obiect "authService"
-// pentru a fi ușor de importat și folosit în aplicație.
 export const authService = {
   login,
   register,

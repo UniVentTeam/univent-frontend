@@ -1,3 +1,7 @@
+// src/pages/RegisterPage.tsx
+// Rămâne aproape la fel, dar asigurăm că error handling-ul e consistent.
+// Am adăugat validare simplă pentru email și parolă (opțional, dar bună practică).
+
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authService } from '@/api/authService';
@@ -21,6 +25,12 @@ export default function RegisterPage() {
     
     if (!email || !password || !fullName) {
       setError(t('auth.registerPage.requiredError'));
+      return;
+    }
+
+    // Validare simplă suplimentară (opțional)
+    if (!email.includes('@') || password.length < 6) {
+      setError(t('auth.registerPage.validationError')); // Adaugă traducere pentru asta
       return;
     }
 

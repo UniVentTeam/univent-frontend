@@ -1,17 +1,19 @@
-import createClient, { type Middleware } from "openapi-fetch";
-import type { paths } from "../types/schema"; // Tipurile generate automat
+// src/api/client.ts
+// Modificăm middleware-ul pentru a gestiona și logout-ul în caz de 401.
+// Deoarece logout e în store, îl importăm și îl apelăm direct.
 
-// 1. Inițializăm clientul cu tipurile 'paths'
+import createClient, { type Middleware } from "openapi-fetch";
+import type { paths } from "../types/schema";
+import { useAuthStore } from '@/stores/authStore'; // Importăm store-ul pentru logout
+
 const api = createClient<paths>({
   baseUrl: "http://localhost:4000" // sau http://localhost:3000
 });
 
-// 2. Configurare Middleware (Echivalentul Interceptorilor din Axios)
-// Aceasta injectează token-ul automat la fiecare request
 const authMiddleware: Middleware = {
   async onRequest({ request }) {
-    // Luăm token-ul din localStorage (sau din context/state management)
-    const token = localStorage.getItem("accessToken");
+    // Luăm token-ul din store (deoarece e persistent, e disponibil)
+    const token = useAuthStore.getState().token;
 
     if (token) {
       request.headers.set("Authorization", `Bearer ${token}`);
@@ -20,16 +22,15 @@ const authMiddleware: Middleware = {
   },
 
   async onResponse({ response }) {
-    // Putem trata erori globale, ex: 401 Unauthorized
     if (response.status === 401) {
       console.log("Sesiune expirată, redirect la login...");
-      // window.location.href = '/login';
+      useAuthStore.getState().logout(); // Apelăm logout din store
+      window.location.href = '/auth/login'; // Redirect explicit
     }
     return response;
   },
 };
 
-// Activăm middleware-ul
 api.use(authMiddleware);
 
 export default api;
