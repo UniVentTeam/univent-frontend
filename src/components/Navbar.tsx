@@ -61,19 +61,19 @@ export default function Navbar() {
   );
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-card/80 backdrop-blur-md border-b border-border transition-colors duration-300">
-      <div className="layout-container flex items-center justify-between h-16">
+    <nav className="sticky top-0 z-50 w-full transition-colors duration-300 border-b bg-card/80 backdrop-blur-md border-border">
+      <div className="flex items-center justify-between h-16 layout-container">
 
         {/* === 1. LOGO === */}
-        <Link to="/" className="text-xl font-display font-bold text-main flex items-center gap-2">
-          <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white">
+        <Link to="/" className="flex items-center gap-2 text-xl font-bold font-display text-main">
+          <div className="flex items-center justify-center w-8 h-8 text-white bg-blue-500 rounded-lg">
             U
           </div>
           UniVent
         </Link>
 
         {/* === 2. MENIU DESKTOP === */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="items-center hidden gap-8 md:flex">
           <Link to="/" className={getLinkClass('/')}>Home</Link>
           <Link to="/events" className={getLinkClass('/events')}>Events</Link>
           
@@ -87,27 +87,27 @@ export default function Navbar() {
         </div>
 
         {/* === 3. CONTROALE DREAPTA (Desktop) === */}
-        <div className="hidden md:flex items-center gap-2">
+        <div className="items-center hidden gap-2 md:flex">
           <button
             onClick={toggleLang}
-            className="btn btn-ghost w-10 h-10"
+            className="w-10 h-10 btn btn-ghost"
             title="Change language"
           >
             <span className="text-sm font-bold uppercase">{i18n.language}</span>
           </button>
           <button
             onClick={toggleTheme}
-            className="btn btn-ghost w-10 h-10"
+            className="w-10 h-10 btn btn-ghost"
             title="Change theme"
           >
             {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
 
-          <div className="w-px h-6 bg-border mx-2"></div>
+          <div className="w-px h-6 mx-2 bg-border"></div>
 
           {/* Auth Buttons - REFACTORIZAT */}
           {isAuthenticated ? (
-            <button onClick={handleLogout} className="btn btn-danger gap-2">
+            <button onClick={handleLogout} className="gap-2 btn btn-danger">
               <LogOut className="w-4 h-4" />
               <span>Logout</span>
             </button>
@@ -123,7 +123,7 @@ export default function Navbar() {
 
         {/* === 4. BUTON HAMBURGER (Mobile Only) === */}
         <button
-          className="md:hidden btn btn-ghost p-2"
+          className="p-2 md:hidden btn btn-ghost"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -132,16 +132,16 @@ export default function Navbar() {
 
       {/* === 5. MENIU MOBIL (Dropdown) === */}
       {isMenuOpen && (
-        <div className="md:hidden border-t border-border bg-card absolute w-full left-0 shadow-lg animate-in slide-in-from-top-2">
-          <div className="p-4 space-y-2 flex flex-col">
-            <Link to="/" className="text-main font-medium py-3 border-b border-border/50">Home</Link>
-            <Link to="/events" className="text-main font-medium py-3 border-b border-border/50">Events</Link>
+        <div className="absolute left-0 w-full border-t shadow-lg md:hidden border-border bg-card animate-in slide-in-from-top-2">
+          <div className="flex flex-col p-4 space-y-2">
+            <Link to="/" className="py-3 font-medium border-b text-main border-border/50">Home</Link>
+            <Link to="/events" className="py-3 font-medium border-b text-main border-border/50">Events</Link>
 
             {isAuthenticated && (
               <>
-                <Link to="/events/calendar" className="text-main font-medium py-3 border-b border-border/50">Calendar</Link>
-                <Link to="/tickets" className="text-main font-medium py-3 border-b border-border/50">My Tickets</Link>
-                <Link to="/profile" className="flex items-center gap-2 text-main font-medium py-3 border-b border-border/50">
+                <Link to="/events/calendar" className="py-3 font-medium border-b text-main border-border/50">Calendar</Link>
+                <Link to="/tickets" className="py-3 font-medium border-b text-main border-border/50">My Tickets</Link>
+                <Link to="/profile" className="flex items-center gap-2 py-3 font-medium border-b text-main border-border/50">
                   <User className="w-4 h-4" /> Profile
                 </Link>
               </>
@@ -149,21 +149,21 @@ export default function Navbar() {
 
             <div className="pt-4">
               {isAuthenticated ? (
-                <button onClick={handleLogout} className="btn btn-danger w-full">
+                <button onClick={handleLogout} className="w-full btn btn-danger">
                   Deconectare
                 </button>
               ) : (
-                <button onClick={() => navigate('/auth/login')} className="btn btn-primary w-full">
+                <button onClick={() => navigate('/auth/login')} className="w-full btn btn-primary">
                   Intră în cont
                 </button>
               )}
             </div>
             
             <div className="flex items-center justify-center gap-2 pt-4">
-              <button onClick={toggleLang} className="btn btn-secondary flex-1">
+              <button onClick={toggleLang} className="flex-1 btn btn-secondary">
                 {i18n.language.toUpperCase()}
               </button>
-              <button onClick={toggleTheme} className="btn btn-secondary p-3">
+              <button onClick={toggleTheme} className="p-3 btn btn-secondary">
                 {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </button>
             </div>

@@ -1,6 +1,6 @@
 // src/components/LanguageToggle.tsx
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/utils/cn';
+//import { cn } from '@/utils/cn';
 
 export function LanguageToggle() {
   const { i18n } = useTranslation();
@@ -13,7 +13,7 @@ export function LanguageToggle() {
   return (
     <button
       onClick={toggleLang}
-      className="btn btn-secondary w-12 h-10"
+      className="w-12 h-10 btn btn-secondary"
       title="Schimbă limba"
     >
       <span className="text-xs font-bold uppercase">{i18n.language}</span>

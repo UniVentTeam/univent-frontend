@@ -1,3 +1,6 @@
+// src/pages/LoginPage.tsx
+// Similar, adăugăm validare simplă și asigurăm redirect-ul corect.
+
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
@@ -29,6 +32,12 @@ export default function LoginPage() {
 
     if (!email || !password) {
       setError(t('auth.loginPage.requiredError'));
+      return;
+    }
+
+    // Validare simplă suplimentară (opțional)
+    if (!email.includes('@') || password.length < 6) {
+      setError(t('auth.loginPage.validationError')); // Adaugă traducere pentru asta
       return;
     }
     

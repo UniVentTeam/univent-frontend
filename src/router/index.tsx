@@ -2,7 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 
 // Layouts
-import DashboardLayout from '@/layouts/DashboardLayout';
+//import DashboardLayout from '@/layouts/DashboardLayout';
 import AuthLayout from '@/layouts/AuthLayout';
 
 // Pages - Auth
@@ -47,7 +47,7 @@ export const router = createBrowserRouter([
   // 2. Aplicația principală
   {
     path: '/',
-    element: <DashboardLayout />,
+   // element: <DashboardLayout />,
     errorElement: <NotFound />,
     children: [
       {

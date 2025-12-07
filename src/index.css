@@ -198,4 +198,15 @@
     .text-body { @apply font-sans text-base text-main; }
     .text-body-sm { @apply font-sans text-sm text-muted; }
     .text-caption { @apply font-sans text-xs text-muted; }
+
+    @media (max-width: 1279px) {
+  .hero-section {
+    flex-direction: column !important;
+    height: 650px !important;
+  }
+}
+    .univent-text {
+  padding-right: 40px !important;
+}
+
 }
