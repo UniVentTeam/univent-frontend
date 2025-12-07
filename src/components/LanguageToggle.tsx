@@ -1,6 +1,5 @@
 // src/components/LanguageToggle.tsx
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/utils/cn';
 
 export function LanguageToggle() {
   const { i18n } = useTranslation();
