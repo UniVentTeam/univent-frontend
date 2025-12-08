@@ -28,5 +28,25 @@
       "loginPrompt": "Ai deja un cont?",
       "loginLink": "Intră în cont"
     }
+  },
+  "profile": {
+    "page_title": "Profilul Meu",
+    "edit_page_title": "Editează Profilul",
+    "edit_button": "Editează Profilul",
+    "role": "Rol",
+    "faculty": "Facultate",
+    "department": "Departament",
+    "fullName_label": "Nume complet",
+    "faculty_label": "Facultate",
+    "department_label": "Departament",
+    "not_set": "Nu este setat",
+    "validation": {
+      "fullName_required": "Numele complet este obligatoriu."
+    }
+  },
+  "common": {
+    "save": "Salvează",
+    "saving": "Se salvează...",
+    "cancel": "Anulează"
   }
 }

@@ -15,6 +15,7 @@ interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
   setAuth: (user: User, token: string) => void;
+  setUser: (user: User) => void; // Adăugăm noua funcție aici
   logout: () => void;
 }
 
@@ -31,6 +32,9 @@ export const useAuthStore = create<AuthState>()(
           token,
           isAuthenticated: true,
         });
+      },
+      setUser: (user) => {
+        set({ user });
       },
       logout: () => {
         set({

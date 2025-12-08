@@ -28,5 +28,25 @@
       "loginPrompt": "Already have an account?",
       "loginLink": "Sign In"
     }
+  },
+  "profile": {
+    "page_title": "My Profile",
+    "edit_page_title": "Edit Profile",
+    "edit_button": "Edit Profile",
+    "role": "Role",
+    "faculty": "Faculty",
+    "department": "Department",
+    "fullName_label": "Full Name",
+    "faculty_label": "Faculty",
+    "department_label": "Department",
+    "not_set": "Not set",
+    "validation": {
+      "fullName_required": "Full name is required."
+    }
+  },
+  "common": {
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel"
   }
 }
