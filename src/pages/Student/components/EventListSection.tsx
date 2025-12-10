@@ -1,5 +1,7 @@
 import React from "react";
 import { useFilters } from "./FilterContext";
+import { cn } from "@/utils/cn";
+import { useTranslation } from "react-i18next";
 
 interface Event {
   id: string | number;
@@ -9,8 +11,6 @@ interface Event {
   organizer: string;
   category: string;
   backgroundImage: string;
-  categoryBg: string;
-  categoryText: string;
   dateIcon: string;
   locationIcon: string;
   organizerIcon: string;
@@ -21,7 +21,25 @@ interface EventListSectionProps {
   searchQuery?: string;
 }
 
+const getTagClass = (category: string) => {
+  switch (category.toLowerCase()) {
+    case "career":
+      return "tag-career";
+    case "academic":
+      return "tag-academic";
+    case "social":
+      return "tag-social";
+    case "volunteering":
+      return "tag-volunteering";
+    case "sports":
+      return "tag-sports";
+    default:
+      return "tag";
+  }
+};
+
 export const EventListSection: React.FC<EventListSectionProps> = ({ events, searchQuery = "" }) => {
+  const { t } = useTranslation();
   const { selectedCategories, dateRange } = useFilters();
 
   const filteredEvents = events.filter((event) => {
@@ -53,15 +71,15 @@ export const EventListSection: React.FC<EventListSectionProps> = ({ events, sear
   {filteredEvents.map((event) => (
     <article
   key={event.id}
-  className={`
-    relative rounded-2xl overflow-hidden bg-cover bg-center h-72 md:h-80 lg:h-96
-    ${event.backgroundImage}
-    transition-all duration-300 ease-out
-    hover:scale-[1.03] hover:-translate-y-1 hover:brightness-105 hover:shadow-xl
-  `}
+  className={cn(
+    `relative rounded-2xl overflow-hidden bg-cover bg-center h-72 md:h-80 lg:h-96`,
+    event.backgroundImage,
+    `transition-all duration-300 ease-out`,
+    `hover:scale-[1.03] hover:-translate-y-1 hover:brightness-105 hover:shadow-xl`
+  )}
 >
 
-      <div className={`${event.categoryBg} ${event.categoryText} absolute top-3 left-3 px-3 py-1 rounded-md text-sm md:text-base lg:text-lg font-bold capitalize`}>
+      <div className={cn("tag", getTagClass(event.category), "absolute top-3 left-3 px-3 py-1 rounded-md text-sm md:text-base lg:text-lg font-bold capitalize")}>
         {event.category}
       </div>
 
@@ -88,7 +106,7 @@ export const EventListSection: React.FC<EventListSectionProps> = ({ events, sear
 
   {filteredEvents.length === 0 && (
     <p className="text-lg text-center text-gray-500 col-span-full md:text-xl">
-      No events match your filters.
+      {t('events.noEvents')}
     </p>
   )}
 </section>

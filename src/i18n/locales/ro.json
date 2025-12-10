@@ -48,5 +48,20 @@
     "save": "Salvează",
     "saving": "Se salvează...",
     "cancel": "Anulează"
+  },
+  "navigation": {
+    "home": "Acasă",
+    "calendar": "Calendar",
+    "saved": "Salvate",
+    "profile": "Profil",
+    "enrollments": "Înscrieri"
+  },
+  "header": {
+    "student": "Student",
+    "signOut": "Deconectare",
+    "heroTitle": "Visează, creează, inovează!<br />Evenimente universitare"
+  },
+  "events": {
+    "noEvents": "Niciun eveniment nu corespunde filtrelor tale."
   }
 }

@@ -62,11 +62,11 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full transition-colors duration-300 border-b bg-card/80 backdrop-blur-md border-border">
-      <div className="flex items-center justify-between h-16 layout-container">
+      <div className="flex items-center justify-between h-14 layout-container">
 
         {/* === 1. LOGO === */}
         <Link to="/" className="flex items-center gap-2 text-xl font-bold font-display text-main">
-          <div className="flex items-center justify-center w-8 h-8 text-white bg-blue-500 rounded-lg">
+          <div className="flex items-center justify-center w-8 h-8 text-white bg-accent rounded-lg">
             U
           </div>
           UniVent
