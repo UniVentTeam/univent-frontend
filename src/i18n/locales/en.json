@@ -48,5 +48,20 @@
     "save": "Save",
     "saving": "Saving...",
     "cancel": "Cancel"
+  },
+  "navigation": {
+    "home": "Home",
+    "calendar": "Calendar",
+    "saved": "Saved",
+    "profile": "Profile",
+    "enrollments": "Enrollments"
+  },
+  "header": {
+    "student": "Student",
+    "signOut": "Sign out",
+    "heroTitle": "Dream, create, innovate!<br />University events"
+  },
+  "events": {
+    "noEvents": "No events match your filters."
   }
 }

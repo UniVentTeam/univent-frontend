@@ -3,8 +3,11 @@
 import React from 'react';
 import { User } from 'lucide-react';
 import { cn } from '@/utils/cn';
+import { useTranslation } from 'react-i18next';
 
 export const HeaderSection: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <header className="relative flex flex-col w-full bg-page shadow-md">
       <nav
@@ -37,22 +40,22 @@ export const HeaderSection: React.FC = () => {
         <div className="flex flex-row items-center gap-2 sm:flex-row sm:gap-6">
           <button
             className={cn('btn btn-secondary', 'w-auto sm:!w-[170px] h-10 sm:h-11 rounded-full')}
-            aria-label="Student profile"
+            aria-label={t('header.student')}
             type="button"
           >
             <span className="font-bold text-sm sm:text-2xl">
-              Student
+              {t('header.student')}
             </span>
             <User className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
 
           <button
             className={cn('btn btn-secondary', 'w-auto  h-10 sm:h-11 rounded-full')}
-            aria-label="Sign out"
+            aria-label={t('header.signOut')}
             type="button"
           >
             <span className="text-sm font-bold sm:text-2xl">
-              Sign out
+              {t('header.signOut')}
             </span>
           </button>
         </div>
@@ -67,10 +70,10 @@ export const HeaderSection: React.FC = () => {
              h-[500px] lg:h-[500px]"
         aria-label="Hero section"
       >
-        <h1 className="text-center lg:text-left text-4xl sm:text-5xl md:text-6xl lg:text-7xl !text-[4rem] font-bold leading-tight text-white max-w-full lg:max-w-[1000px] z-10 drop-shadow-2xl">
-          Visează, creează, inovează!<br />
-          Evenimente universitare
-        </h1>
+        <h1
+          className={cn('text-h1', 'text-center lg:text-left leading-tight text-white max-w-full lg:max-w-[1000px] z-10 drop-shadow-2xl')}
+          dangerouslySetInnerHTML={{ __html: t('header.heroTitle') }}
+        />
 
         <img
           className="z-10 object-cover w-full h-auto max-w-sm border-4 shadow-2xl sm:max-w-md md:max-w-lg lg:max-w-2xl rounded-2xl border-border"

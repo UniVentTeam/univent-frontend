@@ -1,6 +1,7 @@
 import React from "react";
 import { useFilters } from "./FilterContext";
 import { cn } from "@/utils/cn";
+import { useTranslation } from "react-i18next";
 
 interface Event {
   id: string | number;
@@ -38,6 +39,7 @@ const getTagClass = (category: string) => {
 };
 
 export const EventListSection: React.FC<EventListSectionProps> = ({ events, searchQuery = "" }) => {
+  const { t } = useTranslation();
   const { selectedCategories, dateRange } = useFilters();
 
   const filteredEvents = events.filter((event) => {
@@ -104,7 +106,7 @@ export const EventListSection: React.FC<EventListSectionProps> = ({ events, sear
 
   {filteredEvents.length === 0 && (
     <p className="text-lg text-center text-gray-500 col-span-full md:text-xl">
-      No events match your filters.
+      {t('events.noEvents')}
     </p>
   )}
 </section>

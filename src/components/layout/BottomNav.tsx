@@ -2,16 +2,19 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Home, CalendarDays, Bookmark, User, ClipboardPenLine } from 'lucide-react';
 import { cn } from '@/utils/cn';
-
-const navigationItems = [
-  { id: 1, icon: Home, label: 'Home', to: '/' },
-  { id: 2, icon: CalendarDays, label: 'Calendar', to: '/events/calendar' },
-  { id: 3, icon: Bookmark, label: 'Saved' },
-  { id: 4, icon: User, label: 'Profile', to: '/profile' },
-  { id: 5, icon: ClipboardPenLine, label: 'Inscrieri' }
-] as const;
+import { useTranslation } from 'react-i18next';
 
 export const BottomNav: React.FC = () => {
+  const { t } = useTranslation();
+
+  const navigationItems = [
+    { id: 1, icon: Home, label: t('navigation.home'), to: '/' },
+    { id: 2, icon: CalendarDays, label: t('navigation.calendar'), to: '/events/calendar' },
+    { id: 3, icon: Bookmark, label: t('navigation.saved') },
+    { id: 4, icon: User, label: t('navigation.profile'), to: '/profile' },
+    { id: 5, icon: ClipboardPenLine, label: t('navigation.enrollments') }
+  ] as const;
+
   return (
     <nav className="fixed bottom-0 left-0 w-full bg-accent/40 rounded-t-[10px] shadow-[5px_5px_10px_#00000040] z-10 px-4 sm:px-8 [@media(min-width:1400px)]:px-[15rem] py-2 sm:py-3">
       <div className="flex flex-wrap items-center justify-between gap-6 sm:gap-10 md:gap-12 lg:gap-16">
@@ -22,7 +25,7 @@ export const BottomNav: React.FC = () => {
               <div className="relative w-[60px] sm:w-[70px] h-[60px] sm:h-[70px] flex items-center justify-center">
                 <Icon className="w-[70%] h-[70%] object-contain drop-shadow-md" />
               </div>
-              <span className="text-primary text-[12px] sm:text-sm text-center font-bold mt-2 drop-shadow">
+              <span className="text-primary text-base sm:text-sm text-center font-bold mt-2 drop-shadow">
                 {item.label}
               </span>
             </>
