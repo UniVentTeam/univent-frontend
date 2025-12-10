@@ -9,7 +9,7 @@ export default function DashboardLayout() {
       {/*<Navbar />*/}
 
       <main className="flex-1 w-full">
-        <div className="py-6 sm:py-8">
+        <div /*className="py-6 sm:py-8"*/> 
           <Outlet />
         </div>
       </main>
