@@ -13,7 +13,7 @@ const navigationItems = [
 
 export const BottomNav: React.FC = () => {
   return (
-    <nav className="fixed bottom-0 left-0 w-full bg-[#3fbff666] rounded-t-[10px] shadow-[5px_5px_10px_#00000040] z-10 px-4 sm:px-8 [@media(min-width:1400px)]:px-[15rem] py-2 sm:py-3">
+    <nav className="fixed bottom-0 left-0 w-full bg-accent/40 rounded-t-[10px] shadow-[5px_5px_10px_#00000040] z-10 px-4 sm:px-8 [@media(min-width:1400px)]:px-[15rem] py-2 sm:py-3">
       <div className="flex flex-wrap items-center justify-between gap-6 sm:gap-10 md:gap-12 lg:gap-16">
         {navigationItems.map(item => {
           const Icon = item.icon;

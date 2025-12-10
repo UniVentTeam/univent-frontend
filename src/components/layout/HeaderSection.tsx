@@ -8,7 +8,7 @@ export const HeaderSection: React.FC = () => {
   return (
     <header className="relative flex flex-col w-full bg-page shadow-md">
       <nav
-        className="w-full flex flex-row sm:flex-row items-center justify-between bg-blue-500/40 rounded-[10px] px-4 sm:px-8 py-1 gap-4 sm:gap-0"
+        className="w-full flex flex-row sm:flex-row items-center justify-between bg-accent/40 rounded-[10px] px-4 sm:px-8 py-1 gap-4 sm:gap-0"
         role="navigation"
         aria-label="Main navigation"
       >
@@ -47,7 +47,7 @@ export const HeaderSection: React.FC = () => {
           </button>
 
           <button
-            className={cn('btn btn-secondary', 'w-auto sm:!w-[120px] h-10 sm:h-11 rounded-full')}
+            className={cn('btn btn-secondary', 'w-auto  h-10 sm:h-11 rounded-full')}
             aria-label="Sign out"
             type="button"
           >
