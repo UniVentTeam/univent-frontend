@@ -53,6 +53,19 @@
     "cancel": "Anulează",
     "no_results": "Niciun rezultat găsit."
   },
+  "search": {
+    "placeholder": "Caută evenimente după nume, organizator sau descriere..."
+  },
+  "filters": {
+    "event_type": "Tip Eveniment",
+    "association": "Asociație",
+    "faculty": "Facultate",
+    "department": "Departament",
+    "organizer_type": "Organizator",
+    "location": "Locație",
+    "time_period": "Perioadă",
+    "match_all": "Aplică toate filtrele"
+  },
   "navigation": {
     "home": "Acasă",
     "calendar": "Calendar",
