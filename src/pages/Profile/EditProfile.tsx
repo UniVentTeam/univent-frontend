@@ -1,11 +1,12 @@
 // src/pages/Profile/EditProfile.tsx
 import { useAuthStore } from '@/stores/authStore';
 import { useTranslation } from 'react-i18next';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { components } from '@/types/schema';
 import { userService } from '@/api/userService';
 import { cn } from '@/utils/cn';
+import { MultiSelectCombobox } from '@/components/forms/MultiSelectCombobox';
 
 type UserProfile = components['schemas']['UserProfile'];
 type EnumEventType = components['schemas']['EnumEventType'];
@@ -29,11 +30,17 @@ const EditProfile = () => {
     fullName: '',
     faculty: '',
     department: '',
-    preferences: [], // Initialize preferences as an empty array
+    preferences: [],
   });
   const [selectedPreferences, setSelectedPreferences] = useState<EnumEventType[]>([]);
   const [errors, setErrors] = useState<{ fullName?: string }>({});
   const [isSaving, setIsSaving] = useState(false);
+
+  // Memoize the options for the combobox
+  const preferenceOptions = useMemo(
+    () => ALL_EVENT_TYPES.map((type) => ({ value: type, label: t(`event_types.${type}`) })),
+    [t]
+  );
 
   useEffect(() => {
     if (user) {
@@ -53,12 +60,6 @@ const EditProfile = () => {
     if (errors[name as keyof typeof errors]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
-  };
-
-  const handlePreferenceChange = (type: EnumEventType) => {
-    setSelectedPreferences((prev) =>
-      prev.includes(type) ? prev.filter((p) => p !== type) : [...prev, type]
-    );
   };
 
   const validate = () => {
@@ -83,7 +84,7 @@ const EditProfile = () => {
         ...formData,
         preferences: selectedPreferences,
       });
-      setUser(updatedUser as UserProfile); // Update local store
+      setUser(updatedUser as UserProfile);
       navigate('/profile');
     } catch (error) {
       console.error('Failed to update profile', error);
@@ -93,7 +94,7 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="layout-container py-8 pb-32">
+    <div className="layout-container py-8 pb-80">
       <h1 className="text-h1 mb-8">{t('profile.edit_page_title')}</h1>
 
       <form onSubmit={handleSubmit} className="card max-w-2xl mx-auto">
@@ -142,23 +143,13 @@ const EditProfile = () => {
           {/* Preferences Section */}
           <div>
             <label className="label mb-2 block">{t('profile.preferences_title')}</label>
-            <div className="grid grid-cols-2 gap-4">
-              {ALL_EVENT_TYPES.map((type) => (
-                <div key={type} className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id={`preference-${type}`}
-                    name={`preference-${type}`}
-                    checked={selectedPreferences.includes(type)}
-                    onChange={() => handlePreferenceChange(type)}
-                    className="h-4 w-4 text-accent border-border rounded focus:ring-accent"
-                  />
-                  <label htmlFor={`preference-${type}`} className="ml-2 text-primary">
-                    {t(`event_types.${type}`)}
-                  </label>
-                </div>
-              ))}
-            </div>
+            <MultiSelectCombobox
+              options={preferenceOptions}
+              selected={selectedPreferences}
+              onChange={setSelectedPreferences}
+              placeholder={t('profile.select_preferences_placeholder')}
+              closeOnSelect={false}
+            />
           </div>
         </div>
 

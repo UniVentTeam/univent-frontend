@@ -48,7 +48,7 @@ const MyProfile = () => {
   }
 
   return (
-    <div className="layout-container py-8 pb-32">
+    <div className="layout-container py-8 pb-80">
       <h1 className="text-h1 mb-8">{t('profile.page_title')}</h1>
       {user && <ProfileCard />}
     </div>
