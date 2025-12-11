@@ -19,13 +19,25 @@ const MOCK_FACULTIES: { value: string; label: string }[] = [
   { value: 'FMF', label: 'FMF' },
   { value: 'FLSC', label: 'FLSC' },
 ];
-const MOCK_DEPARTMENTS: { value: string; label: string }[] = [
-  { value: 'C', label: 'Calculatoare' },
-  { value: 'AC', label: 'Automatică' },
-];
+// const MOCK_DEPARTMENTS: { value: string; label: string }[] = [
+//   { value: 'C', label: 'Calculatoare' },
+//   { value: 'AC', label: 'Automatică' },
+// ];
 
-const ALL_EVENT_TYPES: EnumEventType[] = ['ACADEMIC', 'SOCIAL', 'SPORTS', 'CAREER', 'VOLUNTEERING', 'WORKSHOP'];
-const ALL_ORGANIZER_TYPES: EnumOrganizerType[] = ['STUDENT_ORG', 'UNIVERSITY_DEPT', 'COMPANY', 'OTHER'];
+const ALL_EVENT_TYPES: EnumEventType[] = [
+  'ACADEMIC',
+  'SOCIAL',
+  'SPORTS',
+  'CAREER',
+  'VOLUNTEERING',
+  'WORKSHOP',
+];
+const ALL_ORGANIZER_TYPES: EnumOrganizerType[] = [
+  'STUDENT_ORG',
+  'UNIVERSITY_DEPT',
+  'COMPANY',
+  'OTHER',
+];
 const ALL_LOCATION_TYPES: EnumLocationType[] = ['IN_CAMPUS', 'IN_CITY', 'OUTSIDE_CITY', 'ONLINE'];
 
 interface SearchBarSectionProps {
@@ -33,19 +45,31 @@ interface SearchBarSectionProps {
   onSearchChange: (value: string) => void;
 }
 
-export const SearchBarSection: React.FC<SearchBarSectionProps> = ({ searchQuery, onSearchChange }) => {
+export const SearchBarSection: React.FC<SearchBarSectionProps> = ({
+  searchQuery,
+  onSearchChange,
+}) => {
   const { t } = useTranslation();
   const [associations, setAssociations] = useState<AssociationSimple[]>([]);
 
   // Get all state and setters from context
   const {
-    selectedCategories, setSelectedCategories, matchAll, setMatchAll,
-    selectedAssociations, setSelectedAssociations,
-    selectedFaculties, setSelectedFaculties,
-    selectedDepartments, setSelectedDepartments,
-    selectedOrganizerTypes, setSelectedOrganizerTypes,
-    selectedLocationTypes, setSelectedLocationTypes,
-    dateRange, updateDateRange,
+    selectedCategories,
+    setSelectedCategories,
+    matchAll,
+    setMatchAll,
+    selectedAssociations,
+    setSelectedAssociations,
+    selectedFaculties,
+    setSelectedFaculties,
+    // selectedDepartments,
+    // setSelectedDepartments,
+    selectedOrganizerTypes,
+    setSelectedOrganizerTypes,
+    selectedLocationTypes,
+    setSelectedLocationTypes,
+    dateRange,
+    updateDateRange,
   } = useFilters();
 
   // Fetch dynamic data
@@ -58,17 +82,37 @@ export const SearchBarSection: React.FC<SearchBarSectionProps> = ({ searchQuery,
   }, []);
 
   // Memoize options to prevent re-computation on every render
-  const categoryOptions = useMemo(() => ALL_EVENT_TYPES.map(type => ({ value: type, label: t(`event_types.${type}`) })), [t]);
-  const associationOptions = useMemo(() => associations.map(assoc => ({ value: assoc.id!, label: assoc.name! })), [associations]);
-  const organizerTypeOptions = useMemo(() => ALL_ORGANIZER_TYPES.map(type => ({ value: type, label: type.replace('_', ' ').toLowerCase() })), []);
-  const locationTypeOptions = useMemo(() => ALL_LOCATION_TYPES.map(type => ({ value: type, label: type.replace('_', ' ').toLowerCase() })), []);
+  const categoryOptions = useMemo(
+    () => ALL_EVENT_TYPES.map((type) => ({ value: type, label: t(`event_types.${type}`) })),
+    [t],
+  );
+  const associationOptions = useMemo(
+    () => associations.map((assoc) => ({ value: assoc.id!, label: assoc.name! })),
+    [associations],
+  );
+  const organizerTypeOptions = useMemo(
+    () =>
+      ALL_ORGANIZER_TYPES.map((type) => ({
+        value: type,
+        label: type.replace('_', ' ').toLowerCase(),
+      })),
+    [],
+  );
+  const locationTypeOptions = useMemo(
+    () =>
+      ALL_LOCATION_TYPES.map((type) => ({
+        value: type,
+        label: type.replace('_', ' ').toLowerCase(),
+      })),
+    [],
+  );
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     updateDateRange({ ...dateRange, [e.target.name]: e.target.value });
   };
 
   return (
-    <header className="relative z-20 w-full flex flex-col bg-page/80 backdrop-blur-sm px-0 py-[50px]">
+    <header className="relative z-20 w-full flex flex-col bg-page backdrop-blur-sm px-0 py-[50px]">
       <div className="flex mx-auto w-[90%] max-w-[1400px] h-[50px] items-center gap-2.5 px-4 py-[13px] bg-card rounded-[10px] mb-8 border border-border shadow-sm">
         <input
           type="search"
@@ -79,7 +123,7 @@ export const SearchBarSection: React.FC<SearchBarSectionProps> = ({ searchQuery,
         />
       </div>
 
-      <div className="mx-auto w-[90%] max-w-[1400px] flex flex-wrap items-center gap-4">
+      <div className="bg-card mx-auto w-[90%] max-w-[1400px] flex flex-wrap items-center gap-4">
         {/* Event Type Filter */}
         <FilterDropdown
           title={t('filters.event_type')}
@@ -125,21 +169,21 @@ export const SearchBarSection: React.FC<SearchBarSectionProps> = ({ searchQuery,
 
         {/* Date Range Filter */}
         <div className="flex items-center gap-2 w-48">
-            <input
-                type="date"
-                name="start"
-                value={dateRange.start}
-                onChange={handleDateChange}
-                className={cn('input-field w-full')}
-            />
-             <span className='text-muted'>-</span>
-            <input
-                type="date"
-                name="end"
-                value={dateRange.end}
-                onChange={handleDateChange}
-                className={cn('input-field w-full')}
-            />
+          <input
+            type="date"
+            name="start"
+            value={dateRange.start}
+            onChange={handleDateChange}
+            className={cn('input-field w-full')}
+          />
+          <span className="text-muted">-</span>
+          <input
+            type="date"
+            name="end"
+            value={dateRange.end}
+            onChange={handleDateChange}
+            className={cn('input-field w-full')}
+          />
         </div>
       </div>
     </header>
