@@ -20,7 +20,7 @@ export default function DashboardLayout() {
 
       {/*<footer className="py-6 mt-auto border-t border-border bg-card">*/}
       {/*  <div className="text-center layout-container text-body-sm">*/}
-      {/*    © 2024 UniVent. Toate drepturile rezervate.*/}
+      {/*    © 2025 UniVent. Toate drepturile rezervate.*/}
       {/*  </div>*/}
       {/*</footer>*/}
     </div>

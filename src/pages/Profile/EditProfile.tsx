@@ -8,6 +8,17 @@ import { userService } from '@/api/userService';
 import { cn } from '@/utils/cn';
 
 type UserProfile = components['schemas']['UserProfile'];
+type EnumEventType = components['schemas']['EnumEventType'];
+
+// Define all possible event types as an array for easy iteration
+const ALL_EVENT_TYPES: EnumEventType[] = [
+  'ACADEMIC',
+  'SOCIAL',
+  'SPORTS',
+  'CAREER',
+  'VOLUNTEERING',
+  'WORKSHOP',
+];
 
 const EditProfile = () => {
   const { t } = useTranslation();
@@ -18,7 +29,9 @@ const EditProfile = () => {
     fullName: '',
     faculty: '',
     department: '',
+    preferences: [], // Initialize preferences as an empty array
   });
+  const [selectedPreferences, setSelectedPreferences] = useState<EnumEventType[]>([]);
   const [errors, setErrors] = useState<{ fullName?: string }>({});
   const [isSaving, setIsSaving] = useState(false);
 
@@ -28,7 +41,9 @@ const EditProfile = () => {
         fullName: user.fullName,
         faculty: user.faculty,
         department: user.department,
+        preferences: user.preferences || [],
       });
+      setSelectedPreferences(user.preferences || []);
     }
   }, [user]);
 
@@ -38,6 +53,12 @@ const EditProfile = () => {
     if (errors[name as keyof typeof errors]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
+  };
+
+  const handlePreferenceChange = (type: EnumEventType) => {
+    setSelectedPreferences((prev) =>
+      prev.includes(type) ? prev.filter((p) => p !== type) : [...prev, type]
+    );
   };
 
   const validate = () => {
@@ -58,7 +79,10 @@ const EditProfile = () => {
 
     setIsSaving(true);
     try {
-      const updatedUser = await userService.updateProfile(formData);
+      const updatedUser = await userService.updateProfile({
+        ...formData,
+        preferences: selectedPreferences,
+      });
       setUser(updatedUser as UserProfile); // Update local store
       navigate('/profile');
     } catch (error) {
@@ -69,10 +93,10 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="container py-8">
+    <div className="layout-container py-8 pb-32">
       <h1 className="text-h1 mb-8">{t('profile.edit_page_title')}</h1>
 
-      <form onSubmit={handleSubmit} className="card max-w-2xl">
+      <form onSubmit={handleSubmit} className="card max-w-2xl mx-auto">
         <div className="space-y-6">
           <div>
             <label htmlFor="fullName" className="label">
@@ -82,11 +106,11 @@ const EditProfile = () => {
               type="text"
               id="fullName"
               name="fullName"
-              className={cn('input-field', errors.fullName && 'border-red-500')}
+              className={cn('input-field', errors.fullName && 'border-destructive')}
               value={formData.fullName ?? ''}
               onChange={handleChange}
             />
-            {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
+            {errors.fullName && <p className="text-destructive text-sm mt-1">{errors.fullName}</p>}
           </div>
           <div>
             <label htmlFor="faculty" className="label">
@@ -113,6 +137,28 @@ const EditProfile = () => {
               value={formData.department ?? ''}
               onChange={handleChange}
             />
+          </div>
+
+          {/* Preferences Section */}
+          <div>
+            <label className="label mb-2 block">{t('profile.preferences_title')}</label>
+            <div className="grid grid-cols-2 gap-4">
+              {ALL_EVENT_TYPES.map((type) => (
+                <div key={type} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id={`preference-${type}`}
+                    name={`preference-${type}`}
+                    checked={selectedPreferences.includes(type)}
+                    onChange={() => handlePreferenceChange(type)}
+                    className="h-4 w-4 text-accent border-border rounded focus:ring-accent"
+                  />
+                  <label htmlFor={`preference-${type}`} className="ml-2 text-primary">
+                    {t(`event_types.${type}`)}
+                  </label>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

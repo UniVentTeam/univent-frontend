@@ -40,28 +40,38 @@
     "faculty_label": "Facultate",
     "department_label": "Departament",
     "not_set": "Nu este setat",
-    "validation": {
-      "fullName_required": "Numele complet este obligatoriu."
+            "validation": {
+              "fullName_required": "Numele complet este obligatoriu."
+            },
+            "preferences_title": "Preferințe",
+            "no_preferences_set": "Nici o preferință setată."
+          },      "common": {
+        "save": "Salvează",
+        "saving": "Se salvează...",
+        "cancel": "Anulează"
+      },
+      "navigation": {
+        "home": "Acasă",
+        "calendar": "Calendar",
+        "saved": "Salvate",
+        "profile": "Profil",
+        "enrollments": "Înscrieri"
+      },
+      "header": {
+        "student": "Student",
+        "signOut": "Deconectare",
+        "heroTitle": "Visează, creează, inovează!<br />Evenimente universitare"
+      },
+      "events": {
+        "noEvents": "Niciun eveniment nu corespunde filtrelor tale."
+      },
+      "event_types": {
+        "ACADEMIC": "Academic",
+        "SOCIAL": "Social",
+        "SPORTS": "Sportiv",
+        "CAREER": "Carieră",
+        "VOLUNTEERING": "Voluntariat",
+        "WORKSHOP": "Workshop"
+      }
     }
-  },
-  "common": {
-    "save": "Salvează",
-    "saving": "Se salvează...",
-    "cancel": "Anulează"
-  },
-  "navigation": {
-    "home": "Acasă",
-    "calendar": "Calendar",
-    "saved": "Salvate",
-    "profile": "Profil",
-    "enrollments": "Înscrieri"
-  },
-  "header": {
-    "student": "Student",
-    "signOut": "Deconectare",
-    "heroTitle": "Visează, creează, inovează!<br />Evenimente universitare"
-  },
-  "events": {
-    "noEvents": "Niciun eveniment nu corespunde filtrelor tale."
-  }
-}
+    

@@ -40,28 +40,38 @@
     "faculty_label": "Faculty",
     "department_label": "Department",
     "not_set": "Not set",
-    "validation": {
-      "fullName_required": "Full name is required."
+            "validation": {
+              "fullName_required": "Full name is required."
+            },
+            "preferences_title": "Preferences",
+            "no_preferences_set": "No preferences set."
+          },      "common": {
+        "save": "Save",
+        "saving": "Saving...",
+        "cancel": "Cancel"
+      },
+      "navigation": {
+        "home": "Home",
+        "calendar": "Calendar",
+        "saved": "Saved",
+        "profile": "Profile",
+        "enrollments": "Enrollments"
+      },
+      "header": {
+        "student": "Student",
+        "signOut": "Sign out",
+        "heroTitle": "Dream, create, innovate!<br />University events"
+      },
+      "events": {
+        "noEvents": "No events match your filters."
+      },
+      "event_types": {
+        "ACADEMIC": "Academic",
+        "SOCIAL": "Social",
+        "SPORTS": "Sports",
+        "CAREER": "Career",
+        "VOLUNTEERING": "Volunteering",
+        "WORKSHOP": "Workshop"
+      }
     }
-  },
-  "common": {
-    "save": "Save",
-    "saving": "Saving...",
-    "cancel": "Cancel"
-  },
-  "navigation": {
-    "home": "Home",
-    "calendar": "Calendar",
-    "saved": "Saved",
-    "profile": "Profile",
-    "enrollments": "Enrollments"
-  },
-  "header": {
-    "student": "Student",
-    "signOut": "Sign out",
-    "heroTitle": "Dream, create, innovate!<br />University events"
-  },
-  "events": {
-    "noEvents": "No events match your filters."
-  }
-}
+    

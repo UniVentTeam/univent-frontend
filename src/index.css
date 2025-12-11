@@ -95,6 +95,13 @@
     --input-border: var(--color-gray-200);
     --input-text: var(--color-black);
     --input-placeholder: var(--color-gray-500);
+
+    /* Destructive */
+    --text-destructive: var(--color-red-600);
+    --border-destructive: var(--color-red-500);
+
+    /* Muted */
+    --bg-muted: var(--color-gray-100);
 }
 
 .dark {
@@ -113,6 +120,9 @@
     --btn-secondary-text: var(--color-white);
     --btn-secondary-border: var(--color-gray-800);
 
+    --btn-danger-bg: var(--color-red-600);
+    --btn-danger-bg-hover: var(--color-red-500);
+
     --btn-ghost-bg-hover: var(--color-gray-800);
     --btn-ghost-text: var(--color-white);
     
@@ -121,6 +131,13 @@
     --input-border: var(--color-gray-800);
     --input-text: var(--color-white);
     --input-placeholder: var(--color-gray-400);
+
+    /* Destructive */
+    --text-destructive: var(--color-red-500);
+    --border-destructive: var(--color-red-500);
+
+    /* Muted */
+    --bg-muted: var(--color-gray-800);
 }
 
 /* ==========================================================================
@@ -142,6 +159,9 @@
     --color-muted: var(--text-secondary);
     --color-ring: var(--ring-focus);
     --color-accent: var(--color-accent);
+    --color-destructive: var(--text-destructive);
+    --border-destructive: var(--border-destructive);
+    --color-bg-muted: var(--bg-muted);
 }
 
 
