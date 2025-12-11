@@ -68,7 +68,7 @@ export const FilterDropdown = ({
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 mt-1 w-full rounded-lg border border-border bg-card p-2 shadow-lg animate-in fade-in-0 zoom-in-95">
+        <div className="absolute z-50 mt-1 w-full rounded-lg border border-border bg-card p-2 shadow-lg animate-in fade-in-0 zoom-in-95">
           {onMatchAllChange && (
             <div className="border-b border-border px-2 py-2 text-sm">
               <label className="flex cursor-pointer items-center justify-between">

@@ -68,7 +68,7 @@ export const SearchBarSection: React.FC<SearchBarSectionProps> = ({ searchQuery,
   };
 
   return (
-    <header className="relative w-full flex flex-col bg-page/80 backdrop-blur-sm px-0 py-[50px]">
+    <header className="relative z-20 w-full flex flex-col bg-page/80 backdrop-blur-sm px-0 py-[50px]">
       <div className="flex mx-auto w-[90%] max-w-[1400px] h-[50px] items-center gap-2.5 px-4 py-[13px] bg-card rounded-[10px] mb-8 border border-border shadow-sm">
         <input
           type="search"
