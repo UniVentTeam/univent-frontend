@@ -42,12 +42,16 @@
     "not_set": "Not set",
     "validation": {
       "fullName_required": "Full name is required."
-    }
+    },
+    "preferences_title": "Preferences",
+    "no_preferences_set": "No preferences set.",
+    "select_preferences_placeholder": "Select your preferences..."
   },
   "common": {
     "save": "Save",
     "saving": "Saving...",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "no_results": "No results found."
   },
   "navigation": {
     "home": "Home",
@@ -63,5 +67,13 @@
   },
   "events": {
     "noEvents": "No events match your filters."
+  },
+  "event_types": {
+    "ACADEMIC": "Academic",
+    "SOCIAL": "Social",
+    "SPORTS": "Sports",
+    "CAREER": "Career",
+    "VOLUNTEERING": "Volunteering",
+    "WORKSHOP": "Workshop"
   }
 }

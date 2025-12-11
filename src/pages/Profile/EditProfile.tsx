@@ -1,13 +1,25 @@
 // src/pages/Profile/EditProfile.tsx
 import { useAuthStore } from '@/stores/authStore';
 import { useTranslation } from 'react-i18next';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { components } from '@/types/schema';
 import { userService } from '@/api/userService';
 import { cn } from '@/utils/cn';
+import { MultiSelectCombobox } from '@/components/forms/MultiSelectCombobox';
 
 type UserProfile = components['schemas']['UserProfile'];
+type EnumEventType = components['schemas']['EnumEventType'];
+
+// Define all possible event types as an array for easy iteration
+const ALL_EVENT_TYPES: EnumEventType[] = [
+  'ACADEMIC',
+  'SOCIAL',
+  'SPORTS',
+  'CAREER',
+  'VOLUNTEERING',
+  'WORKSHOP',
+];
 
 const EditProfile = () => {
   const { t } = useTranslation();
@@ -18,9 +30,17 @@ const EditProfile = () => {
     fullName: '',
     faculty: '',
     department: '',
+    preferences: [],
   });
+  const [selectedPreferences, setSelectedPreferences] = useState<EnumEventType[]>([]);
   const [errors, setErrors] = useState<{ fullName?: string }>({});
   const [isSaving, setIsSaving] = useState(false);
+
+  // Memoize the options for the combobox
+  const preferenceOptions = useMemo(
+    () => ALL_EVENT_TYPES.map((type) => ({ value: type, label: t(`event_types.${type}`) })),
+    [t]
+  );
 
   useEffect(() => {
     if (user) {
@@ -28,7 +48,9 @@ const EditProfile = () => {
         fullName: user.fullName,
         faculty: user.faculty,
         department: user.department,
+        preferences: user.preferences || [],
       });
+      setSelectedPreferences(user.preferences || []);
     }
   }, [user]);
 
@@ -58,8 +80,11 @@ const EditProfile = () => {
 
     setIsSaving(true);
     try {
-      const updatedUser = await userService.updateProfile(formData);
-      setUser(updatedUser as UserProfile); // Update local store
+      const updatedUser = await userService.updateProfile({
+        ...formData,
+        preferences: selectedPreferences,
+      });
+      setUser(updatedUser as UserProfile);
       navigate('/profile');
     } catch (error) {
       console.error('Failed to update profile', error);
@@ -69,10 +94,10 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="container py-8">
+    <div className="layout-container py-8 pb-80">
       <h1 className="text-h1 mb-8">{t('profile.edit_page_title')}</h1>
 
-      <form onSubmit={handleSubmit} className="card max-w-2xl">
+      <form onSubmit={handleSubmit} className="card max-w-2xl mx-auto">
         <div className="space-y-6">
           <div>
             <label htmlFor="fullName" className="label">
@@ -82,11 +107,11 @@ const EditProfile = () => {
               type="text"
               id="fullName"
               name="fullName"
-              className={cn('input-field', errors.fullName && 'border-red-500')}
+              className={cn('input-field', errors.fullName && 'border-destructive')}
               value={formData.fullName ?? ''}
               onChange={handleChange}
             />
-            {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
+            {errors.fullName && <p className="text-destructive text-sm mt-1">{errors.fullName}</p>}
           </div>
           <div>
             <label htmlFor="faculty" className="label">
@@ -112,6 +137,18 @@ const EditProfile = () => {
               className="input-field"
               value={formData.department ?? ''}
               onChange={handleChange}
+            />
+          </div>
+
+          {/* Preferences Section */}
+          <div>
+            <label className="label mb-2 block">{t('profile.preferences_title')}</label>
+            <MultiSelectCombobox
+              options={preferenceOptions}
+              selected={selectedPreferences}
+              onChange={setSelectedPreferences}
+              placeholder={t('profile.select_preferences_placeholder')}
+              closeOnSelect={false}
             />
           </div>
         </div>
