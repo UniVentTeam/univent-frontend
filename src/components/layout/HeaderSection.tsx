@@ -23,17 +23,11 @@ export const HeaderSection: React.FC = () => {
             aria-label="UniVent Home"
           >
             <div className="relative flex-1 grow h-[55%]">
-              <img
-                className="absolute left-[10%]"
-                alt="UniVent Logo"
-                src="/assets/vector-25.svg"
-              />
+              <img className="absolute left-[10%]" alt="UniVent Logo" src="/assets/vector-25.svg" />
             </div>
           </a>
 
-          <div className="text-xl font-normal text-primary sm:text-2xl md:text-3xl">
-            UniVent
-          </div>
+          <div className="text-xl font-normal text-primary sm:text-2xl md:text-3xl">UniVent</div>
         </div>
 
         {/* RIGHT: Student + Sign out buttons */}
@@ -43,9 +37,7 @@ export const HeaderSection: React.FC = () => {
             aria-label={t('header.student')}
             type="button"
           >
-            <span className="font-bold text-sm sm:text-2xl">
-              {t('header.student')}
-            </span>
+            <span className="font-bold text-sm sm:text-2xl">{t('header.student')}</span>
             <User className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
 
@@ -54,9 +46,7 @@ export const HeaderSection: React.FC = () => {
             aria-label={t('header.signOut')}
             type="button"
           >
-            <span className="text-sm font-bold sm:text-2xl">
-              {t('header.signOut')}
-            </span>
+            <span className="text-sm font-bold sm:text-2xl">{t('header.signOut')}</span>
           </button>
         </div>
       </nav>
@@ -71,7 +61,10 @@ export const HeaderSection: React.FC = () => {
         aria-label="Hero section"
       >
         <h1
-          className={cn('text-h1', 'text-center lg:text-left leading-tight text-white max-w-full lg:max-w-[1000px] z-10 drop-shadow-2xl')}
+          className={cn(
+            'text-3xl',
+            'text-center lg:text-left leading-tight text-white max-w-full lg:max-w-[1000px] z-10 drop-shadow-2xl',
+          )}
           dangerouslySetInnerHTML={{ __html: t('header.heroTitle') }}
         />
 

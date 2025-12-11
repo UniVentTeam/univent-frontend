@@ -53,6 +53,19 @@
     "cancel": "Cancel",
     "no_results": "No results found."
   },
+  "search": {
+    "placeholder": "Search events by name, organizer, or description..."
+  },
+  "filters": {
+    "event_type": "Event Type",
+    "association": "Association",
+    "faculty": "Faculty",
+    "department": "Department",
+    "organizer_type": "Organizer",
+    "location": "Location",
+    "time_period": "Time Period",
+    "match_all": "Match all filters"
+  },
   "navigation": {
     "home": "Home",
     "calendar": "Calendar",

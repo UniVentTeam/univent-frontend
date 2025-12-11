@@ -39,7 +39,7 @@ const EditProfile = () => {
   // Memoize the options for the combobox
   const preferenceOptions = useMemo(
     () => ALL_EVENT_TYPES.map((type) => ({ value: type, label: t(`event_types.${type}`) })),
-    [t]
+    [t],
   );
 
   useEffect(() => {
@@ -146,7 +146,9 @@ const EditProfile = () => {
             <MultiSelectCombobox
               options={preferenceOptions}
               selected={selectedPreferences}
-              onChange={setSelectedPreferences}
+              onChange={(newSelection) =>
+                setSelectedPreferences(newSelection as EnumEventType[])
+              }
               placeholder={t('profile.select_preferences_placeholder')}
               closeOnSelect={false}
             />
