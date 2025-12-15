@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { events as eventsData } from "..//Student/data/eventsData";
+import { events as eventsData } from "./data/eventsData";
 
 type EventType =
   | "social"
