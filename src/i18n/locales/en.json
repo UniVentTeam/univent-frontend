@@ -75,6 +75,7 @@
   },
   "header": {
     "student": "Student",
+    "signIn": "Sign in",
     "signOut": "Sign out",
     "heroTitle": "Dream, create, innovate!<br />University events"
   },
