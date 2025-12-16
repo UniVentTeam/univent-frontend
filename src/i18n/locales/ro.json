@@ -71,15 +71,21 @@
     "calendar": "Calendar",
     "saved": "Salvate",
     "profile": "Profil",
-    "enrollments": "Înscrieri"
+    "enrollments": "Înscrieri",
+    "events": "Evenimente"
   },
   "header": {
     "student": "Student",
+    "organizer": "Organizator",
+    "admin": "Administrator",
+    "signIn": "Autentificare",
     "signOut": "Deconectare",
     "heroTitle": "Visează, creează, inovează!<br />Evenimente universitare"
   },
   "events": {
-    "noEvents": "Niciun eveniment nu corespunde filtrelor tale."
+    "noEvents": "Niciun eveniment nu corespunde filtrelor tale.",
+    "EventLog": "Jurnal Evenimente",
+    "Requests": "Cereri"
   },
   "event_types": {
     "ACADEMIC": "Academic",

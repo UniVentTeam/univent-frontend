@@ -71,15 +71,21 @@
     "calendar": "Calendar",
     "saved": "Saved",
     "profile": "Profile",
-    "enrollments": "Enrollments"
+    "enrollments": "Enrollments",
+    "events": "Events"
   },
   "header": {
     "student": "Student",
+    "organizer": "Organizer",
+    "admin": "Admin",
+    "signIn": "Sign in",
     "signOut": "Sign out",
     "heroTitle": "Dream, create, innovate!<br />University events"
   },
   "events": {
-    "noEvents": "No events match your filters."
+    "noEvents": "No events match your filters.",
+    "EventLog": "Event Log",
+    "Requests": "Requests"
   },
   "event_types": {
     "ACADEMIC": "Academic",
