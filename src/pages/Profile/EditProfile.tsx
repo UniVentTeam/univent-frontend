@@ -146,30 +146,28 @@ const EditProfile = () => {
             <MultiSelectCombobox
               options={preferenceOptions}
               selected={selectedPreferences}
-              onChange={(newSelection) =>
-                setSelectedPreferences(newSelection as EnumEventType[])
-              }
+              onChange={(newSelection) => setSelectedPreferences(newSelection as EnumEventType[])}
               placeholder={t('profile.select_preferences_placeholder')}
               closeOnSelect={false}
             />
           </div>
         </div>
 
-        <div className="flex justify-end gap-4 mt-8">
+        <div className="flex justify-end gap-4 mt-8 max-sm:flex-col-reverse">
+          <button
+            type="submit"
+            className={cn('btn btn-primary max-sm:w-full', isSaving && 'opacity-50')}
+            disabled={isSaving}
+          >
+            {isSaving ? t('common.saving') : t('common.save')}
+          </button>
           <button
             type="button"
-            className="btn btn-secondary"
+            className="btn btn-secondary max-sm:w-full"
             onClick={() => navigate('/profile')}
             disabled={isSaving}
           >
             {t('common.cancel')}
-          </button>
-          <button
-            type="submit"
-            className={cn('btn btn-primary', isSaving && 'opacity-50')}
-            disabled={isSaving}
-          >
-            {isSaving ? t('common.saving') : t('common.save')}
           </button>
         </div>
       </form>
