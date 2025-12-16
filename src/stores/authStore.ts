@@ -5,7 +5,7 @@
 // (Zustand are built-in middleware, dar asigură-te că ai versiunea corectă).
 
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware'; // Importăm persist middleware
+import { persist } from 'zustand/middleware';
 import type { components } from '../types/schema';
 
 type User = components['schemas']['UserProfile'];
@@ -14,18 +14,20 @@ interface AuthState {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
+  role: 'student' | 'admin' | 'organizer';
   setAuth: (user: User, token: string) => void;
-  setUser: (user: User) => void; // Adăugăm noua funcție aici
+  setUser: (user: User) => void;
+  setRole: (role: 'student' | 'admin' | 'organizer') => void;
   logout: () => void;
 }
 
-// Folosim persist pentru a salva starea în localStorage (nume: 'auth-storage')
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
       token: null,
       isAuthenticated: false,
+      role: 'student', // rolul default
       setAuth: (user, token) => {
         set({
           user,
@@ -33,20 +35,25 @@ export const useAuthStore = create<AuthState>()(
           isAuthenticated: true,
         });
       },
-      setUser: (user) => {
-        set({ user });
-      },
+      setUser: (user) => set({ user }),
+      setRole: (role) => set({ role }), // adăugăm funcția pentru rol
       logout: () => {
         set({
           user: null,
           token: null,
           isAuthenticated: false,
+          role: 'student', // resetăm rolul la logout
         });
       },
     }),
     {
-      name: 'auth-storage', // Numele cheii în localStorage
-      partialize: (state) => ({ user: state.user, token: state.token, isAuthenticated: state.isAuthenticated }), // Ce salvăm
+      name: 'auth-storage',
+      partialize: (state) => ({
+        user: state.user,
+        token: state.token,
+        isAuthenticated: state.isAuthenticated,
+        role: state.role, // salvăm și rolul
+      }),
     }
   )
 );

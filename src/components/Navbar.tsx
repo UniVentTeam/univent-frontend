@@ -66,7 +66,7 @@ export default function Navbar() {
 
         {/* === 1. LOGO === */}
         <Link to="/" className="flex items-center gap-2 text-xl font-bold font-display text-main">
-          <div className="flex items-center justify-center w-8 h-8 text-white bg-accent rounded-lg">
+          <div className="flex items-center justify-center w-8 h-8 text-white rounded-lg bg-accent">
             U
           </div>
           UniVent
