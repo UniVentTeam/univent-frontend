@@ -33,14 +33,14 @@ const ProfileCard = ({ className }: { className?: string }) => {
 
   return (
     <div className={cn('card', className)}>
-      <div className="flex justify-between items-start max-sm:flex-col">
+      <div className="flex justify-between items-start max-md:flex-col">
         <div className="max-md:w-full max-md:mb-4">
           <h2 className="text-h2 text-primary">{fullName}</h2>
           <p className="text-secondary mt-1">{email}</p>
         </div>
-        <div className="flex items-center gap-2 max-sm:justify-start max-sm:w-full">
-          <ThemeToggle />
-          <LanguageToggle />
+        <div className="flex items-center gap-2 max-md:justify-center max-md:w-full">
+          <ThemeToggle className="max-md:flex-grow max-md:h-12" />
+          <LanguageToggle className="max-md:flex-grow max-md:h-12" />
         </div>
       </div>
 
