@@ -33,18 +33,18 @@ const ProfileCard = ({ className }: { className?: string }) => {
 
   return (
     <div className={cn('card', className)}>
-      <div className="flex justify-between items-start">
-        <div>
+      <div className="flex justify-between items-start max-sm:flex-col">
+        <div className="max-md:w-full max-md:mb-4">
           <h2 className="text-h2 text-primary">{fullName}</h2>
           <p className="text-secondary mt-1">{email}</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 max-sm:justify-start max-sm:w-full">
           <ThemeToggle />
           <LanguageToggle />
         </div>
       </div>
 
-      <div className="mt-6 border-t border-border pt-6 grid grid-cols-1 gap-2">
+      <div className="mt-6 border-t border-border pt-6 grid md:grid-cols-2 gap-x-6 gap-y-4">
         <ProfileField label={t('profile.role')} value={role} icon={ShieldCheck} />
         <ProfileField
           label={t('profile.faculty')}
@@ -76,8 +76,8 @@ const ProfileCard = ({ className }: { className?: string }) => {
         )}
       </div>
 
-      <div className="flex justify-end mt-6">
-        <Link to="/profile/edit" className="btn btn-secondary gap-2">
+      <div className="flex justify-end mt-6 max-sm:justify-center">
+        <Link to="/profile/edit" className="btn btn-secondary gap-2 max-sm:w-full">
           <PenSquare className="w-4 h-4" />
           <span>{t('profile.edit_button')}</span>
         </Link>
@@ -87,4 +87,3 @@ const ProfileCard = ({ className }: { className?: string }) => {
 };
 
 export default ProfileCard;
-
