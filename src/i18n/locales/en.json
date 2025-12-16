@@ -83,7 +83,9 @@
     "heroTitle": "Dream, create, innovate!<br />University events"
   },
   "events": {
-    "noEvents": "No events match your filters."
+    "noEvents": "No events match your filters.",
+    "EventLog": "Event Log",
+    "Requests": "Requests"
   },
   "event_types": {
     "ACADEMIC": "Academic",
