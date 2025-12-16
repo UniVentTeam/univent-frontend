@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import vector5 from "public/assets/vector-5.svg";
 import vector6 from "public/assets/vector-6.svg";
+import { useTranslation } from 'react-i18next';
 
 interface Request {
   id: number;
@@ -11,6 +12,7 @@ interface Request {
 }
 
 export const NotificationsSection = (): JSX.Element => {
+  const { t } = useTranslation();
   const [requests] = useState<Request[]>([
     {
       id: 1,
@@ -30,7 +32,7 @@ export const NotificationsSection = (): JSX.Element => {
       className="w-full max-w-[1200px] mx-auto mt-8 bg-white/80 rounded-2xl overflow-hidden p-4 md:p-6"
       aria-label="Notifications and Requests Section"
     >
-      <h2 className="mb-4 text-2xl font-bold text-center md:text-3xl">Requests</h2>
+      <h2 className="mb-4 text-2xl font-bold text-center md:text-3xl">{t('events.Requests')}</h2>
 
       {/* Header Row */}
       <div className="hidden md:grid grid-cols-[50px_1fr_120px_40px_40px] gap-4 items-center text-sm font-medium text-black mb-2">

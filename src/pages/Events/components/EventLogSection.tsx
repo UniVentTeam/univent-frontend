@@ -1,5 +1,5 @@
 import React from "react";
-
+import { useTranslation } from 'react-i18next';
 interface EventLogEntry {
   id: number;
   userInitials: string;
@@ -10,6 +10,7 @@ interface EventLogEntry {
 }
 
 export const EventLogSection = (): JSX.Element => {
+  const { t } = useTranslation();
   const eventLogData: EventLogEntry[] = [
     {
       id: 1,
@@ -44,7 +45,7 @@ export const EventLogSection = (): JSX.Element => {
       aria-label="Event log section"
     >
       <h2 className="mb-4 text-2xl font-bold text-center md:text-3xl">
-        Event log
+        {t('events.EventLog')}
       </h2>
 
       {/* Header Row */}
