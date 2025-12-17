@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Home, CalendarDays, Bookmark, User, ClipboardPenLine, Ticket } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +7,8 @@ import { useAuthStore } from '@/stores/authStore';
 
 export const BottomNav: React.FC = () => {
   const { t } = useTranslation();
-  const role = useAuthStore((state) => state.role); // preluăm rolul curent
+  const role = useAuthStore((state) => state.role);
+  const location = useLocation();
 
   const baseNavigationItems = [
     { id: 1, icon: Home, label: t('navigation.home'), to: '/' },
@@ -29,19 +30,40 @@ export const BottomNav: React.FC = () => {
   }
 
   return (
-    <nav className="fixed bottom-0 left-0 w-full bg-accent/40 rounded-t-[10px] shadow-[5px_5px_10px_#00000040] z-10 px-4 sm:px-8 [@media(min-width:1400px)]:px-[15rem] py-2 sm:py-3">
-      <div className="flex flex-wrap items-center justify-between gap-6 sm:gap-10 md:gap-12 lg:gap-16">
+    // PĂSTRAT STILURI ORIGINALE: bg-accent/40, rounded-t, shadow specific, z-10
+    <nav className="fixed bottom-0 left-0 z-10 w-full rounded-t-[10px] bg-accent/40 py-2 shadow-[5px_5px_10px_#00000040] backdrop-blur-sm transition-all duration-300 sm:py-3">
+      {/* MODIFICARE LAYOUT:
+         - justify-between: Distribuie elementele egal.
+         - mx-auto max-w-lg: PE MOBIL -> Centrează containerul și îl ține compact.
+         - md:max-w-none md:mx-0: PE DESKTOP -> Anulează limita de lățime, întinzându-se pe tot ecranul.
+         - px-4...: Padding-urile tale originale.
+      */}
+      <div className="mx-auto flex w-full max-w-lg items-center justify-between px-4 sm:px-8 md:mx-0 md:max-w-none md:px-12 lg:px-[15rem]">
         {navigationItems.map((item) => {
           const Icon = item.icon;
+
+          // Verificăm manual ruta pentru a aplica scale-ul corect
+          const isActiveRoute =
+            item.to === '/'
+              ? location.pathname === '/'
+              : item.to && location.pathname.startsWith(item.to);
+
           const content = (
             <>
-              <div className="relative w-[60px] sm:w-[70px] h-[60px] sm:h-[70px] flex items-center justify-center">
-                <Icon className="w-[70%] h-[70%] object-contain drop-shadow-md" />
+              {/* PĂSTRAT DIMENSIUNI ORIGINALE: w-[60px] etc. */}
+              <div className="relative flex h-[60px] w-[60px] items-center justify-center sm:h-[70px] sm:w-[70px]">
+                <Icon className="h-[70%] w-[70%] object-contain drop-shadow-md" />
               </div>
-              <span className="mt-2 text-base font-bold text-center text-primary sm:text-sm drop-shadow">
+              {/* PĂSTRAT TEXT ORIGINAL: text-primary, font-bold, drop-shadow */}
+              <span className="mt-2 text-center text-base font-bold text-primary drop-shadow sm:text-sm">
                 {item.label}
               </span>
             </>
+          );
+
+          // PĂSTRAT EFECTE ORIGINALE: hover:scale-110, active:scale-95
+          const commonClasses = cn(
+            'flex flex-col items-center w-[60px] sm:w-[70px] transition-transform duration-200 hover:scale-110 active:scale-95',
           );
 
           if ('to' in item && item.to) {
@@ -50,10 +72,9 @@ export const BottomNav: React.FC = () => {
                 key={item.id}
                 to={item.to}
                 className={({ isActive }) =>
-                  cn(
-                    'flex flex-col items-center w-[60px] sm:w-[70px] transition-transform duration-200 hover:scale-110 active:scale-95',
-                    { 'scale-110': isActive }
-                  )
+                  cn(commonClasses, {
+                    'scale-110': isActive, // Păstrat efectul de mărire când e activ
+                  })
                 }
                 aria-label={item.label}
               >
@@ -65,7 +86,7 @@ export const BottomNav: React.FC = () => {
           return (
             <button
               key={item.id}
-              className="flex flex-col items-center w-[60px] sm:w-[70px] transition-transform duration-200 hover:scale-110 active:scale-95"
+              className={commonClasses}
               aria-label={item.label}
               title={`${item.label} - Coming Soon`}
             >

@@ -285,3 +285,18 @@
       padding-right: 40px !important;
     }
 }
+
+@layer base {
+    html, body {
+        height: 100%;
+        background-color: var(--bg-page);
+        /* Adăugăm min-width aici */
+        min-width: 500px;
+        /* 320px este standardul industriei (iPhone SE / Galaxy Fold width) */
+    }
+
+    /* Opțional: Pentru a evita scroll orizontal accidental */
+    body {
+        overflow-x: hidden;
+    }
+}
