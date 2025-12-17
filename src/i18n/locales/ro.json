@@ -1,0 +1,98 @@
+{
+  "welcome": "Bun venit la UniVent",
+  "auth": {
+    "login": "Autentificare",
+    "logout": "Deconectare",
+    "loginPage": {
+      "title": "Bun venit înapoi",
+      "subtitle": "Introdu credențialele pentru a-ți accesa contul.",
+      "emailLabel": "Adresă de email",
+      "passwordLabel": "Parolă",
+      "requiredError": "Emailul și parola sunt obligatorii.",
+      "validationError": "Te rog introdu un email valid și o parolă de minim 6 caractere",
+      "submitButton": "Intră în cont",
+      "submitButtonLoading": "Se conectează...",
+      "registerPrompt": "Nu ai un cont?",
+      "registerLink": "Înregistrează-te"
+    },
+    "registerPage": {
+      "title": "Creează un cont",
+      "subtitle": "Alătură-te UniVent pentru a descoperi evenimente inedite.",
+      "fullNameLabel": "Nume complet",
+      "emailLabel": "Adresă de email",
+      "passwordLabel": "Parolă",
+      "requiredError": "Toate câmpurile sunt obligatorii.",
+      "validationError": "Email invalid sau parolă prea scurtă (minim 6 caractere)",
+      "submitButton": "Creează contul",
+      "submitButtonLoading": "Se creează contul...",
+      "loginPrompt": "Ai deja un cont?",
+      "loginLink": "Intră în cont"
+    }
+  },
+  "profile": {
+    "page_title": "Profilul Meu",
+    "edit_page_title": "Editează Profilul",
+    "edit_button": "Editează Profilul",
+    "role": "Rol",
+    "faculty": "Facultate",
+    "department": "Departament",
+    "fullName_label": "Nume complet",
+    "faculty_label": "Facultate",
+    "department_label": "Departament",
+    "not_set": "Nu este setat",
+    "validation": {
+      "fullName_required": "Numele complet este obligatoriu."
+    },
+    "preferences_title": "Preferințe",
+    "no_preferences_set": "Nici o preferință setată.",
+    "select_preferences_placeholder": "Selectează preferințele..."
+  },
+  "common": {
+    "save": "Salvează",
+    "saving": "Se salvează...",
+    "cancel": "Anulează",
+    "no_results": "Niciun rezultat găsit."
+  },
+  "search": {
+    "placeholder": "Caută evenimente după nume, organizator sau descriere..."
+  },
+  "filters": {
+    "event_type": "Tip Eveniment",
+    "association": "Asociație",
+    "faculty": "Facultate",
+    "department": "Departament",
+    "organizer_type": "Organizator",
+    "location": "Locație",
+    "time_period": "Perioadă",
+    "match_all": "Aplică toate filtrele"
+  },
+  "navigation": {
+    "home": "Acasă",
+    "calendar": "Calendar",
+    "saved": "Salvate",
+    "profile": "Profil",
+    "enrollments": "Înscrieri",
+    "events": "Evenimente"
+  },
+  "header": {
+    "student": "Student",
+    "organizer": "Organizator",
+    "admin": "Administrator",
+    "signIn": "Autentificare",
+    "signOut": "Deconectare",
+    "heroTitle": "Visează, creează, inovează!<br />Evenimente universitare"
+  },
+  "events": {
+    "noEvents": "Niciun eveniment nu corespunde filtrelor tale.",
+    "EventLog": "Jurnal Evenimente",
+    "Requests": "Cereri"
+  },
+  "event_types": {
+    "ACADEMIC": "Academic",
+    "SOCIAL": "Social",
+    "SPORTS": "Sportiv",
+    "CAREER": "Carieră",
+    "VOLUNTEERING": "Voluntariat",
+    "WORKSHOP": "Workshop"
+  }
+}
