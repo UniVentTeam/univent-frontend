@@ -3,6 +3,9 @@ import { useFilters } from "./FilterContext";
 import { cn } from "@/utils/cn";
 import { useTranslation } from "react-i18next";
 import type { components } from "@/types/schema";
+import { useNavigate } from "react-router-dom";
+
+
 
 type EnumOrganizerType = components['schemas']['EnumOrganizerType'];
 type EnumLocationType = components['schemas']['EnumLocationType'];
@@ -48,6 +51,9 @@ const getTagClass = (category: string) => {
 
 export const EventListSection: React.FC<EventListSectionProps> = ({ events, searchQuery = "" }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate(); // Modificare Ruben
+
+
   const {
     selectedCategories, matchAll,
     dateRange,
@@ -125,6 +131,9 @@ export const EventListSection: React.FC<EventListSectionProps> = ({ events, sear
       {filteredEvents.map((event) => (
         <article
           key={event.id}
+
+          onClick={() => navigate(`/events/${event.id}`)} // Modificare Ruben
+
           className={cn(
             `relative rounded-2xl overflow-hidden bg-cover bg-center h-72 md:h-80 lg:h-96`,
             event.backgroundImage,
