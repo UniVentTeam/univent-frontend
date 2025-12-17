@@ -1,5 +1,4 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { events } from './data/eventsData';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/authStore';
 import { useEffect, useState } from 'react';
@@ -22,60 +21,64 @@ const EventDetails = () => {
   const [comment, setComment] = useState('');
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
 
-  const event = events.find((e) => String(e.id) === String(id));
+  const [event, setEvent] = useState<any>(null);
+const [isLoadingEvent, setIsLoadingEvent] = useState(true);
 
-  useEffect(() => {
-    const loadReviews = async () => {
-      try {
-        const data = await reviewService.getReviews(event.id);
-        setReviews(data);
-      } catch {
-        // toast already shown
-      } finally {
-        setIsLoadingReviews(false);
-      }
-    };
 
-    loadReviews();
-  }, [event.id]);
+useEffect(() => {
+  if (!id) return;
 
-  useEffect(() => {
-    if (!user) {
-      setIsCheckingRegistration(false);
-      setIsRegistered(false);
-      return;
-    }
-
-    const checkRegistration = async () => {
-      try {
-        const tickets = await ticketService.getMyTickets();
-
-        const registered = tickets.some(
-          (ticket) => ticket.eventId === event.id && ticket.status === 'CONFIRMED',
-        );
-
-        setIsRegistered(registered);
-      } catch {
-        // toast deja afișat în service
-      } finally {
-        setIsCheckingRegistration(false);
-      }
-    };
-
-    checkRegistration();
-  }, [user, event.id]);
-
-  const handleRegister = async () => {
-    setIsRegistering(true);
+  const loadEvent = async () => {
     try {
-      await eventService.registerToEvent(event.id);
-      setIsRegistered(true);
+      const data = await eventService.getEventById(id);
+      setEvent(data);
+      setIsRegistered(data.isRegistered);
     } catch {
-      // toast-ul e deja afișat în service
+      // toast deja afișat
     } finally {
-      setIsRegistering(false);
+      setIsLoadingEvent(false);
     }
   };
+
+  loadEvent();
+}, [id]);
+
+
+useEffect(() => {
+  if (!event?.id) return;
+
+  const loadReviews = async () => {
+    try {
+      const data = await reviewService.getReviews(event.id);
+      setReviews(data);
+    } catch {
+      // toast deja afișat
+    } finally {
+      setIsLoadingReviews(false);
+    }
+  };
+
+  loadReviews();
+}, [event?.id]);
+
+
+  
+
+const handleRegister = async () => {
+  setIsRegistering(true);
+  try {
+    await eventService.registerToEvent(event.id);
+
+    setEvent((prev) =>
+      prev ? { ...prev, isRegistered: true } : prev
+    );
+  } catch {
+    // toast deja afișat
+  } finally {
+    setIsRegistering(false);
+  }
+};
+
 
   const handleAddReview = async () => {
     if (!comment.trim()) return;
@@ -105,23 +108,44 @@ const EventDetails = () => {
     );
   }
 
+  if (isLoadingEvent) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[var(--bg-page)]">
+        <p className="text-[var(--text-secondary)]">Se încarcă evenimentul...</p>
+      </div>
+    );
+  }
+  else
   return (
     <div className="bg-[var(--bg-page)] min-h-screen">
       {/* ================= HERO ================= */}
       <div className="relative h-[480px] w-full">
-        {/* IMAGINE */}
-        <div className={cn('absolute inset-0 bg-cover bg-center', event.backgroundImage)} />
+  {/* IMAGINE */}
+  <div
+  className="absolute inset-0 bg-cover bg-center"
+  style={{ backgroundImage: `url(${event.coverImageUrl})` }}
+/>
 
-        {/* GRADIENT PENTRU CONTRAST */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
 
-        {/* BUTON BACK */}
-        <button
-          onClick={() => navigate(-1)}
-          className="absolute top-6 left-6 z-30 rounded-full bg-white/90 px-4 py-2 text-sm font-medium shadow backdrop-blur"
-        >
-          ← Înapoi
-        </button>
+  {/* GRADIENT PENTRU CONTRAST */}
+  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
+
+  {/* 🔽 FADE SPRE FUNDALUL PAGINII */}
+  <div
+    className="absolute inset-x-0 bottom-0 h-32 pointer-events-none"
+    style={{
+      background:
+        'linear-gradient(to bottom, rgba(0,0,0,0.04) 0%, var(--bg-page) 100%)',
+    }}
+  />
+
+  {/* BUTON BACK */}
+  <button
+    onClick={() => navigate(-1)}
+    className="absolute top-6 left-6 z-30 rounded-full bg-white/90 px-4 py-2 text-sm font-medium shadow backdrop-blur"
+  >
+    ← Înapoi
+  </button>
 
         {/* ================= OVERLAY (MAI JOS) ================= */}
         <div className="absolute left-0 right-0 bottom-[-260px] md:bottom-[-90px] z-40">
@@ -136,7 +160,7 @@ const EventDetails = () => {
                     color: 'var(--color-academic-text)',
                   }}
                 >
-                  {event.category}
+                  {event.type}
                 </span>
 
                 <h1 className="text-4xl font-bold tracking-tight mb-6 text-[var(--text-primary)]">
@@ -146,18 +170,20 @@ const EventDetails = () => {
                 <div className="flex flex-wrap gap-x-10 gap-y-5 text-sm text-[var(--text-secondary)]">
                   <div className="flex items-center gap-3">
                     <CalendarDays className="w-5 h-5 text-[var(--color-accent)]" />
-                    <span>{event.date}</span>
+                    <span>
+  {new Date(event.startAt).toLocaleDateString()}
+</span>
                   </div>
 
                   <div className="flex items-center gap-3">
                     <MapPin className="w-5 h-5 text-[var(--color-accent)]" />
-                    <span>{event.location}</span>
-                  </div>
+                    <span>{event.locationName}</span>
+                    </div>
 
                   <div className="flex items-center gap-3">
                     <Users className="w-5 h-5 text-[var(--color-accent)]" />
-                    <span>{event.organizer}</span>
-                  </div>
+                    <span>{event.organizers.map(o => o.name).join(', ')}</span>
+                    </div>
                 </div>
               </div>
 
@@ -181,37 +207,37 @@ const EventDetails = () => {
         Autentificare
       </button>
     </>
-  ) : isCheckingRegistration ? (
-                  // ⏳ verificăm biletele din backend
-                  <p className="text-center text-sm text-gray-500">Se verifică înscrierea...</p>
-                ) : (
-                  <>
-                    <button
-                      onClick={handleRegister}
-                      disabled={isRegistering || isRegistered}
-                      className={cn(
-                        'w-full rounded-xl py-4 text-sm font-semibold transition',
-                        isRegistered
-                          ? 'bg-green-100 text-green-700 cursor-default'
-                          : 'bg-green-600 text-white hover:bg-green-700',
-                        isRegistering && 'opacity-70 cursor-wait',
-                      )}
-                    >
-                      {isRegistered
-                        ? 'Ești deja înscris'
-                        : isRegistering
-                          ? 'Se face înscrierea...'
-                          : 'Înscrie-te la eveniment'}
-                    </button>
+  ) : event.isRegistered ? (
+    <>
+      <div className="rounded-2xl bg-[var(--color-green-100)] px-6 py-10 text-center text-sm font-medium text-[var(--color-green-500)]">
+        Ești deja înscris la acest eveniment
+      </div>
 
-                    {!isRegistered && (
-                      <p className="mt-4 text-center text-sm text-gray-500">
-                        Vei primi o notificare de confirmare după înscriere.
-                      </p>
-                    )}
-                  </>
-                )}
-              </div>
+      <p className="mt-4 text-center text-sm text-[var(--text-secondary)]">
+        Vei primi notificări și acces la eveniment.
+      </p>
+    </>
+  ) : (
+    <>
+      <button
+        onClick={handleRegister}
+        disabled={isRegistering}
+        className={cn(
+          'w-full rounded-xl py-4 text-sm font-semibold transition',
+          'btn-primary',
+          isRegistering && 'opacity-70 cursor-wait'
+        )}
+      >
+        {isRegistering ? 'Se face înscrierea...' : 'Înscrie-te la eveniment'}
+      </button>
+
+      <p className="mt-4 text-center text-sm text-[var(--text-secondary)]">
+        Vei primi o notificare de confirmare după înscriere.
+      </p>
+    </>
+  )}
+</div>
+
             </div>
           </div>
         </div>
@@ -221,11 +247,11 @@ const EventDetails = () => {
       <div className="max-w-5xl mx-auto px-6 pt-[340px] md:pt-[160px] pb-28 space-y-14">
         {/* DESPRE */}
         <section className="bg-[var(--bg-card)] rounded-[28px] p-12 shadow">
-  <h2 className="text-xl font-semibold mb-6 text-[var(--text-primary)]">
-    Despre acest eveniment
-  </h2>
+          <h2 className="text-xl font-semibold mb-6 text-[var(--text-primary)]">
+            Despre acest eveniment
+          </h2>
 
-  <p className="text-[var(--text-secondary)] leading-relaxed text-base">
+          <p className="text-[var(--text-secondary)] leading-relaxed text-base">
             Acest workshop îți oferă oportunitatea de a-ți realiza fotografii profesionale de
             profil, dar și variante creative, ideale pentru rețelele sociale, CV sau alte scopuri.
             <br />
@@ -263,18 +289,17 @@ const EventDetails = () => {
           {/* CTA – NEAUTENTIFICAT */}
           {!user && (
             <div className="mb-8 flex flex-col items-center gap-4 rounded-2xl bg-[var(--bg-muted)] px-6 py-6 text-center">
-            <p className="text-sm font-medium text-[var(--text-secondary)]">
-              Autentifică-te pentru a lăsa o recenzie
-            </p>
-          
-            <button
-              onClick={() => navigate('/auth/login')}
-              className="rounded-xl btn-primary px-6 py-2 text-sm font-semibold"
-            >
-              Autentificare
-            </button>
-          </div>
-          
+              <p className="text-sm font-medium text-[var(--text-secondary)]">
+                Autentifică-te pentru a lăsa o recenzie
+              </p>
+
+              <button
+                onClick={() => navigate('/auth/login')}
+                className="rounded-xl btn-primary px-6 py-2 text-sm font-semibold"
+              >
+                Autentificare
+              </button>
+            </div>
           )}
 
           {/* CTA – LOGAT DAR NEÎNSCRIS */}
@@ -350,7 +375,9 @@ const EventDetails = () => {
                 {/* CONTENT */}
                 <div className="flex-1">
                   <div className="flex items-center gap-3">
-                    <span className="font-semibold text-[var(--text-primary)]">{review.userName}</span>
+                    <span className="font-semibold text-[var(--text-primary)]">
+                      {review.userName}
+                    </span>
 
                     <span className="text-yellow-500 text-sm">{'★'.repeat(review.rating)}</span>
 

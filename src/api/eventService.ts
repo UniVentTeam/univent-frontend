@@ -62,7 +62,36 @@ async function getEvents(filters: EventFilterQuery) {
   console.log(data);
   return data;
 }
+
+
+async function getEventById(eventId: string) {
+  const { data, error } = await api.GET('/events/{id}', {
+    params: {
+      path: { id: eventId },
+    },
+  });
+
+  if (error) {
+    console.error('Failed to fetch event details:', error);
+
+    const errorMessage =
+      (error as Error).message || 'Nu s-au putut încărca detaliile evenimentului.';
+
+    toast.error('Eroare', {
+      description: errorMessage,
+    });
+
+    throw new Error(errorMessage);
+  }
+
+  return data;
+}
 export const eventService = {
   registerToEvent,
   getEvents,
+  getEventById,
+
 };
+
+
+
