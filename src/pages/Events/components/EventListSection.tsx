@@ -1,30 +1,30 @@
-import React from "react";
-import { useFilters } from "./FilterContext";
-import { cn } from "@/utils/cn";
-import { useTranslation } from "react-i18next";
-import type { components } from "@/types/schema";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { useFilters } from './FilterContext';
+import { cn } from '@/utils/cn';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+// IMPORTAT: Iconițe, deoarece API-ul nu ne dă imagini pentru iconițe
+import { Calendar, MapPin, User } from 'lucide-react';
 
-
-
-type EnumOrganizerType = components['schemas']['EnumOrganizerType'];
-type EnumLocationType = components['schemas']['EnumLocationType'];
+// 1. Definim Event exact cum vine din API, nu cum era în Mock
+interface Organizer {
+  id: string;
+  name: string;
+  type: string;
+}
 
 interface Event {
-  id: string | number;
+  id: string;
   title: string;
-  date: string;
-  location: string;
-  organizer: string;
-  category: string;
-  backgroundImage: string;
-  dateIcon: string;
-  locationIcon: string;
-  organizerIcon: string;
+  coverImageUrl?: string; // API trimite asta în loc de 'backgroundImage'
+  startAt?: string; // API trimite asta în loc de 'date'
+  locationName?: string; // API trimite asta în loc de 'location'
+  organizers?: Organizer[];
+  category?: string;
+
+  // Opționale pentru filtre
   faculty?: string | null;
   associationId?: string | null;
-  organizerType?: EnumOrganizerType;
-  locationType?: EnumLocationType;
 }
 
 interface EventListSectionProps {
@@ -32,139 +32,154 @@ interface EventListSectionProps {
   searchQuery?: string;
 }
 
-const getTagClass = (category: string) => {
+// PĂSTRAT IDENTIC: Funcția ta de tag-uri
+const getTagClass = (category: string = '') => {
   switch (category.toLowerCase()) {
-    case "career":
-      return "tag-career";
-    case "academic":
-      return "tag-academic";
-    case "social":
-      return "tag-social";
-    case "volunteering":
-      return "tag-volunteering";
-    case "sports":
-      return "tag-sports";
+    case 'career':
+      return 'tag-career';
+    case 'academic':
+      return 'tag-academic';
+    case 'social':
+      return 'tag-social';
+    case 'volunteering':
+      return 'tag-volunteering';
+    case 'sports':
+      return 'tag-sports';
     default:
-      return "tag";
+      return 'tag';
   }
 };
 
-export const EventListSection: React.FC<EventListSectionProps> = ({ events, searchQuery = "" }) => {
+export const EventListSection: React.FC<EventListSectionProps> = ({ events, searchQuery = '' }) => {
   const { t } = useTranslation();
-  const navigate = useNavigate(); // Modificare Ruben
+  const navigate = useNavigate();
 
+  const { selectedCategories, dateRange, selectedAssociations, selectedFaculties } = useFilters();
 
-  const {
-    selectedCategories, matchAll,
-    dateRange,
-    selectedAssociations,
-    selectedFaculties,
-    selectedOrganizerTypes,
-    selectedLocationTypes,
-  } = useFilters();
-
+  // --- LOGICA ADAPTATĂ PENTRU API ---
   const filteredEvents = events.filter((event) => {
-    // 1. Search Query Filter
+    if (!event) return false;
+
+    // 1. Search Query
     const query = searchQuery.toLowerCase();
-    if (
-      query &&
-      !event.title.toLowerCase().includes(query) &&
-      !event.location.toLowerCase().includes(query) &&
-      !event.organizer.toLowerCase().includes(query) &&
-      !event.category.toLowerCase().includes(query)
-    ) {
+    // Verificăm câmpurile care există în API
+    const titleMatch = event.title?.toLowerCase().includes(query) || false;
+    const locationMatch = event.locationName?.toLowerCase().includes(query) || false;
+    const organizerMatch =
+      event.organizers?.some((org) => org.name.toLowerCase().includes(query)) || false;
+    const categoryMatch = event.category?.toLowerCase().includes(query) || false;
+
+    if (query && !titleMatch && !locationMatch && !organizerMatch && !categoryMatch) {
       return false;
     }
 
-    // 2. Date Range Filter
-    const eventDate = new Date(event.date.split("*")[0].trim());
+    // 2. Date Range (Fix pentru eroarea .split('*'))
+    // API-ul trimite data ISO, deci o convertim direct
+    const eventDate = event.startAt ? new Date(event.startAt) : new Date();
     const startDate = dateRange.start ? new Date(dateRange.start) : null;
     const endDate = dateRange.end ? new Date(dateRange.end) : null;
+
     if ((startDate && eventDate < startDate) || (endDate && eventDate > endDate)) {
       return false;
     }
 
     // 3. Category Filter
     if (selectedCategories.length > 0) {
-      const eventCategory = event.category.toUpperCase();
-      if (matchAll) {
-        // This logic is tricky if an event only has one category.
-        // A true "matchAll" would mean event.categories is an array.
-        // For now, we interpret it as: "does this event's category match one of the (potentially many) selected?"
-        // This is effectively the same as OR logic in this data model.
-        if (!selectedCategories.includes(eventCategory)) {
-          return false;
-        }
-      } else {
-        if (!selectedCategories.includes(eventCategory)) {
-          return false;
-        }
+      const eventCategory = (event.category || 'General').toUpperCase();
+      if (!selectedCategories.includes(eventCategory)) {
+        return false;
       }
     }
 
-    // 4. Association Filter
-    if (selectedAssociations.length > 0 && !selectedAssociations.includes(event.associationId!)) {
-        return false;
+    // 4. Association & Faculty Filters
+    if (selectedAssociations.length > 0) {
+      const hasAssoc = event.organizers?.some((org) => selectedAssociations.includes(org.id));
+      if (!hasAssoc && !selectedAssociations.includes(event.associationId || '')) return false;
+    }
+    if (selectedFaculties.length > 0 && !selectedFaculties.includes(event.faculty || '')) {
+      return false;
     }
 
-    // 5. Faculty Filter
-    if (selectedFaculties.length > 0 && !selectedFaculties.includes(event.faculty!)) {
-        return false;
-    }
-    
-    // 6. Organizer Type Filter
-    if (selectedOrganizerTypes.length > 0 && !selectedOrganizerTypes.includes(event.organizerType!)) {
-        return false;
-    }
-
-    // 7. Location Type Filter
-    if (selectedLocationTypes.length > 0 && !selectedLocationTypes.includes(event.locationType!)) {
-        return false;
-    }
-
-    // If all checks pass, include the event
     return true;
   });
 
+  // Helper pentru a formata data frumos (înlocuiește string-ul brut din Mock)
+  const formatDate = (isoString?: string) => {
+    if (!isoString) return '';
+    const d = new Date(isoString);
+    // Ex: 25 Nov, 14:00
+    return d.toLocaleDateString('ro-RO', {
+      day: 'numeric',
+      month: 'short',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
   return (
+    // PĂSTRAT IDENTIC: Grid-ul tău cu minmax(600px)
     <section className="mt-[100px] grid gap-6 px-4 py-8 grid-cols-[repeat(auto-fill,minmax(600px,1fr))]">
-      {filteredEvents.map((event) => (
-        <article
-          key={event.id}
+      {filteredEvents.map((event) => {
+        // Mapăm datele din API la variabile de afișare
+        const displayCategory = event.category || event.organizers?.[0]?.type || 'Eveniment';
+        const displayLocation = event.locationName || 'Locație';
+        const displayOrganizer = event.organizers?.[0]?.name || 'Organizator';
+        const displayDate = formatDate(event.startAt);
 
-          onClick={() => navigate(`/events/${event.id}`)} // Modificare Ruben
+        // MODIFICARE OBLIGATORIE: Imaginea vine ca URL, deci o punem în style
+        const bgStyle = event.coverImageUrl
+          ? { backgroundImage: `url(${event.coverImageUrl})` }
+          : { backgroundColor: '#374151' };
 
-          className={cn(
-            `relative rounded-2xl overflow-hidden bg-cover bg-center h-72 md:h-80 lg:h-96`,
-            event.backgroundImage,
-            `transition-all duration-300 ease-out`,
-            `hover:scale-[1.03] hover:-translate-y-1 hover:brightness-105 hover:shadow-xl`
-          )}
-        >
-          <div className={cn("tag", getTagClass(event.category), "absolute top-3 left-3 px-3 py-1 rounded-md text-sm md:text-base lg:text-lg font-bold capitalize")}>
-            {event.category}
-          </div>
-
-          <div className="absolute inset-0 flex flex-col justify-end p-4 text-white bg-gradient-to-t from-black/60 to-transparent">
-            <h2 className="mb-2 text-xl font-bold md:text-2xl lg:text-3xl">{event.title}</h2>
-
-            <div className="flex items-center mb-1 text-sm md:text-base">
-              <img src={event.dateIcon} className="w-4 h-4 mr-2" alt="Date" />
-              <time>{event.date}</time>
+        return (
+          <article
+            key={event.id}
+            onClick={() => navigate(`/events/${event.id}`)}
+            className={cn(
+              // PĂSTRAT IDENTIC: Clasele tale originale
+              `relative rounded-2xl overflow-hidden bg-cover bg-center h-72 md:h-80 lg:h-96`,
+              // Am scos 'event.backgroundImage' de aici pentru că nu mai e o clasă CSS
+              `transition-all duration-300 ease-out`,
+              `hover:scale-[1.03] hover:-translate-y-1 hover:brightness-105 hover:shadow-xl`,
+            )}
+            style={bgStyle} // Aici aplicăm imaginea din API
+          >
+            {/* TAG - PĂSTRAT IDENTIC */}
+            <div
+              className={cn(
+                'tag',
+                getTagClass(displayCategory),
+                'absolute top-3 left-3 px-3 py-1 rounded-md text-sm md:text-base lg:text-lg font-bold capitalize',
+              )}
+            >
+              {displayCategory}
             </div>
 
-            <div className="flex items-center mb-1 text-sm md:text-base">
-              <img src={event.locationIcon} className="w-4 h-4 mr-2" alt="Location" />
-              <span>{event.location}</span>
-            </div>
+            {/* OVERLAY - PĂSTRAT IDENTIC */}
+            <div className="absolute inset-0 flex flex-col justify-end p-4 text-white bg-gradient-to-t from-black/60 to-transparent">
+              <h2 className="mb-2 text-xl font-bold md:text-2xl lg:text-3xl">{event.title}</h2>
 
-            <div className="flex items-center text-sm md:text-base">
-              <img src={event.organizerIcon} className="w-4 h-4 mr-2" alt="Organizer" />
-              <span>{event.organizer}</span>
+              {/* RÂNDURILE CU ICONIȚE */}
+              {/* Am înlocuit <img> cu Componente React (Calendar, MapPin) dar cu aceleași clase w-4 h-4 mr-2 */}
+
+              <div className="flex items-center mb-1 text-sm md:text-base">
+                <Calendar className="w-4 h-4 mr-2" />
+                <time>{displayDate}</time>
+              </div>
+
+              <div className="flex items-center mb-1 text-sm md:text-base">
+                <MapPin className="w-4 h-4 mr-2" />
+                <span>{displayLocation}</span>
+              </div>
+
+              <div className="flex items-center text-sm md:text-base">
+                <User className="w-4 h-4 mr-2" />
+                <span>{displayOrganizer}</span>
+              </div>
             </div>
-          </div>
-        </article>
-      ))}
+          </article>
+        );
+      })}
 
       {filteredEvents.length === 0 && (
         <p className="text-lg text-center text-gray-500 col-span-full md:text-xl">
