@@ -4,6 +4,7 @@ import ProtectedRoute from './ProtectedRoute';
 // Layouts
 import DashboardLayout from '@/layouts/DashboardLayout';
 import AuthLayout from '@/layouts/AuthLayout';
+import EventDetailsLayout from '@/layouts/EventDetailsLayout';
 
 // Pages - Auth
 import LoginPage from '@/pages/Auth/Login';
@@ -62,11 +63,12 @@ export const router = createBrowserRouter([
         path: 'events/calendar',
         element: <EventsCalendar />
       },
+      /*
       {
         path: 'events/:id',
         element: <EventDetails />
       },
-
+*/
       // --- B. RUTE PROTEJATE (Doar logat) ---
       {
         element: <ProtectedRoute />,
@@ -108,6 +110,17 @@ export const router = createBrowserRouter([
             element: <TicketDetails />
           }
         ]
+      }
+    ]
+  },
+   // 🎯 EVENT DETAILS – layout separat
+   {
+    path: '/events/:id',
+    element: <EventDetailsLayout />,
+    children: [
+      {
+        index: true,
+        element: <EventDetails />
       }
     ]
   },

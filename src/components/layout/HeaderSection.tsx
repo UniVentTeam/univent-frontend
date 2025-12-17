@@ -113,7 +113,7 @@ export const HeaderSection: React.FC = () => {
         </div>
       </nav>
 
-      {/* HERO SECTION */}
+      {/* HERO SECTION 
       <section
         className="hero-section flex flex-row lg:flex-row w-full items-center justify-between gap-4 lg:gap-8 
              p-4 sm:p-6 md:p-10 lg:px-[5%] 
@@ -134,7 +134,7 @@ export const HeaderSection: React.FC = () => {
           alt="University events showcase"
           src="/assets/rectangle-6.svg"
         />
-      </section>
+      </section>*/}
     </header>
   );
 };

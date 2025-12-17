@@ -79,14 +79,14 @@ const EventDetails = () => {
 
   const handleAddReview = async () => {
     if (!comment.trim()) return;
-  
+
     setIsSubmittingReview(true);
     try {
       const newReview = await reviewService.addReview(event.id, {
         rating,
         comment,
       });
-  
+
       setReviews((prev) => [newReview, ...prev]);
       setComment('');
       setRating(5);
@@ -96,7 +96,6 @@ const EventDetails = () => {
       setIsSubmittingReview(false);
     }
   };
-  
 
   if (!event) {
     return (
@@ -107,7 +106,7 @@ const EventDetails = () => {
   }
 
   return (
-    <div className="bg-[#F5F8FB] min-h-screen">
+    <div className="bg-[var(--bg-page)] min-h-screen">
       {/* ================= HERO ================= */}
       <div className="relative h-[480px] w-full">
         {/* IMAGINE */}
@@ -129,31 +128,34 @@ const EventDetails = () => {
           <div className="max-w-7xl mx-auto px-6">
             <div className="grid grid-cols-[2fr_1fr] gap-8 items-stretch">
               {/* INFO EVENIMENT */}
-              <div className="bg-white rounded-[28px] p-10 shadow-xl">
-                <span className="inline-flex items-center mb-4 px-3 py-1 text-xs font-semibold rounded-full bg-blue-50 text-blue-600 capitalize">
+              <div className="bg-[var(--bg-card)] rounded-[28px] p-10 shadow-xl">
+                <span
+                  className="inline-flex items-center mb-4 px-3 py-1 text-xs font-semibold rounded-full capitalize"
+                  style={{
+                    backgroundColor: 'var(--color-academic-bg)',
+                    color: 'var(--color-academic-text)',
+                  }}
+                >
                   {event.category}
                 </span>
 
-                <h1 className="text-4xl font-bold tracking-tight mb-6 text-gray-900">
+                <h1 className="text-4xl font-bold tracking-tight mb-6 text-[var(--text-primary)]">
                   {event.title}
                 </h1>
 
-                <div className="flex flex-wrap gap-x-10 gap-y-5 text-sm text-gray-600">
-                  {/* DATA */}
+                <div className="flex flex-wrap gap-x-10 gap-y-5 text-sm text-[var(--text-secondary)]">
                   <div className="flex items-center gap-3">
-                    <CalendarDays className="w-5 h-5 text-blue-600" />
+                    <CalendarDays className="w-5 h-5 text-[var(--color-accent)]" />
                     <span>{event.date}</span>
                   </div>
 
-                  {/* LOCAȚIE */}
                   <div className="flex items-center gap-3">
-                    <MapPin className="w-5 h-5 text-blue-600" />
+                    <MapPin className="w-5 h-5 text-[var(--color-accent)]" />
                     <span>{event.location}</span>
                   </div>
 
-                  {/* ORGANIZATOR */}
                   <div className="flex items-center gap-3">
-                    <Users className="w-5 h-5 text-blue-600" />
+                    <Users className="w-5 h-5 text-[var(--color-accent)]" />
                     <span>{event.organizer}</span>
                   </div>
                 </div>
@@ -161,23 +163,25 @@ const EventDetails = () => {
 
               {/* CARD ÎNSCRIERE */}
               {/* CARD ÎNSCRIERE */}
-              <div className="bg-white rounded-[28px] p-10 shadow-xl h-full flex flex-col">
-                <h2 className="text-lg font-semibold mb-6 text-gray-900">Înscriere la eveniment</h2>
+              <div className="bg-[var(--bg-card)] rounded-[28px] p-10 shadow-xl h-full flex flex-col">
+  <h2 className="text-lg font-semibold mb-6 text-[var(--text-primary)]">
+    Înscriere la eveniment
+  </h2>
 
-                {!user ? (
-                  <>
-                    <div className="rounded-2xl bg-blue-50 px-6 py-14 text-center text-sm text-gray-700 font-medium">
-                      Autentifică-te pentru a te putea înscrie la acest eveniment
-                    </div>
+  {!user ? (
+    <>
+      <div className="rounded-2xl bg-[var(--bg-muted)] px-6 py-14 text-center text-sm text-[var(--text-secondary)] font-medium">
+        Autentifică-te pentru a te putea înscrie la acest eveniment
+      </div>
 
-                    <button
-                      onClick={() => navigate('/auth/login')}
-                      className="mt-6 w-full rounded-xl btn-primary text-white py-3 text-sm font-semibold hover:btn-primary transition"
-                    >
-                      Autentificare
-                    </button>
-                  </>
-                ) : isCheckingRegistration ? (
+      <button
+        onClick={() => navigate('/auth/login')}
+        className="mt-6 w-full rounded-xl btn-primary py-3 text-sm font-semibold"
+      >
+        Autentificare
+      </button>
+    </>
+  ) : isCheckingRegistration ? (
                   // ⏳ verificăm biletele din backend
                   <p className="text-center text-sm text-gray-500">Se verifică înscrierea...</p>
                 ) : (
@@ -216,10 +220,12 @@ const EventDetails = () => {
       {/* ================= CONȚINUT PRINCIPAL ================= */}
       <div className="max-w-5xl mx-auto px-6 pt-[340px] md:pt-[160px] pb-28 space-y-14">
         {/* DESPRE */}
-        <section className="bg-white rounded-[28px] p-12 shadow">
-          <h2 className="text-xl font-semibold mb-6 text-gray-900">Despre acest eveniment</h2>
+        <section className="bg-[var(--bg-card)] rounded-[28px] p-12 shadow">
+  <h2 className="text-xl font-semibold mb-6 text-[var(--text-primary)]">
+    Despre acest eveniment
+  </h2>
 
-          <p className="text-gray-700 leading-relaxed text-base">
+  <p className="text-[var(--text-secondary)] leading-relaxed text-base">
             Acest workshop îți oferă oportunitatea de a-ți realiza fotografii profesionale de
             profil, dar și variante creative, ideale pentru rețelele sociale, CV sau alte scopuri.
             <br />
@@ -240,147 +246,128 @@ const EventDetails = () => {
         </section>
 
         {/* RECENZII */}
-       {/* RECENZII */}
-<section className="bg-white rounded-[28px] p-12 shadow">
-  {/* HEADER */}
-  <div className="flex items-center justify-between mb-8">
-    <h2 className="text-xl font-semibold text-gray-900">Recenzii</h2>
+        {/* RECENZII */}
+        <section className="bg-white rounded-[28px] p-12 shadow">
+          {/* HEADER */}
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-xl font-semibold text-gray-900">Recenzii</h2>
 
-    {reviews.length > 0 && (
-      <span className="text-yellow-500 font-medium">
-        {'★'.repeat(
-          Math.round(
-            reviews.reduce((a, r) => a + r.rating, 0) / reviews.length
-          )
-        )}{' '}
-        {(
-          reviews.reduce((a, r) => a + r.rating, 0) / reviews.length
-        ).toFixed(1)}
-      </span>
-    )}
-  </div>
-
-  {/* CTA – NEAUTENTIFICAT */}
-  {!user && (
-    <div className="mb-8 flex flex-col items-center gap-4 rounded-2xl bg-blue-50 px-6 py-6 text-center">
-      <p className="text-sm font-medium text-gray-700">
-        Autentifică-te pentru a lăsa o recenzie
-      </p>
-
-      <button
-        onClick={() => navigate('/auth/login')}
-        className="rounded-xl btn-primary px-6 py-2 text-sm font-semibold text-white transition"
-      >
-        Autentificare
-      </button>
-    </div>
-  )}
-
-  {/* CTA – LOGAT DAR NEÎNSCRIS */}
-  {user && !isRegistered && (
-    <div className="mb-8 rounded-xl bg-gray-50 py-3 text-center text-sm text-gray-600">
-      Doar participanții pot lăsa recenzii la acest eveniment.
-    </div>
-  )}
-
-  {/* FORMULAR – DOAR PARTICIPANȚI */}
-  {user && isRegistered && (
-    <div className="mb-10 rounded-2xl bg-blue-50 p-6">
-      <h3 className="mb-4 text-sm font-semibold text-gray-900">
-        Lasă o recenzie
-      </h3>
-
-      {/* STELE */}
-      <div className="flex items-center gap-2 mb-4">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <button
-            key={star}
-            type="button"
-            onClick={() => setRating(star)}
-            className={cn(
-              'text-xl transition',
-              star <= rating ? 'text-yellow-400' : 'text-gray-300'
+            {reviews.length > 0 && (
+              <span className="text-yellow-500 font-medium">
+                {'★'.repeat(Math.round(reviews.reduce((a, r) => a + r.rating, 0) / reviews.length))}{' '}
+                {(reviews.reduce((a, r) => a + r.rating, 0) / reviews.length).toFixed(1)}
+              </span>
             )}
-          >
-            ★
-          </button>
-        ))}
-      </div>
-
-      {/* COMENTARIU */}
-      <textarea
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
-        placeholder="Scrie părerea ta despre eveniment..."
-        className="w-full rounded-xl border border-gray-200 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        rows={3}
-      />
-
-      {/* SUBMIT */}
-      <button
-        onClick={handleAddReview}
-        disabled={isSubmittingReview || !comment.trim()}
-        className="mt-4 rounded-xl btn-primary px-6 py-2 text-sm font-semibold text-white hover:btn-primary transition disabled:opacity-60"
-      >
-        {isSubmittingReview ? 'Se trimite...' : 'Trimite recenzia'}
-      </button>
-    </div>
-  )}
-
-  {/* LOADING */}
-  {isLoadingReviews && (
-    <p className="text-sm text-gray-500">Se încarcă recenziile...</p>
-  )}
-
-  {/* EMPTY */}
-  {!isLoadingReviews && reviews.length === 0 && (
-    <p className="text-sm text-gray-500">
-      Acest eveniment nu are încă recenzii.
-    </p>
-  )}
-
-  {/* LISTA RECENZII */}
-  <div className="space-y-8">
-    {reviews.map((review) => (
-      <div key={review.id} className="flex gap-5 border-t pt-8">
-        {/* AVATAR */}
-        <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center font-semibold">
-          {review.userName
-            .split(' ')
-            .map((n) => n[0])
-            .join('')
-            .slice(0, 2)}
-        </div>
-
-        {/* CONTENT */}
-        <div className="flex-1">
-          <div className="flex items-center gap-3">
-            <span className="font-semibold text-gray-900">
-              {review.userName}
-            </span>
-
-            <span className="text-yellow-500 text-sm">
-              {'★'.repeat(review.rating)}
-            </span>
-
-            <span className="text-xs text-gray-400">
-              {new Date(review.createdAt).toLocaleDateString()}
-            </span>
           </div>
 
-          <p className="mt-2 text-gray-700 text-sm">
-            {review.comment}
-          </p>
-        </div>
-      </div>
-    ))}
-  </div>
-</section>
+          {/* CTA – NEAUTENTIFICAT */}
+          {!user && (
+            <div className="mb-8 flex flex-col items-center gap-4 rounded-2xl bg-[var(--bg-muted)] px-6 py-6 text-center">
+            <p className="text-sm font-medium text-[var(--text-secondary)]">
+              Autentifică-te pentru a lăsa o recenzie
+            </p>
+          
+            <button
+              onClick={() => navigate('/auth/login')}
+              className="rounded-xl btn-primary px-6 py-2 text-sm font-semibold"
+            >
+              Autentificare
+            </button>
+          </div>
+          
+          )}
 
+          {/* CTA – LOGAT DAR NEÎNSCRIS */}
+          {user && !isRegistered && (
+            <div className="mb-8 rounded-xl bg-gray-50 py-3 text-center text-sm text-gray-600">
+              Doar participanții pot lăsa recenzii la acest eveniment.
+            </div>
+          )}
+
+          {/* FORMULAR – DOAR PARTICIPANȚI */}
+          {user && isRegistered && (
+            <div className="mb-10 rounded-2xl bg-blue-50 p-6">
+              <h3 className="mb-4 text-sm font-semibold text-gray-900">Lasă o recenzie</h3>
+
+              {/* STELE */}
+              <div className="flex items-center gap-2 mb-4">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    onClick={() => setRating(star)}
+                    className={cn(
+                      'text-xl transition',
+                      star <= rating ? 'text-yellow-400' : 'text-gray-300',
+                    )}
+                  >
+                    ★
+                  </button>
+                ))}
+              </div>
+
+              {/* COMENTARIU */}
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Scrie părerea ta despre eveniment..."
+                className="w-full rounded-xl border border-gray-200 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows={3}
+              />
+
+              {/* SUBMIT */}
+              <button
+                onClick={handleAddReview}
+                disabled={isSubmittingReview || !comment.trim()}
+                className="mt-4 rounded-xl btn-primary px-6 py-2 text-sm font-semibold text-white hover:btn-primary transition disabled:opacity-60"
+              >
+                {isSubmittingReview ? 'Se trimite...' : 'Trimite recenzia'}
+              </button>
+            </div>
+          )}
+
+          {/* LOADING */}
+          {isLoadingReviews && <p className="text-sm text-gray-500">Se încarcă recenziile...</p>}
+
+          {/* EMPTY */}
+          {!isLoadingReviews && reviews.length === 0 && (
+            <p className="text-sm text-gray-500">Acest eveniment nu are încă recenzii.</p>
+          )}
+
+          {/* LISTA RECENZII */}
+          <div className="space-y-8">
+            {reviews.map((review) => (
+              <div key={review.id} className="flex gap-5 border-t pt-8">
+                {/* AVATAR */}
+                <div className="w-12 h-12 rounded-full bg-[var(--bg-muted)] flex items-center justify-center font-semibold">
+                  {review.userName
+                    .split(' ')
+                    .map((n) => n[0])
+                    .join('')
+                    .slice(0, 2)}
+                </div>
+
+                {/* CONTENT */}
+                <div className="flex-1">
+                  <div className="flex items-center gap-3">
+                    <span className="font-semibold text-[var(--text-primary)]">{review.userName}</span>
+
+                    <span className="text-yellow-500 text-sm">{'★'.repeat(review.rating)}</span>
+
+                    <span className="text-xs text-[var(--text-secondary)]">
+                      {new Date(review.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+
+                  <p className="mt-2 text-[var(--text-secondary)] text-sm">{review.comment}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );
-
 };
 
 export default EventDetails;
