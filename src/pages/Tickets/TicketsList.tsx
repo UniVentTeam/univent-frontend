@@ -17,7 +17,7 @@ const TicketsList = () => {
 
   return (
     <FilterProvider>
-      <div className="relative min-h-screen pb-32 text-black bg-white dark:bg-gray-900 dark:text-white">
+      <div className="relative min-h-screen pb-32 transition-colors duration-300 bg-page text-main">
         <SearchBarSection
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
