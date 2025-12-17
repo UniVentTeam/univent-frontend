@@ -10,18 +10,21 @@ const EventsList = () => {
 
   return (
     <FilterProvider>
-      <div className="relative min-h-screen pb-32 bg-white">
+      <div className="relative min-h-screen pb-32 text-black bg-white dark:bg-gray-900 dark:text-white">
+
         <SearchBarSection
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
         />
 
-        <main className="relative z-10 w-full px-4 mx-0 -mt-20">
+        <main className="relative z-10 w-full px-4 mx-0 -mt-20 transition-colors duration-300"
+          style={{ backgroundColor: 'var(--bg-page)', color: 'var(--text-primary)' }}>
           <EventListSection
             events={events}
             searchQuery={searchQuery}
           />
         </main>
+
       </div>
     </FilterProvider>
   );

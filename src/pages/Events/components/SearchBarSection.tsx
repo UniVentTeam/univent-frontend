@@ -123,7 +123,7 @@ export const SearchBarSection: React.FC<SearchBarSectionProps> = ({
         />
       </div>
 
-      <div className="bg-card mx-auto w-[90%] max-w-[1400px] flex flex-wrap items-center gap-4">
+      <div className="mx-auto w-[90%] max-w-[1400px] flex flex-wrap items-center gap-4">
         {/* Event Type Filter */}
         <FilterDropdown
           title={t('filters.event_type')}
@@ -168,7 +168,7 @@ export const SearchBarSection: React.FC<SearchBarSectionProps> = ({
         />
 
         {/* Date Range Filter */}
-        <div className="flex items-center gap-2 w-48">
+        <div className="flex items-center w-48 gap-2">
           <input
             type="date"
             name="start"
