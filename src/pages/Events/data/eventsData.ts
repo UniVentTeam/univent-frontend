@@ -1,7 +1,7 @@
 
 export const events = [
   {
-    id: "1",
+    id: "6927227c158cf8a456d8105f",
     title: "Photography workshop",
     date: "2025-11-17 * 12:00AM - 2:00PM",
     location: "CCS-Casa de cultura a studentilor",
