@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, CalendarDays, Bookmark, User, ClipboardPenLine, Ticket } from 'lucide-react';
+import { Home, CalendarDays, User, ClipboardPenLine, Ticket } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/authStore';
@@ -12,16 +12,15 @@ export const BottomNav: React.FC = () => {
   const baseNavigationItems = [
     { id: 1, icon: Home, label: t('navigation.home'), to: '/' },
     { id: 2, icon: CalendarDays, label: t('navigation.calendar'), to: '/events/calendar' },
-    { id: 3, icon: Bookmark, label: t('navigation.saved') },
-    { id: 4, icon: User, label: t('navigation.profile'), to: '/profile' },
-    { id: 5, icon: ClipboardPenLine, label: t('navigation.enrollments') },
+    { id: 4, icon: ClipboardPenLine, label: t('navigation.enrollments'), to: '/tickets' },
+    { id: 5, icon: User, label: t('navigation.profile'), to: '/profile' },
   ];
 
   const navigationItems = [...baseNavigationItems];
 
   if (role === 'admin' || role === 'organizer') {
     navigationItems.push({
-      id: 6,
+      id: 5,
       icon: Ticket,
       label: t('navigation.events'),
       to: '/events/verification',
