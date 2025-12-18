@@ -72,7 +72,9 @@
     "saved": "Saved",
     "profile": "Profile",
     "enrollments": "Enrollments",
-    "events": "Events"
+    "events": "Events",
+    "admin": "Admin",
+    "organize": "Organize Event"
   },
   "header": {
     "student": "Student",
@@ -102,6 +104,50 @@
       "CONFIRMED": "Confirmed",
       "CHECKED_IN": "Checked In",
       "CANCELLED": "Cancelled"
+    }
+  },
+  "location_types": {
+    "IN_CAMPUS": "In Campus",
+    "IN_CITY": "In City",
+    "OUTSIDE_CITY": "Outside City",
+    "ONLINE": "Online"
+  },
+  "organizer_dashboard": {
+    "title": "Organizer Dashboard",
+    "subtitle": "Manage and track your events",
+    "tabs": {
+      "overview": "Overview",
+      "my_events": "My events",
+      "analytics": "Analytics"
+    },
+    "create_btn": "Create event"
+  },
+  "create_event": {
+    "page_title": "Create New Event",
+    "page_subtitle": "Fill in the details to publish your event",
+    "back_link": "Back to dashboard",
+    "labels": {
+      "title": "Event Title",
+      "title_placeholder": "e.g., Photography Workshop",
+      "date": "Date",
+      "start_time": "Start Time",
+      "end_time": "End Time",
+      "type": "Event Type",
+      "type_placeholder": "Select type",
+      "location": "Location Name",
+      "location_placeholder": "e.g. Building A, Room 101",
+      "location_type": "Location Type",
+      "location_type_placeholder": "Select location type",
+      "max_participants": "Max Participants",
+      "description": "Description",
+      "description_placeholder": "Tell people what this event is about...",
+      "cover_image": "Cover Image",
+      "upload_text": "Click to upload image",
+      "upload_subtext": "PNG, JPG up to 10MB"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "publish": "Publish Event"
     }
   }
 }

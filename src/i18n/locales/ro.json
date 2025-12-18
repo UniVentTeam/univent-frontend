@@ -72,7 +72,9 @@
     "saved": "Salvate",
     "profile": "Profil",
     "enrollments": "Înscrieri",
-    "events": "Evenimente"
+    "events": "Evenimente",
+    "admin": "Administrare",
+    "organize": "Organizare eveniment"
   },
   "header": {
     "student": "Student",
@@ -102,6 +104,50 @@
       "CONFIRMED": "Confirmat",
       "CHECKED_IN": "Validat",
       "CANCELLED": "Anulat"
+    }
+  },
+  "location_types": {
+    "IN_CAMPUS": "În Campus",
+    "IN_CITY": "În Oraș",
+    "OUTSIDE_CITY": "În Afara Orașului",
+    "ONLINE": "Online"
+  },
+  "organizer_dashboard": {
+    "title": "Panoul Organizatorului",
+    "subtitle": "Gestionează și urmărește evenimentele tale",
+    "tabs": {
+      "overview": "Privire generală",
+      "my_events": "Evenimentele mele",
+      "analytics": "Analize"
+    },
+    "create_btn": "Creează eveniment"
+  },
+  "create_event": {
+    "page_title": "Creează eveniment nou",
+    "page_subtitle": "Completează detaliile pentru a publica evenimentul tău",
+    "back_link": "Înapoi la panou",
+    "labels": {
+      "title": "Titlu Eveniment",
+      "title_placeholder": "ex: Workshop de Fotografie",
+      "date": "Dată",
+      "start_time": "Oră Început",
+      "end_time": "Oră Sfârșit",
+      "type": "Tip Eveniment",
+      "type_placeholder": "Selectează tipul",
+      "location": "Nume Locație",
+      "location_placeholder": "ex. Corp A, Sala 101",
+      "location_type": "Tip Locație",
+      "location_type_placeholder": "Selectează tip locație",
+      "max_participants": "Nr. Max. Participanți",
+      "description": "Descriere",
+      "description_placeholder": "Spune oamenilor despre ce este acest eveniment...",
+      "cover_image": "Imagine de copertă",
+      "upload_text": "Apasă pentru a încărca imaginea",
+      "upload_subtext": "PNG, JPG până la 10MB"
+    },
+    "buttons": {
+      "cancel": "Anulează",
+      "publish": "Publică Eveniment"
     }
   }
 }

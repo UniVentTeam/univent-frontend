@@ -29,6 +29,7 @@ import EventStatistics from '@/pages/Statistics/EventStatistics';
 
 import TicketsList from '@/pages/Tickets/TicketsList';
 import TicketDetails from '@/pages/Tickets/TicketDetails';
+import OrganizeEventPage from '@/pages/Organizer/OrganizeEventPage';
 
 import NotFound from '@/pages/NotFound';
 
@@ -113,13 +114,17 @@ export const router = createBrowserRouter([
           {
             path: 'tickets/:id',
             element: <TicketDetails />
+          },
+          {
+            path: 'organize',
+            element: <OrganizeEventPage />
           }
         ]
       }
     ]
   },
-   // 🎯 EVENT DETAILS – layout separat
-   {
+  // 🎯 EVENT DETAILS – layout separat
+  {
     path: '/events/:id',
     element: <EventDetailsLayout />,
     children: [

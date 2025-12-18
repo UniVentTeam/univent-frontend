@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/authStore';
 
 type NavItem = {
-  key: 'home' | 'calendar' | 'enrollments' | 'profile' | 'events';
+  key: 'home' | 'calendar' | 'enrollments' | 'profile' | 'events' | 'admin' | 'organize';
   icon: React.ElementType;
   to: string;
   auth?: boolean;
@@ -86,13 +86,20 @@ export const HeaderSection: React.FC = () => {
       icon: Ticket,
       to: '/events/verification',
       auth: true,
-      roles: ['ADMIN', 'ORGANIZER'],
+      roles: ['ADMIN'],
+    },
+    {
+      key: 'organize',
+      icon: Ticket, // Using Ticket as placeholder, imported PlusCircle would be better but keeping it simple as per imports
+      to: '/organize',
+      auth: true,
+      roles: ['ORGANIZER'],
     },
   ];
 
   const visibleNavItems = navItems.filter((item) => {
     if (item.auth && !isAuthenticated) return false;
-    if (item.roles && !item.roles.includes(role)) return false;
+    if (item.roles && (!role || !item.roles.includes(role))) return false;
     return true;
   });
 

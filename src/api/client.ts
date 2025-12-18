@@ -42,4 +42,49 @@ const authMiddleware: Middleware = {
 
 api.use(authMiddleware);
 
+export const createEvent = async (eventData: any) => {
+  const { data, error } = await api.POST('/events', {
+    body: eventData,
+  });
+
+  if (error) {
+    throw new Error((error as any).message || 'Failed to create event');
+  }
+
+  return data;
+};
+
+export const getMyAssociations = async () => {
+  // @ts-ignore - Route added recently
+  const { data, error } = await api.GET('/associations/mine', {});
+  if (error) throw new Error((error as any).message || 'Failed to fetch associations');
+  return data;
+};
+
+export const getEvents = async (query?: any) => {
+  const { data, error } = await api.GET('/events', {
+    params: {
+      query: query
+    }
+  });
+
+  if (error) throw new Error((error as any).message || 'Failed to fetch events');
+  return data;
+};
+
+export const updateEventStatus = async (eventId: string, status: 'PUBLISHED' | 'REJECTED', reason?: string) => {
+  const { data, error } = await api.PATCH('/events/{id}/status', {
+    params: {
+      path: { id: eventId }
+    },
+    body: {
+      status,
+      rejectionReason: reason
+    }
+  });
+
+  if (error) throw new Error((error as any).message || 'Failed to update status');
+  return data;
+};
+
 export default api;
