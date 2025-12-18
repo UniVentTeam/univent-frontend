@@ -5,9 +5,13 @@
 import createClient, { type Middleware } from 'openapi-fetch';
 import type { paths } from '../types/schema';
 import { useAuthStore } from '@/stores/authStore'; // Importăm store-ul pentru logout
+import qs from 'qs';
 
 const api = createClient<paths>({
   baseUrl: 'http://localhost:4001', // sau http://localhost:3000
+  querySerializer: (params) => {
+    return qs.stringify(params, { arrayFormat: 'repeat' });
+  },
 });
 
 const authMiddleware: Middleware = {
