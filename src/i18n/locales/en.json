@@ -94,5 +94,14 @@
     "CAREER": "Career",
     "VOLUNTEERING": "Volunteering",
     "WORKSHOP": "Workshop"
+  },
+  "tickets": {
+    "my_tickets": "My Tickets",
+    "noTickets": "You have no tickets yet.",
+    "ticket_statuses": {
+      "CONFIRMED": "Confirmed",
+      "CHECKED_IN": "Checked In",
+      "CANCELLED": "Cancelled"
+    }
   }
 }
