@@ -46,7 +46,7 @@ async function getEvents(filters: EventFilterQuery) {
   // Aplicat tipul 'EventFilterQuery' parametrului 'filters'
   const { data, error } = await api.GET('/events', {
     params: {
-      query: { filters },
+      query: filters,
     },
   });
 
@@ -59,7 +59,15 @@ async function getEvents(filters: EventFilterQuery) {
     });
     throw new Error(errorMessage);
   }
-  console.log(data);
+
+  // Handle API inconsistency: it might return { events: [...] } or { data: [...] }
+  if (data && (data as any).events) {
+    return (data as any).events;
+  }
+  if (data && (data as any).data) {
+    return (data as any).data;
+  }
+
   return data;
 }
 
