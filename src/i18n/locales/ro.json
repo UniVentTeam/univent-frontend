@@ -94,5 +94,14 @@
     "CAREER": "Carieră",
     "VOLUNTEERING": "Voluntariat",
     "WORKSHOP": "Workshop"
+  },
+  "tickets": {
+    "my_tickets": "Biletele Mele",
+    "noTickets": "Nu ai niciun bilet încă.",
+    "ticket_statuses": {
+      "CONFIRMED": "Confirmat",
+      "CHECKED_IN": "Validat",
+      "CANCELLED": "Anulat"
+    }
   }
 }
