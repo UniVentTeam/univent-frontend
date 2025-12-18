@@ -36,7 +36,7 @@ const TicketsList = () => {
       </header>
 
       <main
-        className="relative z-10 w-full px-4 mx-0 -mt-10 transition-colors duration-300"
+        className="relative z-10 w-full px-4 mx-0 transition-colors duration-300"
         style={{ backgroundColor: 'var(--bg-page)', color: 'var(--text-primary)' }}
       >
         {loading ? (

@@ -1,13 +1,10 @@
 import api from './client';
 import { toast } from 'sonner';
+import type { components } from '../types/schema';
 
-export type Ticket = {
-  id: string;
-  eventId: string;
-  status: string;
-};
+type TicketResponse = components['schemas']['TicketResponse'];
 
-async function getMyTickets(): Promise<Ticket[]> {
+async function getMyTickets(): Promise<TicketResponse[]> {
   const { data, error } = await api.GET('/tickets');
 
   if (error) {
