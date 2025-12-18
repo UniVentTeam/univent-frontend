@@ -14,6 +14,7 @@ import ForgotPassword from '@/pages/Auth/ForgotPassword';
 // Pages - App
 import HomePage from '@/pages/Home/HomePage';
 import EventsList from '@/pages/Events/EventsList';
+import AdminPage from '@/pages/Admin/AdminPage'; // [NEW]
 import EventDetails from '@/pages/Events/EventDetails';
 import CreateEvent from '@/pages/Events/CreateEvent';
 import EventsCalendar from '@/pages/Events/EventsCalendar';
@@ -54,6 +55,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />
+      },
+      {
+        path: 'admin', // [NEW]
+        element: <AdminPage />
       },
       {
         path: 'events',
