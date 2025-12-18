@@ -71,7 +71,6 @@ async function getEvents(filters: EventFilterQuery) {
   return data;
 }
 
-
 async function getEventById(eventId: string) {
   const { data, error } = await api.GET('/events/{id}', {
     params: {
@@ -98,8 +97,4 @@ export const eventService = {
   registerToEvent,
   getEvents,
   getEventById,
-
 };
-
-
-
