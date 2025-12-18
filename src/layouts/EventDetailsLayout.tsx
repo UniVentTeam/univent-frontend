@@ -10,10 +10,10 @@ export default function EventDetailsLayout() {
       <Toaster richColors position="top-right" />
 
       {/* FĂRĂ Header global */}
-      {/* FĂRĂ BottomNav */}
+     
 
       <Outlet />
-            <BottomNav/>
+         {/* FĂRĂ BottomNav   <BottomNav/>*/}  
       
     </div>
   );

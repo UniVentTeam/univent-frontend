@@ -8,6 +8,10 @@ import { reviewService, type Review } from '@/api/reviewService';
 import { ticketService } from '@/api/ticketService';
 
 const EventDetails = () => {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+  
   const { id } = useParams();
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
@@ -132,7 +136,7 @@ const handleRegister = async () => {
 
   {/* 🔽 FADE SPRE FUNDALUL PAGINII */}
   <div
-    className="absolute inset-x-0 bottom-0 h-32 pointer-events-none"
+    className="absolute inset-x-0 bottom-0 h-14 pointer-events-none"
     style={{
       background:
         'linear-gradient(to bottom, rgba(0,0,0,0.04) 0%, var(--bg-page) 100%)',
@@ -245,38 +249,45 @@ const handleRegister = async () => {
 
       {/* ================= CONȚINUT PRINCIPAL ================= */}
       <div className="max-w-5xl mx-auto px-6 pt-[340px] md:pt-[160px] pb-28 space-y-14">
-        {/* DESPRE */}
+      <section className="bg-[var(--bg-card)] rounded-[28px] p-12 shadow">
+  <h2 className="text-xl font-semibold mb-6 text-[var(--text-primary)]">
+    Despre acest eveniment
+  </h2>
+
+  {/* DESCRIERE */}
+  {event.description ? (
+    <p className="text-[var(--text-secondary)] leading-relaxed text-base whitespace-pre-line">
+      {event.description}
+    </p>
+  ) : (
+    <p className="text-sm text-[var(--text-secondary)] italic">
+      Nu există o descriere pentru acest eveniment.
+    </p>
+  )}
+
+  {/* AGENDA */}
+  {event.agenda?.length > 0 && (
+    <div className="mt-8">
+      <h3 className="font-semibold mb-3 text-[var(--text-primary)]">
+        Agenda evenimentului
+      </h3>
+
+      <ul className="list-disc list-inside space-y-2 text-[var(--text-secondary)]">
+        {event.agenda.map((item: string, index: number) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  )}
+</section>
+
+
+        {/* RECENZII */}
+        {/* RECENZII */}
         <section className="bg-[var(--bg-card)] rounded-[28px] p-12 shadow">
-          <h2 className="text-xl font-semibold mb-6 text-[var(--text-primary)]">
-            Despre acest eveniment
-          </h2>
-
-          <p className="text-[var(--text-secondary)] leading-relaxed text-base">
-            Acest workshop îți oferă oportunitatea de a-ți realiza fotografii profesionale de
-            profil, dar și variante creative, ideale pentru rețelele sociale, CV sau alte scopuri.
-            <br />
-            <br />
-            De asemenea, vei putea descoperi cum funcționează un studio foto profesionist și vei
-            interacționa cu echipamente moderne.
-          </p>
-
-          <div className="mt-8">
-            <h3 className="font-semibold mb-3 text-gray-900">Agenda evenimentului</h3>
-            <ul className="list-disc list-inside space-y-2 text-gray-700">
-              <li>Echipamente foto profesionale</li>
-              <li>Setup-uri de iluminare</li>
-              <li>Tutoriale de fotografie</li>
-              <li>Sesiuni foto creative</li>
-            </ul>
-          </div>
-        </section>
-
-        {/* RECENZII */}
-        {/* RECENZII */}
-        <section className="bg-white rounded-[28px] p-12 shadow">
           {/* HEADER */}
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-xl font-semibold text-gray-900">Recenzii</h2>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)]">Recenzii</h2>
 
             {reviews.length > 0 && (
               <span className="text-yellow-500 font-medium">
@@ -303,16 +314,16 @@ const handleRegister = async () => {
           )}
 
           {/* CTA – LOGAT DAR NEÎNSCRIS */}
-          {user && !isRegistered && (
-            <div className="mb-8 rounded-xl bg-gray-50 py-3 text-center text-sm text-gray-600">
+          {user && !event.isRegistered&& (
+            <div className="mb-8 rounded-xl bg-[var(--bg-muted)] py-3 text-center text-sm text-gray-600">
               Doar participanții pot lăsa recenzii la acest eveniment.
             </div>
           )}
 
           {/* FORMULAR – DOAR PARTICIPANȚI */}
-          {user && isRegistered && (
-            <div className="mb-10 rounded-2xl bg-blue-50 p-6">
-              <h3 className="mb-4 text-sm font-semibold text-gray-900">Lasă o recenzie</h3>
+          {user && event.isRegistered && (
+            <div className="mb-10 rounded-2xl bg-[var(--bg-muted)] p-6">
+              <h3 className="mb-4 text-sm font-semibold text-[var(--text-primary)]">Lasă o recenzie</h3>
 
               {/* STELE */}
               <div className="flex items-center gap-2 mb-4">
@@ -352,17 +363,17 @@ const handleRegister = async () => {
           )}
 
           {/* LOADING */}
-          {isLoadingReviews && <p className="text-sm text-gray-500">Se încarcă recenziile...</p>}
+          {isLoadingReviews && <p className="text-sm text-[var(--text-secondary)]">Se încarcă recenziile...</p>}
 
           {/* EMPTY */}
           {!isLoadingReviews && reviews.length === 0 && (
-            <p className="text-sm text-gray-500">Acest eveniment nu are încă recenzii.</p>
+            <p className="text-sm text-[var(--text-secondary)]">Acest eveniment nu are încă recenzii.</p>
           )}
 
           {/* LISTA RECENZII */}
           <div className="space-y-8">
             {reviews.map((review) => (
-              <div key={review.id} className="flex gap-5 border-t pt-8">
+              <div key={review.id} className="flex gap-5 border-t border-[var(--border-base)] pt-8">
                 {/* AVATAR */}
                 <div className="w-12 h-12 rounded-full bg-[var(--bg-muted)] flex items-center justify-center font-semibold">
                   {review.userName

@@ -50,6 +50,7 @@ const EventsList = () => {
   }, [searchQuery]);
 
   return (
+    
     <FilterProvider>
       <div className="relative min-h-screen pb-32 transition-colors duration-300 bg-page text-main">
         <SearchBarSection searchQuery={searchQuery} onSearchChange={setSearchQuery} />
