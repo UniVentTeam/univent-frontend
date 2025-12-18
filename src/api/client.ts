@@ -7,8 +7,13 @@ import type { paths } from '../types/schema';
 import { useAuthStore } from '@/stores/authStore'; // Importăm store-ul pentru logout
 import qs from 'qs';
 
+const baseUrl =
+  import.meta.env.MODE === 'production'
+    ? import.meta.env.VITE_API_BASE_URL_PRODUCTION
+    : import.meta.env.VITE_API_BASE_URL_LOCAL;
+
 const api = createClient<paths>({
-  baseUrl: 'http://localhost:4001', // sau http://localhost:3000
+  baseUrl,
   querySerializer: (params) => {
     return qs.stringify(params, { arrayFormat: 'repeat' });
   },
