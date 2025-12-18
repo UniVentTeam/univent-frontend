@@ -29,7 +29,6 @@ export const HeaderSection: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuthStore();
   const role = user?.role;
 
-
   const [userOpen, setUserOpen] = React.useState(false);
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
@@ -102,7 +101,7 @@ export const HeaderSection: React.FC = () => {
     role,
     user,
   });
-  
+
   const isActive = (to: string) =>
     to === '/' ? location.pathname === '/' : location.pathname.startsWith(to);
 
@@ -124,7 +123,10 @@ export const HeaderSection: React.FC = () => {
         {/* LEFT */}
         <div className="flex items-center gap-4">
           <a
-            href="/"
+            // href="/"
+            onClick={() => {
+              navigate('/');
+            }}
             className="flex w-12 h-12 items-center justify-center rounded-2xl bg-[var(--bg-muted)] border border-[var(--border-base)] hover:shadow-md transition"
           >
             <img src="/assets/vector-25.svg" alt="UniVent" className="w-7 h-7" />
