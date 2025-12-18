@@ -123,7 +123,8 @@ export const SearchBarSection: React.FC<SearchBarSectionProps> = ({
         />
       </div>
 
-      <div className="mx-auto w-[90%] max-w-[1400px] flex flex-wrap items-center gap-4">
+      <div className="mx-auto w-[90%] max-w-[1400px] flex flex-col [@media(min-width:768px)]:flex-row [@media(min-width:768px)]:flex-wrap items-center gap-4">
+        {' '}
         {/* Event Type Filter */}
         <FilterDropdown
           title={t('filters.event_type')}
@@ -132,7 +133,7 @@ export const SearchBarSection: React.FC<SearchBarSectionProps> = ({
           onChange={setSelectedCategories}
           matchAll={matchAll}
           onMatchAllChange={setMatchAll}
-          className="w-48"
+          className="w-full [@media(min-width:768px)]:w-48"
         />
         {/* Association Filter */}
         <FilterDropdown
@@ -140,7 +141,7 @@ export const SearchBarSection: React.FC<SearchBarSectionProps> = ({
           options={associationOptions}
           selected={selectedAssociations}
           onChange={setSelectedAssociations}
-          className="w-48"
+          className="w-full [@media(min-width:768px)]:w-48"
         />
         {/* Faculty Filter */}
         <FilterDropdown
@@ -166,7 +167,6 @@ export const SearchBarSection: React.FC<SearchBarSectionProps> = ({
           onChange={setSelectedLocationTypes}
           className="w-48"
         />
-
         {/* Date Range Filter */}
         <div className="flex items-center w-48 gap-2">
           <input
