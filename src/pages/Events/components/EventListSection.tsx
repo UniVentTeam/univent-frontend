@@ -44,8 +44,7 @@ export const EventListSection: React.FC<EventListSectionProps> = ({ events }) =>
   };
 
   return (
-    <section className="mt-[100px] grid gap-6 px-4 py-8 grid-cols-[repeat(auto-fill,minmax(min(100%,500px),1fr))] [@media(min-width:768px)]:grid-cols-[repeat(auto-fill,minmax(600px,1fr))]">
-      {' '}
+    <section className="mt-[100px] grid gap-6 px-4 py-8 grid-cols-[repeat(auto-fill,minmax(600px,1fr))]">
       {events.map((event) => {
         const displayCategory = event.organizers?.[0]?.name || 'Eveniment';
         const displayLocation = event.locationName || 'Locație';
@@ -98,6 +97,7 @@ export const EventListSection: React.FC<EventListSectionProps> = ({ events }) =>
           </article>
         );
       })}
+
       {events.length === 0 && (
         <p className="text-lg text-center text-gray-500 col-span-full md:text-xl">
           {t('events.noEvents')}

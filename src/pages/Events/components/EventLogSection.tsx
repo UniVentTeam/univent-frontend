@@ -13,7 +13,7 @@ interface EventLogEntry {
   status: string; // "PUBLISHED", "PENDING", "REJECTED"
 }
 
-export const EventLogSection = (): JSX.Element => {
+export const EventLogSection = (): React.JSX.Element => {
   const { t } = useTranslation();
   const [logs, setLogs] = useState<EventLogEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,8 +22,8 @@ export const EventLogSection = (): JSX.Element => {
     const fetchLogs = async () => {
       try {
         setLoading(true);
-        // Fetch all events
-        const data = await getEvents({}) as any;
+        // Fetch processed events (history)
+        const data = await getEvents({ status: ['PUBLISHED', 'REJECTED'] }) as any;
         const events = data.events || [];
 
         // Map events to logs

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { getEvents, updateEventStatus } from '@/api/client';
 import { Check, X } from 'lucide-react';
 
-export const NotificationsSection = (): JSX.Element => {
+export const NotificationsSection = (): React.JSX.Element => {
   const { t } = useTranslation();
   const [requests, setRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -12,7 +12,7 @@ export const NotificationsSection = (): JSX.Element => {
   const fetchRequests = async () => {
     try {
       setLoading(true);
-      const data = await getEvents({ status: ['PENDING'] });
+      const data = await getEvents({ status: ['PENDING'] }) as any;
       setRequests(data.events || []);
     } catch (error) {
       console.error("Failed to fetch pending requests", error);

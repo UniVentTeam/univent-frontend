@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Calendar, MapPin, Users, Edit2, Trash2 } from 'lucide-react';
+import { MapPin, Users, Edit2, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { getMyAssociations, getEvents } from '@/api/client';
+import { getMyAssociations, getEvents, deleteEvent } from '@/api/client';
 
 const OrganizeEventPage = () => {
     const { t } = useTranslation();
@@ -11,7 +11,6 @@ const OrganizeEventPage = () => {
 
     const [events, setEvents] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [association, setAssociation] = useState<any>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -21,7 +20,7 @@ const OrganizeEventPage = () => {
                 const assocs = await getMyAssociations() as any;
                 if (assocs && assocs.length > 0) {
                     const myAssoc = assocs[0];
-                    setAssociation(myAssoc);
+                    // setAssociation(myAssoc); // Unused, removing assignment and state
 
                     // 2. Get events for this association
                     // Backend expects associationIds array in query
@@ -47,14 +46,59 @@ const OrganizeEventPage = () => {
 
     // Translate Status
     const mapStatus = (status: string) => {
+        // All statuses use the same gray style as requested
+        const commonStyle = 'bg-gray-100 text-gray-700';
+
         switch (status) {
-            case 'PUBLISHED': return { label: 'Published', color: 'bg-green-100 text-green-700' };
-            case 'PENDING': return { label: 'Pending Approval', color: 'bg-yellow-100 text-yellow-700' };
-            case 'DRAFT': return { label: 'Draft', color: 'bg-gray-100 text-gray-700' };
-            case 'REJECTED': return { label: 'Rejected', color: 'bg-red-100 text-red-700' };
-            default: return { label: status, color: 'bg-gray-100 text-gray-700' };
+            case 'PUBLISHED': return { label: 'Publicat', color: commonStyle };
+            case 'UPCOMING': return { label: 'Publicat', color: commonStyle };
+            case 'ONGOING': return { label: 'Publicat', color: commonStyle };
+            case 'PENDING': return { label: 'În Așteptare', color: commonStyle };
+            case 'DRAFT': return { label: 'Ciornă', color: commonStyle };
+            case 'REJECTED': return { label: 'Respins', color: commonStyle };
+            case 'ENDED': return { label: 'Încheiat', color: commonStyle };
+            default: return { label: status, color: commonStyle };
         }
     };
+
+    // Filter events
+    // const publishedEvents... removed from here as we filter inline
+
+    const handleDelete = async (id: string) => {
+        if (!confirm('Are you sure you want to delete this event?')) return;
+        try {
+            await deleteEvent(id);
+            // Refresh
+            navigate(0); // simple reload or refetch
+        } catch (err) {
+            console.error("Failed to delete", err);
+            alert("Failed to delete event");
+        }
+    };
+
+    const [filterStatus, setFilterStatus] = useState('ALL');
+
+    // Helper to determine effective status based on time
+    const getEffectiveStatus = (event: any) => {
+        // Treat UPCOMING and ONGOING exactly like PUBLISHED
+        if (event.status === 'PUBLISHED' || event.status === 'UPCOMING' || event.status === 'ONGOING') {
+            const now = new Date();
+            // Fallback to startAt if endAt is missing
+            const eventEnd = event.endAt ? new Date(event.endAt) : new Date(event.startAt);
+            if (eventEnd < now) {
+                return 'ENDED';
+            }
+            // If active and future/ongoing, show as PUBLISHED
+            return 'PUBLISHED';
+        }
+        return event.status;
+    };
+
+    // Filter events based on selection
+    const filteredEvents = events.filter(event => {
+        if (filterStatus === 'ALL') return true;
+        return getEffectiveStatus(event) === filterStatus;
+    });
 
     return (
         <div className="min-h-screen bg-gray-50/50 p-6 md:p-12">
@@ -98,7 +142,24 @@ const OrganizeEventPage = () => {
                     </div>
 
                     {/* Main List */}
-                    <div className="lg:col-span-3">
+                    <div className="lg:col-span-3 space-y-12">
+
+                        {/* Filter Dropdown */}
+                        <div className="flex justify-end">
+                            <select
+                                value={filterStatus}
+                                onChange={(e) => setFilterStatus(e.target.value)}
+                                className="bg-white border border-gray-200 text-gray-700 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block p-2.5 shadow-sm"
+                            >
+                                <option value="ALL">Toate Evenimentele</option>
+                                <option value="PUBLISHED">Publicat</option>
+                                <option value="PENDING">În Așteptare</option>
+                                <option value="REJECTED">Respins</option>
+                                <option value="ENDED">Încheiat</option>
+                                <option value="DRAFT">Ciornă</option>
+                            </select>
+                        </div>
+
                         {loading ? (
                             <div className="text-center py-20 text-gray-500">Loading events...</div>
                         ) : events.length === 0 ? (
@@ -111,10 +172,15 @@ const OrganizeEventPage = () => {
                                     Creează Primul Eveniment
                                 </button>
                             </div>
+                        ) : filteredEvents.length === 0 ? (
+                            <div className="text-center py-20 text-gray-500">
+                                <p>Nu există evenimente cu statusul selectat.</p>
+                            </div>
                         ) : (
                             <div className="grid grid-cols-1 gap-6">
-                                {events.map((event) => {
-                                    const statusInfo = mapStatus(event.status);
+                                {filteredEvents.map((event) => {
+                                    const effectiveStatus = getEffectiveStatus(event);
+                                    const statusInfo = mapStatus(effectiveStatus);
                                     return (
                                         <div key={event.id} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition group">
                                             <div className="flex flex-col md:flex-row gap-6">
@@ -132,13 +198,25 @@ const OrganizeEventPage = () => {
                                                             </span>
                                                             <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition">{event.title}</h3>
                                                         </div>
-                                                        <div className="flex gap-2">
-                                                            <button className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 hover:text-blue-600 transition">
-                                                                <Edit2 className="w-4 h-4" />
-                                                            </button>
-                                                            <button className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 hover:text-red-600 transition">
-                                                                <Trash2 className="w-4 h-4" />
-                                                            </button>
+                                                        <div className="flex gap-2 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            {(effectiveStatus === 'REJECTED' || effectiveStatus === 'DRAFT') && (
+                                                                <>
+                                                                    <button
+                                                                        onClick={() => navigate(`/events/edit/${event.id}`)}
+                                                                        className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 hover:text-blue-600 transition"
+                                                                        title={t('Edit Event', 'Editează')}
+                                                                    >
+                                                                        <Edit2 className="w-4 h-4" />
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => handleDelete(event.id)}
+                                                                        className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 hover:text-red-600 transition"
+                                                                        title={t('Delete Event', 'Șterge')}
+                                                                    >
+                                                                        <Trash2 className="w-4 h-4" />
+                                                                    </button>
+                                                                </>
+                                                            )}
                                                         </div>
                                                     </div>
 
@@ -152,6 +230,12 @@ const OrganizeEventPage = () => {
                                                             <span>{event.locationName}</span>
                                                         </div>
                                                     </div>
+
+                                                    {event.status === 'REJECTED' && event.rejectionReason && (
+                                                        <div className="mt-4 p-3 bg-red-50 text-red-700 text-sm rounded-lg border border-red-100">
+                                                            <strong>Motiv respingere:</strong> {event.rejectionReason}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>

@@ -17,16 +17,15 @@ import EventsList from '@/pages/Events/EventsList';
 import AdminPage from '@/pages/Admin/AdminPage'; // [NEW]
 import EventDetails from '@/pages/Events/EventDetails';
 import CreateEvent from '@/pages/Events/CreateEvent';
+import EditEvent from '@/pages/Events/EditEvent';
 import EventsCalendar from '@/pages/Events/EventsCalendar';
 import EventVerefication from '@/pages/Events/EventVerefication';
 import OrganizationEvents from '@/pages/Events/OrganizationEvents';
 
 import MyProfile from '@/pages/Profile/MyProfile';
 import EditProfile from '@/pages/Profile/EditProfile';
-
 import EventsRaports from '@/pages/Statistics/EventsRaports';
 import EventStatistics from '@/pages/Statistics/EventStatistics';
-
 import TicketsList from '@/pages/Tickets/TicketsList';
 import TicketDetails from '@/pages/Tickets/TicketDetails';
 import OrganizeEventPage from '@/pages/Organizer/OrganizeEventPage';
@@ -82,6 +81,10 @@ export const router = createBrowserRouter([
           {
             path: 'events/create',
             element: <CreateEvent />
+          },
+          {
+            path: 'events/edit/:id',
+            element: <EditEvent />
           },
           {
             path: 'events/verification',

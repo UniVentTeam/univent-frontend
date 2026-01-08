@@ -84,7 +84,7 @@ export const HeaderSection: React.FC = () => {
     {
       key: 'events',
       icon: Ticket,
-      to: '/events/verification',
+      to: '/admin',
       auth: true,
       roles: ['ADMIN'],
     },

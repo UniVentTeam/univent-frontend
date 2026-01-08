@@ -1,16 +1,13 @@
-// src/pages/Auth/Register.tsx
-import { useState, useEffect } from 'react';
+// src/pages/RegisterPage.tsx
+// Rămâne aproape la fel, dar asigurăm că error handling-ul e consistent.
+// Am adăugat validare simplă pentru email și parolă (opțional, dar bună practică).
+
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authService } from '@/api/authService';
-import { associationService } from '@/api/associationService';
 import { UserPlus } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
-import { SelectDropdown } from '@/components/forms/SelectDropdown';
-import type { components } from '@/types/schema';
-import { CustomCheckbox } from '@/components/forms/CustomCheckbox';
-
-type AssociationSimple = components['schemas']['AssociationSimple'];
 
 export default function RegisterPage() {
   const { t } = useTranslation();
@@ -19,49 +16,28 @@ export default function RegisterPage() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isOrganizer, setIsOrganizer] = useState(false);
-  const [associationId, setAssociationId] = useState<string | null>(null);
-  const [associations, setAssociations] = useState<AssociationSimple[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function fetchAssociations() {
-      if (isOrganizer) {
-        const fetchedAssociations = await associationService.getAssociations();
-        setAssociations(fetchedAssociations);
-      }
-    }
-    fetchAssociations();
-  }, [isOrganizer]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-
+    
     if (!email || !password || !fullName) {
       setError(t('auth.registerPage.requiredError'));
       return;
     }
 
-    if (isOrganizer && !associationId) {
-      setError(t('auth.registerPage.associationRequiredError'));
-      return;
-    }
-
+    // Validare simplă suplimentară (opțional)
     if (!email.includes('@') || password.length < 6) {
-      setError(t('auth.registerPage.validationError'));
+      setError(t('auth.registerPage.validationError')); // Adaugă traducere pentru asta
       return;
     }
 
     setIsLoading(true);
     try {
-      await authService.register({
-        fullName,
-        email,
-        password,
-        ...(isOrganizer && { associationId }),
-      });
+      await authService.register({ fullName, email, password });
+      // The service shows a success toast
       setTimeout(() => {
         navigate('/auth/login');
       }, 2000);
@@ -71,11 +47,6 @@ export default function RegisterPage() {
       setIsLoading(false);
     }
   };
-
-  const associationOptions = associations.map((assoc) => ({
-    value: assoc.id ?? '',
-    label: assoc.name ?? 'Unnamed Association',
-  }));
 
   return (
     <div className="w-full max-w-md">
@@ -129,46 +100,17 @@ export default function RegisterPage() {
             disabled={isLoading}
           />
         </div>
+        
+        {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
-        <CustomCheckbox
-          id="isOrganizer"
-          label={t('auth.registerPage.isOrganizerLabel')}
-          checked={isOrganizer}
-          onChange={(e) => setIsOrganizer(e.target.checked)}
-          disabled={isLoading}
-        />
-
-        {isOrganizer && (
-          <div>
-            <label className="label" htmlFor="association">
-              {t('auth.registerPage.associationLabel')}
-            </label>
-            <SelectDropdown
-              options={associationOptions}
-              selected={associationId}
-              onChange={setAssociationId}
-              title={t('auth.registerPage.selectAssociationPlaceholder')}
-              className="mt-1"
-            />
-          </div>
-        )}
-
-        {error && <p className="text-sm text-destructive text-center">{error}</p>}
-
-        <button
-          type="submit"
-          className={cn('btn btn-primary w-full gap-2', isLoading && 'cursor-wait')}
-          disabled={isLoading}
-        >
-          <UserPlus className={cn('transition-all', isLoading && 'animate-pulse')} size={16} />
-          {isLoading
-            ? t('auth.registerPage.submitButtonLoading')
-            : t('auth.registerPage.submitButton')}
+        <button type="submit" className={cn("btn btn-primary w-full gap-2", isLoading && "cursor-wait")} disabled={isLoading}>
+          <UserPlus className={cn("transition-all", isLoading && "animate-pulse")} size={16} />
+          {isLoading ? t('auth.registerPage.submitButtonLoading') : t('auth.registerPage.submitButton')}
         </button>
 
         <p className="text-center text-caption">
           {t('auth.registerPage.loginPrompt')}{' '}
-          <Link to="/auth/login" className="font-medium text-accent hover:underline">
+          <Link to="/auth/login" className="font-medium text-blue-500 hover:underline">
             {t('auth.registerPage.loginLink')}
           </Link>
         </p>
