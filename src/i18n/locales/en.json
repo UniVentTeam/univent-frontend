@@ -26,7 +26,11 @@
       "submitButton": "Create Account",
       "submitButtonLoading": "Creating Account...",
       "loginPrompt": "Already have an account?",
-      "loginLink": "Sign In"
+      "loginLink": "Sign In",
+      "isOrganizerLabel": "I am an organizer",
+      "associationLabel": "Organization",
+      "selectAssociationPlaceholder": "Select your organization",
+      "associationRequiredError": "Please select your organization."
     }
   },
   "profile": {

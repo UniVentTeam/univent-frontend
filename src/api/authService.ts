@@ -9,7 +9,9 @@ import { toast } from 'sonner';
 
 // Tipuri extrase pentru claritate
 type LoginRequest = components['schemas']['LoginRequest'];
-type RegisterRequest = components['schemas']['RegisterRequest'];
+type RegisterRequest = components['schemas']['RegisterRequest'] & {
+  associationId?: string | null;
+};
 
 /**
  * Gestionează procesul de login.
