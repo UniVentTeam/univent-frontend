@@ -1,6 +1,3 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import {
   Menu,
   X,
@@ -13,13 +10,14 @@ import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/authStore';
 
 export default function Navbar() {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
 
   // --- STATE ---
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isAuthenticated, logout: clearAuth } = useAuthStore();
+  const { isAuthenticated, logout: clearAuth, user } = useAuthStore();
+  const isAdmin = user?.role === 'ADMIN';
 
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -74,14 +72,19 @@ export default function Navbar() {
 
         {/* === 2. MENIU DESKTOP === */}
         <div className="items-center hidden gap-8 md:flex">
-          <Link to="/" className={getLinkClass('/')}>Home</Link>
-          <Link to="/events" className={getLinkClass('/events')}>Events</Link>
+          <Link to="/" className={getLinkClass('/')}>{t('navigation.home')}</Link>
+          <Link to="/events" className={getLinkClass('/events')}>{t('navigation.events')}</Link>
           
           {isAuthenticated && (
             <>
-              <Link to="/events/calendar" className={getLinkClass('/events/calendar')}>Calendar</Link>
-              <Link to="/tickets" className={getLinkClass('/tickets')}>My Tickets</Link>
-              <Link to="/profile" className={getLinkClass('/profile')}>Profile</Link>
+              {isAdmin && (
+                <Link to="/admin/users" className={getLinkClass('/admin/users')}>
+                  {t('navigation.userManagement')}
+                </Link>
+              )}
+              <Link to="/events/calendar" className={getLinkClass('/events/calendar')}>{t('navigation.calendar')}</Link>
+              <Link to="/tickets" className={getLinkClass('/tickets')}>{t('navigation.enrollments')}</Link>
+              <Link to="/profile" className={getLinkClass('/profile')}>{t('navigation.profile')}</Link>
             </>
           )}
         </div>
@@ -109,14 +112,14 @@ export default function Navbar() {
           {isAuthenticated ? (
             <button onClick={handleLogout} className="gap-2 btn btn-danger">
               <LogOut className="w-4 h-4" />
-              <span>Logout</span>
+              <span>{t('auth.logout')}</span>
             </button>
           ) : (
             <button
               onClick={() => navigate('/auth/login')}
               className="btn btn-primary"
             >
-              Login
+              {t('auth.login')}
             </button>
           )}
         </div>
@@ -134,15 +137,20 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="absolute left-0 w-full border-t shadow-lg md:hidden border-border bg-card animate-in slide-in-from-top-2">
           <div className="flex flex-col p-4 space-y-2">
-            <Link to="/" className="py-3 font-medium border-b text-main border-border/50">Home</Link>
-            <Link to="/events" className="py-3 font-medium border-b text-main border-border/50">Events</Link>
+            <Link to="/" className="py-3 font-medium border-b text-main border-border/50">{t('navigation.home')}</Link>
+            <Link to="/events" className="py-3 font-medium border-b text-main border-border/50">{t('navigation.events')}</Link>
 
             {isAuthenticated && (
               <>
-                <Link to="/events/calendar" className="py-3 font-medium border-b text-main border-border/50">Calendar</Link>
-                <Link to="/tickets" className="py-3 font-medium border-b text-main border-border/50">My Tickets</Link>
+                {isAdmin && (
+                  <Link to="/admin/users" className="py-3 font-medium border-b text-main border-border/50">
+                    {t('navigation.userManagement')}
+                  </Link>
+                )}
+                <Link to="/events/calendar" className="py-3 font-medium border-b text-main border-border/50">{t('navigation.calendar')}</Link>
+                <Link to="/tickets" className="py-3 font-medium border-b text-main border-border/50">{t('navigation.enrollments')}</Link>
                 <Link to="/profile" className="flex items-center gap-2 py-3 font-medium border-b text-main border-border/50">
-                  <User className="w-4 h-4" /> Profile
+                  <User className="w-4 h-4" /> {t('navigation.profile')}
                 </Link>
               </>
             )}
@@ -150,11 +158,11 @@ export default function Navbar() {
             <div className="pt-4">
               {isAuthenticated ? (
                 <button onClick={handleLogout} className="w-full btn btn-danger">
-                  Deconectare
+                  {t('auth.logout')}
                 </button>
               ) : (
                 <button onClick={() => navigate('/auth/login')} className="w-full btn btn-primary">
-                  Intră în cont
+                  {t('auth.login')}
                 </button>
               )}
             </div>

@@ -89,6 +89,13 @@ export const HeaderSection: React.FC = () => {
       roles: ['ADMIN'],
     },
     {
+      key: '',
+      icon: Ticket,
+      to: '/events/verification',
+      auth: true,
+      roles: ['ADMIN'],
+    },
+    {
       key: 'organize',
       icon: Ticket, // Using Ticket as placeholder, imported PlusCircle would be better but keeping it simple as per imports
       to: '/organize',

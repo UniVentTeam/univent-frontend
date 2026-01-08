@@ -78,7 +78,8 @@
     "enrollments": "Înscrieri",
     "events": "Evenimente",
     "admin": "Administrare",
-    "organize": "Organizare eveniment"
+    "organize": "Organizare eveniment",
+    "userManagement": "Management Utilizatori"
   },
   "header": {
     "student": "Student",
@@ -153,5 +154,27 @@
       "cancel": "Anulează",
       "publish": "Publică Eveniment"
     }
+  },
+  "admin": {
+    "users": {
+      "title": "Management Utilizatori",
+      "subtitle": "Caută, vizualizează și gestionează rolurile utilizatorilor.",
+      "searchPlaceholder": "Caută după nume sau email...",
+      "loading": "Se încarcă utilizatorii...",
+      "noUsersFound": "Niciun utilizator găsit.",
+      "roleUpdateSuccess": "Rolul a fost actualizat pentru utilizatorul {{userId}}",
+      "roleUpdateError": "A eșuat actualizarea rolului.",
+      "table": {
+        "fullName": "Nume Complet",
+        "email": "Email",
+        "currentRole": "Rol Curent",
+        "changeRole": "Schimbă Rolul"
+      }
+    }
+  },
+  "roles": {
+    "student": "Student",
+    "organizer": "Organizator",
+    "admin": "Admin"
   }
 }
