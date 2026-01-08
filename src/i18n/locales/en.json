@@ -1,0 +1,153 @@
+{
+  "welcome": "Welcome to UniVent",
+  "auth": {
+    "login": "Log In",
+    "logout": "Log Out",
+    "loginPage": {
+      "title": "Welcome Back",
+      "subtitle": "Enter your credentials to access your account.",
+      "validationError": "Please enter a valid email and a password of at least 6 characters.",
+      "emailLabel": "Email Address",
+      "passwordLabel": "Password",
+      "requiredError": "Email and password are required.",
+      "submitButton": "Sign In",
+      "submitButtonLoading": "Signing In...",
+      "registerPrompt": "Don't have an account?",
+      "registerLink": "Sign Up"
+    },
+    "registerPage": {
+      "title": "Create an Account",
+      "subtitle": "Join UniVent to discover amazing events.",
+      "fullNameLabel": "Full Name",
+      "emailLabel": "Email Address",
+      "passwordLabel": "Password",
+      "requiredError": "All fields are required.",
+      "validationError": "Invalid email or password too short (minimum 6 characters)",
+      "submitButton": "Create Account",
+      "submitButtonLoading": "Creating Account...",
+      "loginPrompt": "Already have an account?",
+      "loginLink": "Sign In"
+    }
+  },
+  "profile": {
+    "page_title": "My Profile",
+    "edit_page_title": "Edit Profile",
+    "edit_button": "Edit Profile",
+    "role": "Role",
+    "faculty": "Faculty",
+    "department": "Department",
+    "fullName_label": "Full Name",
+    "faculty_label": "Faculty",
+    "department_label": "Department",
+    "not_set": "Not set",
+    "validation": {
+      "fullName_required": "Full name is required."
+    },
+    "preferences_title": "Preferences",
+    "no_preferences_set": "No preferences set.",
+    "select_preferences_placeholder": "Select your preferences..."
+  },
+  "common": {
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "no_results": "No results found."
+  },
+  "search": {
+    "placeholder": "Search events by name, organizer, or description..."
+  },
+  "filters": {
+    "event_type": "Event Type",
+    "association": "Association",
+    "faculty": "Faculty",
+    "department": "Department",
+    "organizer_type": "Organizer",
+    "location": "Location",
+    "time_period": "Time Period",
+    "match_all": "Match all filters"
+  },
+  "navigation": {
+    "home": "Home",
+    "calendar": "Calendar",
+    "saved": "Saved",
+    "profile": "Profile",
+    "enrollments": "Enrollments",
+    "events": "Events",
+    "admin": "Admin",
+    "organize": "Organize Event"
+  },
+  "header": {
+    "student": "Student",
+    "organizer": "Organizer",
+    "admin": "Admin",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "heroTitle": "Dream, create, innovate!<br />University events"
+  },
+  "events": {
+    "noEvents": "No events match your filters.",
+    "EventLog": "Event Log",
+    "Requests": "Requests"
+  },
+  "event_types": {
+    "ACADEMIC": "Academic",
+    "SOCIAL": "Social",
+    "SPORTS": "Sports",
+    "CAREER": "Career",
+    "VOLUNTEERING": "Volunteering",
+    "WORKSHOP": "Workshop"
+  },
+  "tickets": {
+    "my_tickets": "My Tickets",
+    "noTickets": "You have no tickets yet.",
+    "ticket_statuses": {
+      "CONFIRMED": "Confirmed",
+      "CHECKED_IN": "Checked In",
+      "CANCELLED": "Cancelled"
+    }
+  },
+  "location_types": {
+    "IN_CAMPUS": "In Campus",
+    "IN_CITY": "In City",
+    "OUTSIDE_CITY": "Outside City",
+    "ONLINE": "Online"
+  },
+  "organizer_dashboard": {
+    "title": "Organizer Dashboard",
+    "subtitle": "Manage and track your events",
+    "tabs": {
+      "overview": "Overview",
+      "my_events": "My events",
+      "analytics": "Analytics"
+    },
+    "create_btn": "Create event"
+  },
+  "create_event": {
+    "page_title": "Create New Event",
+    "page_subtitle": "Fill in the details to publish your event",
+    "back_link": "Back to dashboard",
+    "labels": {
+      "title": "Event Title",
+      "title_placeholder": "e.g., Photography Workshop",
+      "date": "Date",
+      "start_time": "Start Time",
+      "end_time": "End Time",
+      "type": "Event Type",
+      "type_placeholder": "Select type",
+      "location": "Location Name",
+      "location_placeholder": "e.g. Building A, Room 101",
+      "location_type": "Location Type",
+      "location_type_placeholder": "Select location type",
+      "max_participants": "Max Participants",
+      "description": "Description",
+      "description_placeholder": "Tell people what this event is about...",
+      "cover_image": "Cover Image",
+      "upload_text": "Click to upload image",
+      "upload_subtext": "PNG, JPG up to 10MB"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "publish": "Publish Event"
+    }
+  }
+}
