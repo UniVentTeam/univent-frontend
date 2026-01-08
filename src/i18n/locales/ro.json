@@ -26,7 +26,11 @@
       "submitButton": "Creează contul",
       "submitButtonLoading": "Se creează contul...",
       "loginPrompt": "Ai deja un cont?",
-      "loginLink": "Intră în cont"
+      "loginLink": "Intră în cont",
+      "isOrganizerLabel": "Sunt organizator",
+      "associationLabel": "Organizație",
+      "selectAssociationPlaceholder": "Selectează organizația",
+      "associationRequiredError": "Te rog selectează organizația."
     }
   },
   "profile": {
