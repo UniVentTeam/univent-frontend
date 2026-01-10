@@ -32,6 +32,8 @@ import OrganizeEventPage from '@/pages/Organizer/OrganizeEventPage';
 
 import NotFound from '@/pages/NotFound';
 
+import UsersManagementPage from '@/pages/Admin/UsersManagementPage';
+
 export const router = createBrowserRouter([
   // 1. Login/Register
   {
@@ -42,8 +44,8 @@ export const router = createBrowserRouter([
       { path: 'register', element: <RegisterPage /> },
       { path: 'forgot-password', element: <ForgotPassword /> },
       // Redirect automat dacă intră cineva doar pe /auth
-      { index: true, element: <Navigate to="/auth/login" replace /> }
-    ]
+      { index: true, element: <Navigate to="/auth/login" replace /> },
+    ],
   },
 
   // 2. Aplicația principală
@@ -54,19 +56,15 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <HomePage />
-      },
-      {
-        path: 'admin', // [NEW]
-        element: <AdminPage />
+        element: <HomePage />,
       },
       {
         path: 'events',
-        element: <EventsList />
+        element: <EventsList />,
       },
       {
         path: 'events/calendar',
-        element: <EventsCalendar />
+        element: <EventsCalendar />,
       },
       /*
       {
@@ -79,8 +77,16 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           {
+            path: 'admin', // [MOVED & PROTECTED]
+            element: <AdminPage />,
+          },
+          {
+            path: 'admin/users', // [NEW & PROTECTED]
+            element: <UsersManagementPage />,
+          },
+          {
             path: 'events/create',
-            element: <CreateEvent />
+            element: <CreateEvent />,
           },
           {
             path: 'events/edit/:id',
@@ -88,43 +94,43 @@ export const router = createBrowserRouter([
           },
           {
             path: 'events/verification',
-            element: <EventVerefication />
+            element: <EventVerefication />,
           },
           {
             path: 'events/organization',
-            element: <OrganizationEvents />
+            element: <OrganizationEvents />,
           },
           {
             path: 'profile',
-            element: <MyProfile />
+            element: <MyProfile />,
           },
           {
             path: 'profile/edit',
-            element: <EditProfile />
+            element: <EditProfile />,
           },
           {
             path: 'statistics/raports',
-            element: <EventsRaports />
+            element: <EventsRaports />,
           },
           {
             path: 'statistics/events/:id',
-            element: <EventStatistics />
+            element: <EventStatistics />,
           },
           {
             path: 'tickets',
-            element: <TicketsList />
+            element: <TicketsList />,
           },
           {
             path: 'tickets/:id',
-            element: <TicketDetails />
+            element: <TicketDetails />,
           },
           {
             path: 'organize',
-            element: <OrganizeEventPage />
-          }
-        ]
-      }
-    ]
+            element: <OrganizeEventPage />,
+          },
+        ],
+      },
+    ],
   },
   // 🎯 EVENT DETAILS – layout separat
   {
@@ -133,14 +139,14 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <EventDetails />
-      }
-    ]
+        element: <EventDetails />,
+      },
+    ],
   },
 
   // 3. Catch-all (Orice altceva duce la 404 sau redirect)
   {
     path: '*',
-    element: <NotFound />
-  }
+    element: <NotFound />,
+  },
 ]);

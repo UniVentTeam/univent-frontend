@@ -9,13 +9,14 @@ import {
   CalendarDays,
   ClipboardPenLine,
   Ticket,
+  Users,
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/authStore';
 
 type NavItem = {
-  key: 'home' | 'calendar' | 'enrollments' | 'profile' | 'events' | 'admin' | 'organize';
+  key: 'home' | 'calendar' | 'enrollments' | 'profile' | 'events' | 'admin' | 'organize' | 'userManagement';
   icon: React.ElementType;
   to: string;
   auth?: boolean;
@@ -85,6 +86,13 @@ export const HeaderSection: React.FC = () => {
       key: 'events',
       icon: Ticket,
       to: '/admin',
+      auth: true,
+      roles: ['ADMIN'],
+    },
+    {
+      key: 'userManagement',
+      icon: Users,
+      to: '/admin/users',
       auth: true,
       roles: ['ADMIN'],
     },

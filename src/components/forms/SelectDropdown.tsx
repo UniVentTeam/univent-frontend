@@ -50,9 +50,7 @@ export const SelectDropdown = ({
         onClick={() => setIsOpen(!isOpen)}
         className="input-field flex w-full items-center justify-between"
       >
-        <span>
-          {selectedOption ? selectedOption.label : title}
-        </span>
+        <span>{selectedOption ? selectedOption.label : title}</span>
         <ChevronDown
           className={`h-5 w-5 text-secondary transition-transform ${isOpen ? 'rotate-180' : ''}`}
         />
@@ -67,7 +65,7 @@ export const SelectDropdown = ({
                 onClick={() => handleSelect(option.value)}
                 className={cn(
                   'flex cursor-pointer items-center gap-3 rounded-md p-2 hover:bg-muted',
-                  selected === option.value && 'bg-muted'
+                  selected === option.value && 'bg-muted',
                 )}
               >
                 <span className="flex-1 text-main">{option.label}</span>

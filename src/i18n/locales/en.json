@@ -74,7 +74,8 @@
     "enrollments": "Enrollments",
     "events": "Events",
     "admin": "Admin",
-    "organize": "Organize Event"
+    "organize": "Organize Event",
+    "userManagement": "User Management"
   },
   "header": {
     "student": "Student",
@@ -149,5 +150,27 @@
       "cancel": "Cancel",
       "publish": "Publish Event"
     }
+  },
+  "admin": {
+    "users": {
+      "title": "User Management",
+      "subtitle": "Search, view, and manage user roles.",
+      "searchPlaceholder": "Search by name or email...",
+      "loading": "Loading users...",
+      "noUsersFound": "No users found.",
+      "roleUpdateSuccess": "Role updated for user {{userId}}",
+      "roleUpdateError": "Failed to update role.",
+      "table": {
+        "fullName": "Full Name",
+        "email": "Email",
+        "currentRole": "Current Role",
+        "changeRole": "Change Role"
+      }
+    }
+  },
+  "roles": {
+    "student": "Student",
+    "organizer": "Organizer",
+    "admin": "Admin"
   }
 }

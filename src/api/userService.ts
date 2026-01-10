@@ -5,6 +5,9 @@ import type { components } from '@/types/schema';
 import { toast } from 'sonner';
 
 type UserProfile = components['schemas']['UserProfile'];
+// Asumat pe baza cerinței - adăugăm un rol local
+export type AdminUser = UserProfile & { id: string };
+export type UserRole = components['schemas']['EnumUserRole'];
 
 /**
  * Preia profilul complet al utilizatorului logat.
@@ -47,7 +50,43 @@ async function updateProfile(profileData: Partial<UserProfile>) {
   return updatedUser;
 }
 
+/**
+ * [ADMIN] Preia toți utilizatorii din sistem.
+ */
+async function getAllUsers(): Promise<AdminUser[]> {
+    // Presupunem că acest endpoint există, dar nu e în schema.
+    const { data, error } = await api.GET('/admin/users');
+
+    if (error) {
+        toast.error('Failed to fetch users.');
+        console.error('Failed to fetch users:', error);
+        return [];
+    }
+    return (data as AdminUser[]) || [];
+}
+
+/**
+ * [ADMIN] Actualizează rolul unui utilizator.
+ * @param userId ID-ul utilizatorului de modificat.
+ * @param role Noul rol.
+ */
+async function updateUserRole(userId: string, role: UserRole): Promise<void> {
+    // Presupunem că acest endpoint există.
+    const { error } = await api.PATCH(`/admin/users/${userId}/role`, {
+        body: { role },
+    });
+
+    if (error) {
+        toast.error('Failed to update user role.');
+        throw new Error('Could not update user role.');
+    }
+
+    toast.success('User role updated successfully!');
+}
+
 export const userService = {
   getProfile,
   updateProfile,
+  getAllUsers,
+  updateUserRole,
 };
