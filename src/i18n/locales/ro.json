@@ -47,16 +47,64 @@
     "no_preferences_set": "Nici o preferință setată.",
     "select_preferences_placeholder": "Selectează preferințele..."
   },
-  "common": {
-  "save": "Salvează",
-  "saving": "Se salvează...",
-  "cancel": "Anulează",
-  "no_results": "Niciun rezultat găsit.",
-  "loading": "Se încarcă...",
-  "link_copied": "Link copiat în clipboard",
-  "share": "Distribuie",
-  "back": "Înapoi"
+ "common": {
+    "save": "Salvează",
+    "saving": "Se salvează...",
+    "cancel": "Anulează",
+    "no_results": "Niciun rezultat găsit.",
+    "loading": "Se încarcă...",
+    "link_copied": "Link copiat în clipboard",
+    "share": "Distribuie",
+    "back": "Înapoi",
+    "access_denied": "Acces Interzis",
+    "go_back": "Înapoi",
+    "close": "Închide",
+    "confirm": "Confirmă"
   },
+  "checkin": {
+    "pageTitle": "Scanează Codul QR",
+    "method": "Metodă",
+    "methods": {
+      "camera": "Camera",
+      "manual": "Manual"
+    },
+    "status": {
+      "verifying": "Se verifică biletul...",
+      "success": "Acces Permis",
+      "error": "Acces Respins",
+      "validatedStudent": "Student Validated"
+    },
+    "errors": {
+      "unknown": "A apărut o eroare necunoscută la scanare.",
+      "processing": "Eroare la procesarea validării.",
+      "cameraPermission": "Nu am putut accesa camera. Te rugăm să verifici permisiunile."
+    },
+    "camera": {
+      "inactiveTitle": "Cameră inactivă",
+      "inactiveDesc": "Apasă butonul de mai jos și acceptă permisiunile pentru a scana.",
+      "activateBtn": "Activează Camera",
+      "readyTitle": "Cameră pregătită",
+      "readyDesc": "Pentru a începe scanarea pe acest dispozitiv, trebuie să activezi camera manual.",
+      "alignInstruction": "Încadrează codul QR în ramă"
+    },
+    "manual": {
+      "title": "Introdu Codul",
+      "description": "Introdu manual codul biletului de pe ecranul studentului.",
+      "label": "Introdu Codul Biletului",
+      "placeholder": "EX: TICKET-123"
+    },
+    "tips": {
+      "title": "Sfaturi",
+      "light": "Asigură-te că lumina este suficientă.",
+      "distance": "Ține telefonul la aproximativ 15-20 cm distanță.",
+      "damaged": "Dacă QR-ul este deteriorat, folosește codul manual."
+    },
+    "actions": {
+      "scanAgain": "Scanează Din Nou",
+      "scanNext": "Următorul"
+    }
+  },
+
   "search": {
     "placeholder": "Caută evenimente după nume, organizator sau descriere..."
   },
@@ -145,7 +193,8 @@
       "my_events": "Evenimentele mele",
       "analytics": "Analize"
     },
-    "create_btn": "Creează eveniment"
+    "create_btn": "Creează eveniment",
+    "scan_qr_tooltip": "Scanează Coduri QR"
   },
   "create_event": {
     "page_title": "Creează eveniment nou",

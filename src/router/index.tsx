@@ -29,6 +29,7 @@ import EventStatistics from '@/pages/Statistics/EventStatistics';
 import TicketsList from '@/pages/Tickets/TicketsList';
 import TicketDetails from '@/pages/Tickets/TicketDetails';
 import OrganizeEventPage from '@/pages/Organizer/OrganizeEventPage';
+import QrScannerPage from '@/pages/CheckIn/QrScannerPage';
 
 import NotFound from '@/pages/NotFound';
 
@@ -132,6 +133,10 @@ export const router = createBrowserRouter([
           {
             path: 'organize',
             element: <OrganizeEventPage />,
+          },
+          {
+            path: 'check-in/:eventId',
+            element: <QrScannerPage />,
           },
         ],
       },
