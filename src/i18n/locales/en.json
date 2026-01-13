@@ -52,6 +52,10 @@
     "saving": "Saving...",
     "cancel": "Cancel",
     "no_results": "No results found.",
+    "loading": "Loading...",
+    "link_copied": "Link copied to clipboard",
+    "share": "Share",
+    "back": "Back",
     "access_denied": "Access Denied",
     "go_back": "Go Back",
     "close": "Close",
@@ -100,6 +104,7 @@
       "scanNext": "Scan Next"
     }
   },
+
   "search": {
     "placeholder": "Search events by name, organizer, or description..."
   },
@@ -146,13 +151,33 @@
     "WORKSHOP": "Workshop"
   },
   "tickets": {
-    "my_tickets": "My Tickets",
-    "noTickets": "You have no tickets yet.",
-    "ticket_statuses": {
-      "CONFIRMED": "Confirmed",
-      "CHECKED_IN": "Checked In",
-      "CANCELLED": "Cancelled"
-    }
+  "my_tickets": "My Tickets",
+  "noTickets": "You have no tickets yet.",
+  "ticket_statuses": {
+    "CONFIRMED": "Confirmed",
+    "CHECKED_IN": "Checked In",
+    "CANCELLED": "Cancelled"
+  },
+  "error_loading_ticket": "Could not load ticket details",
+  "ticket_not_found": "Ticket not found or does not belong to you",
+  "back_to_my_tickets": "Back to my tickets",
+  "registration_details": "Registration Details",
+  "event_information": "Event Information",
+  "organizer": "Organizer",
+  "qr_title": "QR Code Ticket",
+  "qr_instruction": "Present this QR code at entry",
+  "invalid_ticket_id": "Missing ticket ID",
+  "show_qr_code": "Show QR Code",
+  "share_title": "Event Ticket",
+  "share": "Share",
+  "registered_on": "Registered On",
+  "registration_code": "Access Code",
+  "ticket_type": "Ticket Type",
+  "date": "Date",
+  "time": "Time",
+  "location": "Location",
+  "no_organizer_info": "Organizer information unavailable",
+  "download_button": "Download Ticket"
   },
   "location_types": {
     "IN_CAMPUS": "In Campus",

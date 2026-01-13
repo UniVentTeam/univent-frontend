@@ -47,11 +47,15 @@
     "no_preferences_set": "Nici o preferință setată.",
     "select_preferences_placeholder": "Selectează preferințele..."
   },
-  "common": {
+ "common": {
     "save": "Salvează",
     "saving": "Se salvează...",
     "cancel": "Anulează",
     "no_results": "Niciun rezultat găsit.",
+    "loading": "Se încarcă...",
+    "link_copied": "Link copiat în clipboard",
+    "share": "Distribuie",
+    "back": "Înapoi",
     "access_denied": "Acces Interzis",
     "go_back": "Înapoi",
     "close": "Închide",
@@ -100,6 +104,7 @@
       "scanNext": "Următorul"
     }
   },
+
   "search": {
     "placeholder": "Caută evenimente după nume, organizator sau descriere..."
   },
@@ -146,13 +151,33 @@
     "WORKSHOP": "Workshop"
   },
   "tickets": {
-    "my_tickets": "Biletele Mele",
-    "noTickets": "Nu ai niciun bilet încă.",
-    "ticket_statuses": {
-      "CONFIRMED": "Confirmat",
-      "CHECKED_IN": "Validat",
-      "CANCELLED": "Anulat"
-    }
+  "my_tickets": "Biletele Mele",
+  "noTickets": "Nu ai niciun bilet încă.",
+  "ticket_statuses": {
+    "CONFIRMED": "Confirmat",
+    "CHECKED_IN": "Validat",
+    "CANCELLED": "Anulat"
+  },
+  "error_loading_ticket": "Nu am putut încărca detaliile biletului",
+  "ticket_not_found": "Biletul nu a fost găsit sau nu îți aparține",
+  "back_to_my_tickets": "Înapoi la biletele mele",
+  "registration_details": "Detalii Înregistrare",
+  "event_information": "Informații Eveniment",
+  "organizer": "Organizator",
+  "qr_title": "Cod QR Bilet",
+  "qr_instruction": "Prezintă acest cod QR la intrare",
+  "invalid_ticket_id": "ID bilet lipsă",
+  "show_qr_code": "Arată Cod QR",
+  "share_title": "Bilet eveniment",
+  "share": "Distribuie",
+  "registered_on": "Înregistrat pe",
+  "registration_code": "Cod acces",
+  "ticket_type": "Tip bilet",
+  "date": "Data",
+  "time": "Ora",
+  "location": "Locație",
+  "no_organizer_info": "Informații organizator indisponibile",
+  "download_button": "Descarcă Bilet"
   },
   "location_types": {
     "IN_CAMPUS": "În Campus",

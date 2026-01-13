@@ -16,6 +16,15 @@ async function getMyTickets(): Promise<TicketResponse[]> {
   return data ?? [];
 }
 
+async function getTicketById(ticketId: string): Promise<TicketResponse> {
+  const { data, error } = await api.GET('/tickets/{id}', {
+    params: {
+      path: { id: ticketId },
+    },
+  });
+
+  if (error) {
+    const message = error.message || 'Nu s-a putut încărca biletul';
 async function checkIn(qrContent: string, eventId: string) {
   const body: CheckInRequest = { qrContent, eventId };
   const { data, error } = await api.POST('/check-in/scan', {
@@ -30,6 +39,8 @@ async function checkIn(qrContent: string, eventId: string) {
     throw new Error(message);
   }
 
+  if (!data) {
+    throw new Error('Biletul nu a fost găsit');
   if (data?.valid) {
     toast.success(data.message);
   } else {
@@ -41,5 +52,6 @@ async function checkIn(qrContent: string, eventId: string) {
 
 export const ticketService = {
   getMyTickets,
-  checkIn,
+  getTicketById,  
+  checkIn
 };
