@@ -33,6 +33,7 @@ import OrganizeEventPage from '@/pages/Organizer/OrganizeEventPage';
 import NotFound from '@/pages/NotFound';
 
 import UsersManagementPage from '@/pages/Admin/UsersManagementPage';
+import TicketQR from '@/pages/Tickets/TicketQR';
 
 export const router = createBrowserRouter([
   // 1. Login/Register
@@ -121,8 +122,12 @@ export const router = createBrowserRouter([
             element: <TicketsList />,
           },
           {
-            path: 'tickets/:id',
+            path: 'tickets/:ticketId',
             element: <TicketDetails />,
+          },
+          {
+            path: 'tickets/:ticketId/qr',
+            element: <TicketQR />,
           },
           {
             path: 'organize',

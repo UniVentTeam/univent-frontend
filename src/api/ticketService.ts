@@ -15,6 +15,27 @@ async function getMyTickets(): Promise<TicketResponse[]> {
   return data ?? [];
 }
 
+async function getTicketById(ticketId: string): Promise<TicketResponse> {
+  const { data, error } = await api.GET('/tickets/{id}', {
+    params: {
+      path: { id: ticketId },
+    },
+  });
+
+  if (error) {
+    const message = error.message || 'Nu s-a putut încărca biletul';
+    toast.error(message);
+    throw new Error(message);
+  }
+
+  if (!data) {
+    throw new Error('Biletul nu a fost găsit');
+  }
+
+  return data;
+}
+
 export const ticketService = {
   getMyTickets,
+  getTicketById,   // ← adăugat aici
 };
