@@ -291,7 +291,7 @@
         height: 100%;
         background-color: var(--bg-page);
         /* Adăugăm min-width aici */
-        min-width: 500px;
+        min-width: 320px;
         /* 320px este standardul industriei (iPhone SE / Galaxy Fold width) */
     }
 

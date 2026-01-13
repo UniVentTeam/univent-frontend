@@ -51,7 +51,54 @@
     "save": "Save",
     "saving": "Saving...",
     "cancel": "Cancel",
-    "no_results": "No results found."
+    "no_results": "No results found.",
+    "access_denied": "Access Denied",
+    "go_back": "Go Back",
+    "close": "Close",
+    "confirm": "Confirm"
+  },
+  "checkin": {
+    "pageTitle": "Scan QR Code",
+    "method": "Method",
+    "methods": {
+      "camera": "Camera",
+      "manual": "Manual"
+    },
+    "status": {
+      "verifying": "Verifying ticket...",
+      "success": "Access Granted",
+      "error": "Access Denied",
+      "validatedStudent": "Student Validated"
+    },
+    "errors": {
+      "unknown": "An unknown error occurred during scanning.",
+      "processing": "Error processing check-in.",
+      "cameraPermission": "We could not access your camera. Please ensure you have granted permission."
+    },
+    "camera": {
+      "inactiveTitle": "Camera Inactive",
+      "inactiveDesc": "Press the button below and accept permissions to scan.",
+      "activateBtn": "Activate Camera",
+      "readyTitle": "Camera Ready",
+      "readyDesc": "To start scanning on this device, you must manually activate the camera.",
+      "alignInstruction": "Align QR code within the frame"
+    },
+    "manual": {
+      "title": "Enter Code",
+      "description": "Manually enter the ticket code from the student's screen.",
+      "label": "Enter Ticket Code",
+      "placeholder": "EX: TICKET-123"
+    },
+    "tips": {
+      "title": "Tips",
+      "light": "Ensure there is sufficient light.",
+      "distance": "Hold the phone about 15-20 cm away.",
+      "damaged": "If the QR is damaged, use the manual code."
+    },
+    "actions": {
+      "scanAgain": "Scan Again",
+      "scanNext": "Scan Next"
+    }
   },
   "search": {
     "placeholder": "Search events by name, organizer, or description..."
@@ -121,7 +168,8 @@
       "my_events": "My events",
       "analytics": "Analytics"
     },
-    "create_btn": "Create event"
+    "create_btn": "Create event",
+    "scan_qr_tooltip": "Scan QR Codes"
   },
   "create_event": {
     "page_title": "Create New Event",
