@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
+import { Html5Qrcode } from 'html5-qrcode';
 import { ticketService } from '@/api/ticketService';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/authStore';
@@ -13,7 +13,6 @@ import {
   CheckCircle2,
   XCircle,
   AlertTriangle,
-  ArrowLeft,
   Loader2,
   RefreshCcw,
 } from 'lucide-react';
@@ -75,7 +74,7 @@ const QrScannerPage = () => {
         const response = await ticketService.checkIn(code, eventId);
         setResult({
           valid: response?.valid ?? false,
-          message: response?.message ?? t('scanner.unknown_error'),
+          message: response?.message ?? t('checkin.errors.unknown'),
           studentName: response?.studentName,
           timestamp: new Date(),
         });
@@ -83,7 +82,7 @@ const QrScannerPage = () => {
       } catch (error) {
         setResult({
           valid: false,
-          message: error instanceof Error ? error.message : t('scanner.error_processing'),
+          message: error instanceof Error ? error.message : t('checkin.errors.processing'),
           timestamp: new Date(),
         });
         setStatus('ERROR');
@@ -126,61 +125,59 @@ const QrScannerPage = () => {
     }
   }, [handleScan]);
 
-  const renderScannerArea = () => {
-    if (mode === 'MANUAL') {
-      return (
-        <div className="flex-1 bg-card flex flex-col items-center justify-center p-8">
-          <div className="w-full max-w-xs">
-            <label className="label">{t('scanner.manual_code_label')}</label>
-            <input
-              type="text"
-              className="input-field"
-              value={manualCode}
-              onChange={(e) => setManualCode(e.target.value)}
-              placeholder="TICKET-..."
-            />
-            <button onClick={() => handleScan(manualCode)} className="btn btn-primary w-full mt-4">
-              {t('common.confirm')}
-            </button>
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div className="relative w-full h-full min-h-[400px] bg-black">
-        <div id={scannerContainerId} className="w-full h-full" />
-
-        {/* BUTON DE ACTIVARE DACĂ AUTO-START EȘUEAZĂ */}
-        {(hasPermission === null || hasPermission === false) && (
-          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-6 bg-gray-900 text-center text-white">
-            <Camera size={48} className="text-muted mb-4" />
-            <h3 className="text-h3 mb-2">Cameră inactivă</h3>
-            <p className="mb-6 text-sm opacity-80">
-              Apasă butonul de mai jos și acceptă permisiunile pentru a scana.
-            </p>
-            <button
-              onClick={() => {
-                // Forțăm startul printr-o interacțiune directă a utilizatorului
-                startScanner();
-              }}
-              className="btn btn-primary px-8 py-4"
-            >
-              Activează Camera
-            </button>
-          </div>
-        )}
-
-        {status === 'SCANNING' && (
-          <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center">
-            <div className="w-64 h-64 border-2 border-accent/50 rounded-3xl relative">
-              <div className="absolute inset-0 border-2 border-accent rounded-3xl animate-pulse" />
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
+  // const renderScannerArea = () => {
+  //   if (mode === 'MANUAL') {
+  //     return (
+  //       <div className="flex-1 bg-card flex flex-col items-center justify-center p-8">
+  //         <div className="w-full max-w-xs">
+  //           <label className="label">{t('checkin.manual.label')}</label>
+  //           <input
+  //             type="text"
+  //             className="input-field"
+  //             value={manualCode}
+  //             onChange={(e) => setManualCode(e.target.value)}
+  //             placeholder="TICKET-..."
+  //           />
+  //           <button onClick={() => handleScan(manualCode)} className="btn btn-primary w-full mt-4">
+  //             {t('common.confirm')}
+  //           </button>
+  //         </div>
+  //       </div>
+  //     );
+  //   }
+  //
+  //   return (
+  //     <div className="relative w-full h-full min-h-[400px] bg-black">
+  //       <div id={scannerContainerId} className="w-full h-full" />
+  //
+  //       {/* BUTON DE ACTIVARE DACĂ AUTO-START EȘUEAZĂ */}
+  //       {(hasPermission === null || hasPermission === false) && (
+  //         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-6 bg-gray-900 text-center text-white">
+  //           <Camera size={48} className="text-muted mb-4" />
+  //           <h3 className="text-h3 mb-2">{t('checkin.camera.inactiveTitle')}</h3>
+  //           <p className="mb-6 text-sm opacity-80">{t('checkin.camera.inactiveDesc')}</p>
+  //           <button
+  //             onClick={() => {
+  //               // Forțăm startul printr-o interacțiune directă a utilizatorului
+  //               startScanner();
+  //             }}
+  //             className="btn btn-primary px-8 py-4"
+  //           >
+  //             {t('checkin.camera.activateBtn')}
+  //           </button>
+  //         </div>
+  //       )}
+  //
+  //       {status === 'SCANNING' && (
+  //         <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center">
+  //           <div className="w-64 h-64 border-2 border-accent/50 rounded-3xl relative">
+  //             <div className="absolute inset-0 border-2 border-accent rounded-3xl animate-pulse" />
+  //           </div>
+  //         </div>
+  //       )}
+  //     </div>
+  //   );
+  // };
 
   // Controlerul principal pentru Lifecycle-ul camerei
   useEffect(() => {
@@ -203,6 +200,7 @@ const QrScannerPage = () => {
       try {
         scannerRef.current.resume();
         setStatus('SCANNING');
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         startScanner();
       }
@@ -229,20 +227,20 @@ const QrScannerPage = () => {
   return (
     <div className="min-h-screen bg-page flex flex-col pb-10">
       {/* Header Mobil & Desktop */}
-      <div className="bg-card border-b border-border p-4">
-        <div className="layout-container flex items-center justify-between">
-          <button onClick={() => navigate(-1)} className="btn btn-ghost p-2">
-            <ArrowLeft size={24} />
-          </button>
-          <h1 className="text-h3">{t('scanner.page_title')}</h1>
-          <div className="w-10" />
-        </div>
-      </div>
+      {/*<div className="bg-card border-b border-border p-4">*/}
+      {/*  <div className="layout-container flex items-center justify-between">*/}
+      {/*    <button onClick={() => navigate(-1)} className="btn btn-ghost p-2">*/}
+      {/*      /!*<ArrowLeft size={24} />*!/*/}
+      {/*    </button>*/}
+      {/*    <h1 className="text-h3">{t('checkin.pageTitle')}</h1>*/}
+      {/*    <div className="w-10" />*/}
+      {/*  </div>*/}
+      {/*</div>*/}
 
       <main className="flex-1 flex flex-col md:py-8">
         <div className="layout-container max-w-4xl w-full flex-1 flex flex-col md:flex-row gap-6">
           {/* Zona Principală de Scanare */}
-          <div className="flex-1 card p-0 bg-black overflow-hidden relative flex flex-col min-h-[450px] shadow-xl">
+          <div className="card p-0 bg-black overflow-hidden relative flex flex-col shadow-xl">
             {mode === 'CAMERA' ? (
               <>
                 {/* Viewport-ul Camerei */}
@@ -254,16 +252,13 @@ const QrScannerPage = () => {
                     <div className="w-20 h-20 bg-accent/20 rounded-full flex items-center justify-center mb-6">
                       <Camera size={40} className="text-accent" />
                     </div>
-                    <h3 className="text-h3 text-white mb-2">Cameră pregătită</h3>
-                    <p className="mb-8 text-gray-300 max-w-xs">
-                      Pentru a începe scanarea pe acest dispozitiv, trebuie să activezi camera
-                      manual.
-                    </p>
+                    <h3 className="text-h3 text-white mb-2">{t('checkin.camera.readyTitle')}</h3>
+                    <p className="mb-8 text-gray-300 max-w-xs">{t('checkin.camera.readyDesc')}</p>
                     <button
                       onClick={() => startScanner()}
                       className="btn btn-primary px-10 py-4 text-lg shadow-[0_0_20px_rgba(63,191,246,0.4)]"
                     >
-                      Activează Camera
+                      {t('checkin.camera.activateBtn')}
                     </button>
                   </div>
                 )}
@@ -272,7 +267,7 @@ const QrScannerPage = () => {
                 {hasPermission === false && (
                   <div className="absolute inset-0 z-30 flex flex-col items-center justify-center p-6 bg-gray-950 text-center text-white">
                     <AlertTriangle size={48} className="text-destructive mb-4" />
-                    <p className="mb-6 text-gray-300">{t('scanner.camera_error_desc')}</p>
+                    <p className="mb-6 text-gray-300">{t('checkin.errors.cameraPermission')}</p>
                     <button
                       onClick={() => {
                         setHasPermission(null);
@@ -280,7 +275,7 @@ const QrScannerPage = () => {
                       }}
                       className="btn btn-secondary"
                     >
-                      {t('scanner.scan_again')}
+                      {t('checkin.actions.scanAgain')}
                     </button>
                   </div>
                 )}
@@ -288,14 +283,14 @@ const QrScannerPage = () => {
                 {/* 3. OVERLAY SCANARE ACTIVĂ */}
                 {status === 'SCANNING' && (
                   <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center">
-                    <div className="w-64 h-64  border-accent/50 rounded-3xl relative">
+                    <div className="w-64 h-64 mt-8 border-accent/50 rounded-3xl relative">
                       {/* Colțuri animate */}
                       {/*<div className="absolute inset-0 border-2 border-accent rounded-3xl animate-pulse" />*/}
                       {/*/!* Linia de scanare *!/*/}
                       {/*<div className="absolute top-0 left-0 right-0 h-1 bg-accent/60 shadow-[0_0_15px_#3FBFF6] animate-[scan_2s_infinite]" />*/}
                     </div>
                     <p className="mt-8 text-white bg-black/60 px-6 py-2 rounded-full text-sm backdrop-blur-md border border-white/10">
-                      {t('scanner.align_qr_code')}
+                      {t('checkin.camera.alignInstruction')}
                     </p>
                   </div>
                 )}
@@ -304,7 +299,9 @@ const QrScannerPage = () => {
                 {status === 'PROCESSING' && (
                   <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[2px]">
                     <Loader2 className="w-12 h-12 text-accent animate-spin" />
-                    <p className="mt-4 text-white font-medium italic">Se verifică biletul...</p>
+                    <p className="mt-4 text-white font-medium italic">
+                      {t('checkin.status.verifying')}
+                    </p>
                   </div>
                 )}
               </>
@@ -316,19 +313,17 @@ const QrScannerPage = () => {
                     <div className="w-16 h-16 bg-bg-muted rounded-full flex items-center justify-center mb-4">
                       <Keyboard className="text-muted" size={32} />
                     </div>
-                    <h3 className="text-h3">Introdu Codul</h3>
-                    <p className="text-caption mt-1">
-                      Introdu manual codul biletului de pe ecranul studentului.
-                    </p>
+                    <h3 className="text-h3">{t('checkin.manual.title')}</h3>
+                    <p className="text-caption mt-1">{t('checkin.manual.description')}</p>
                   </div>
 
-                  <label className="label">{t('scanner.manual_code_label')}</label>
+                  <label className="label">{t('checkin.manual.label')}</label>
                   <input
                     type="text"
                     className="input-field text-center text-xl tracking-widest uppercase font-bold"
                     value={manualCode}
                     onChange={(e) => setManualCode(e.target.value)}
-                    placeholder="EX: TICKET-123"
+                    placeholder={t('checkin.manual.placeholder')}
                     autoFocus
                   />
                   <button
@@ -351,7 +346,7 @@ const QrScannerPage = () => {
           <div className="w-full md:w-80 flex flex-col gap-4">
             <div className="card space-y-4 bg-card">
               <h2 className="text-xs font-bold uppercase tracking-widest text-muted border-b border-border pb-2">
-                {t('scanner.method')}
+                {t('checkin.method')}
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-1 gap-3">
                 <button
@@ -363,7 +358,7 @@ const QrScannerPage = () => {
                       : 'btn-secondary border-transparent',
                   )}
                 >
-                  <ScanLine size={20} /> Camera
+                  <ScanLine size={20} /> {t('checkin.methods.camera')}
                 </button>
                 <button
                   onClick={() => setMode('MANUAL')}
@@ -374,19 +369,19 @@ const QrScannerPage = () => {
                       : 'btn-secondary border-transparent',
                   )}
                 >
-                  <Keyboard size={20} /> Manual
+                  <Keyboard size={20} /> {t('checkin.methods.manual')}
                 </button>
               </div>
             </div>
 
             <div className="card bg-bg-muted border-none p-4">
               <h4 className="text-sm font-semibold mb-2 flex items-center gap-2">
-                <AlertTriangle size={16} className="text-accent" /> Sfaturi
+                <AlertTriangle size={16} className="text-accent" /> {t('checkin.tips.title')}
               </h4>
               <ul className="text-caption space-y-2 list-disc pl-4">
-                <li>Asigură-te că lumina este suficientă.</li>
-                <li>Ține telefonul la aproximativ 15-20 cm distanță.</li>
-                <li>Dacă QR-ul este deteriorat, folosește codul manual.</li>
+                <li>{t('checkin.tips.light')}</li>
+                <li>{t('checkin.tips.distance')}</li>
+                <li>{t('checkin.tips.damaged')}</li>
               </ul>
             </div>
           </div>
@@ -421,7 +416,7 @@ const QrScannerPage = () => {
                   result.valid ? 'text-green-600' : 'text-destructive',
                 )}
               >
-                {result.valid ? 'Acces Permis' : 'Acces Respins'}
+                {result.valid ? t('checkin.status.success') : t('checkin.status.error')}
               </h2>
               <p className="text-main font-semibold mt-3 text-lg text-center">{result.message}</p>
             </div>
@@ -434,7 +429,7 @@ const QrScannerPage = () => {
                   </div>
                   <div>
                     <p className="text-[10px] uppercase font-bold tracking-widest text-muted">
-                      Student Validat
+                      {t('checkin.status.validatedStudent')}
                     </p>
                     <p className="font-bold text-main text-xl leading-none mt-1">
                       {result.studentName}
@@ -448,7 +443,7 @@ const QrScannerPage = () => {
                   onClick={resetScanner}
                   className="btn btn-primary w-full py-5 text-lg font-bold shadow-lg"
                 >
-                  <RefreshCcw size={20} className="mr-2" /> {t('scanner.scan_next')}
+                  <RefreshCcw size={20} className="mr-2" /> {t('checkin.actions.scanNext')}
                 </button>
                 <button
                   onClick={() => navigate(-1)}

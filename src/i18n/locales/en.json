@@ -54,22 +54,51 @@
     "no_results": "No results found.",
     "access_denied": "Access Denied",
     "go_back": "Go Back",
-    "close": "Close"
+    "close": "Close",
+    "confirm": "Confirm"
   },
-  "scanner": {
-    "page_title": "Scan QR Code",
-    "unauthorized_message": "You are not authorized to use this feature.",
-    "unknown_error": "An unknown error occurred during scanning.",
-    "scan_again": "Scan Again",
-    "scan_qr": "Scan QR Code",
-    "enter_code": "Enter Code Manually",
-    "camera_error_title": "Camera Error",
-    "camera_error_desc": "We could not access your camera. Please ensure you have granted permission.",
-    "align_qr_code": "Align QR code within the frame",
-    "manual_code_label": "Enter Ticket Code",
-    "manual_code_help": "Type the alphanumeric code found on the ticket.",
-    "scan_next": "Scan Next",
-    "error_processing": "Error processing check-in."
+  "checkin": {
+    "pageTitle": "Scan QR Code",
+    "method": "Method",
+    "methods": {
+      "camera": "Camera",
+      "manual": "Manual"
+    },
+    "status": {
+      "verifying": "Verifying ticket...",
+      "success": "Access Granted",
+      "error": "Access Denied",
+      "validatedStudent": "Student Validated"
+    },
+    "errors": {
+      "unknown": "An unknown error occurred during scanning.",
+      "processing": "Error processing check-in.",
+      "cameraPermission": "We could not access your camera. Please ensure you have granted permission."
+    },
+    "camera": {
+      "inactiveTitle": "Camera Inactive",
+      "inactiveDesc": "Press the button below and accept permissions to scan.",
+      "activateBtn": "Activate Camera",
+      "readyTitle": "Camera Ready",
+      "readyDesc": "To start scanning on this device, you must manually activate the camera.",
+      "alignInstruction": "Align QR code within the frame"
+    },
+    "manual": {
+      "title": "Enter Code",
+      "description": "Manually enter the ticket code from the student's screen.",
+      "label": "Enter Ticket Code",
+      "placeholder": "EX: TICKET-123"
+    },
+    "tips": {
+      "title": "Tips",
+      "light": "Ensure there is sufficient light.",
+      "distance": "Hold the phone about 15-20 cm away.",
+      "damaged": "If the QR is damaged, use the manual code."
+    },
+    "actions": {
+      "scanAgain": "Scan Again",
+      "scanNext": "Scan Next"
+    }
   },
   "search": {
     "placeholder": "Search events by name, organizer, or description..."
