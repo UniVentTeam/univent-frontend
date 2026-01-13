@@ -51,7 +51,25 @@
     "save": "Save",
     "saving": "Saving...",
     "cancel": "Cancel",
-    "no_results": "No results found."
+    "no_results": "No results found.",
+    "access_denied": "Access Denied",
+    "go_back": "Go Back",
+    "close": "Close"
+  },
+  "scanner": {
+    "page_title": "Scan QR Code",
+    "unauthorized_message": "You are not authorized to use this feature.",
+    "unknown_error": "An unknown error occurred during scanning.",
+    "scan_again": "Scan Again",
+    "scan_qr": "Scan QR Code",
+    "enter_code": "Enter Code Manually",
+    "camera_error_title": "Camera Error",
+    "camera_error_desc": "We could not access your camera. Please ensure you have granted permission.",
+    "align_qr_code": "Align QR code within the frame",
+    "manual_code_label": "Enter Ticket Code",
+    "manual_code_help": "Type the alphanumeric code found on the ticket.",
+    "scan_next": "Scan Next",
+    "error_processing": "Error processing check-in."
   },
   "search": {
     "placeholder": "Search events by name, organizer, or description..."
@@ -121,7 +139,8 @@
       "my_events": "My events",
       "analytics": "Analytics"
     },
-    "create_btn": "Create event"
+    "create_btn": "Create event",
+    "scan_qr_tooltip": "Scan QR Codes"
   },
   "create_event": {
     "page_title": "Create New Event",

@@ -51,7 +51,25 @@
     "save": "Salvează",
     "saving": "Se salvează...",
     "cancel": "Anulează",
-    "no_results": "Niciun rezultat găsit."
+    "no_results": "Niciun rezultat găsit.",
+    "access_denied": "Acces Interzis",
+    "go_back": "Înapoi",
+    "close": "Închide"
+  },
+  "scanner": {
+    "page_title": "Scanează Codul QR",
+    "unauthorized_message": "Nu ești autorizat să folosești această funcționalitate.",
+    "unknown_error": "A apărut o eroare necunoscută la scanare.",
+    "scan_again": "Scanează Din Nou",
+    "scan_qr": "Scanează QR",
+    "enter_code": "Introdu Cod Manual",
+    "camera_error_title": "Eroare Cameră",
+    "camera_error_desc": "Nu am putut accesa camera. Te rugăm să verifici permisiunile.",
+    "align_qr_code": "Încadrează codul QR în ramă",
+    "manual_code_label": "Introdu Codul Biletului",
+    "manual_code_help": "Tastează codul alfanumeric de pe bilet.",
+    "scan_next": "Următorul",
+    "error_processing": "Eroare la procesarea validării."
   },
   "search": {
     "placeholder": "Caută evenimente după nume, organizator sau descriere..."
@@ -121,7 +139,8 @@
       "my_events": "Evenimentele mele",
       "analytics": "Analize"
     },
-    "create_btn": "Creează eveniment"
+    "create_btn": "Creează eveniment",
+    "scan_qr_tooltip": "Scanează Coduri QR"
   },
   "create_event": {
     "page_title": "Creează eveniment nou",
