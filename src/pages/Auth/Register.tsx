@@ -1,13 +1,15 @@
-// src/pages/RegisterPage.tsx
-// Rămâne aproape la fel, dar asigurăm că error handling-ul e consistent.
-// Am adăugat validare simplă pentru email și parolă (opțional, dar bună practică).
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authService } from '@/api/authService';
+import { associationService } from '@/api/associationService'; // Adăugat pentru fetch
 import { UserPlus } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
+import { SelectDropdown } from '@/components/forms/SelectDropdown'; // Componenta existentă
+import { CustomCheckbox } from '@/components/forms/CustomCheckbox'; // Componenta existentă
+import type { components } from '@/types/schema';
+
+type AssociationSimple = components['schemas']['AssociationSimple'];
 
 export default function RegisterPage() {
   const { t } = useTranslation();
@@ -16,28 +18,53 @@ export default function RegisterPage() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  // State-uri noi pentru selecție organizație
+  const [isOrganizer, setIsOrganizer] = useState(false);
+  const [associationId, setAssociationId] = useState<string | null>(null);
+  const [associations, setAssociations] = useState<AssociationSimple[]>([]);
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Fetch asociații la bifarea checkbox-ului
+  useEffect(() => {
+    async function fetchAssociations() {
+      if (isOrganizer && associations.length === 0) {
+        try {
+          const fetched = await associationService.getAssociations();
+          setAssociations(fetched);
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    }
+    fetchAssociations();
+  }, [isOrganizer, associations.length]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-    
+
     if (!email || !password || !fullName) {
       setError(t('auth.registerPage.requiredError'));
       return;
     }
 
-    // Validare simplă suplimentară (opțional)
     if (!email.includes('@') || password.length < 6) {
-      setError(t('auth.registerPage.validationError')); // Adaugă traducere pentru asta
+      setError(t('auth.registerPage.validationError'));
       return;
     }
 
     setIsLoading(true);
     try {
-      await authService.register({ fullName, email, password });
-      // The service shows a success toast
+      await authService.register({
+        fullName,
+        email,
+        password,
+        ...(isOrganizer && { associationId }), // Adaugă asociația doar dacă este organizator
+      });
+
       setTimeout(() => {
         navigate('/auth/login');
       }, 2000);
@@ -47,6 +74,11 @@ export default function RegisterPage() {
       setIsLoading(false);
     }
   };
+
+  const associationOptions = associations.map((assoc) => ({
+    value: assoc.id ?? '',
+    label: assoc.name ?? '',
+  }));
 
   return (
     <div className="w-full max-w-md">
@@ -100,12 +132,40 @@ export default function RegisterPage() {
             disabled={isLoading}
           />
         </div>
-        
+
+        {/* Partea de selecție organizație */}
+        <CustomCheckbox
+          id="isOrganizer"
+          label={t('roles.organizer')}
+          checked={isOrganizer}
+          onChange={(e) => setIsOrganizer(e.target.checked)}
+          disabled={isLoading}
+        />
+
+        {isOrganizer && (
+          <div>
+            <label className="label">{t('filters.association')}</label>
+            <SelectDropdown
+              options={associationOptions}
+              selected={associationId}
+              onChange={setAssociationId}
+              title={t('filters.association')}
+              className="mt-1"
+            />
+          </div>
+        )}
+
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
-        <button type="submit" className={cn("btn btn-primary w-full gap-2", isLoading && "cursor-wait")} disabled={isLoading}>
-          <UserPlus className={cn("transition-all", isLoading && "animate-pulse")} size={16} />
-          {isLoading ? t('auth.registerPage.submitButtonLoading') : t('auth.registerPage.submitButton')}
+        <button
+          type="submit"
+          className={cn('btn btn-primary w-full gap-2', isLoading && 'cursor-wait')}
+          disabled={isLoading}
+        >
+          <UserPlus className={cn('transition-all', isLoading && 'animate-pulse')} size={16} />
+          {isLoading
+            ? t('auth.registerPage.submitButtonLoading')
+            : t('auth.registerPage.submitButton')}
         </button>
 
         <p className="text-center text-caption">
