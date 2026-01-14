@@ -22,28 +22,35 @@ export default function UsersManagementPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const [page, setPage] = useState(1);
+  const [limit] = useState(20);
+  const [totalPages, setTotalPages] = useState(1);
+  
   const fetchUsers = async () => {
     setIsLoading(true);
+    setError(null);
+  
     try {
-      // Use mock data in development
-      if (import.meta.env.DEV) {
-        setUsers(usersMockData as AdminUser[]);
-      } else {
-        const fetchedUsers = await userService.getAllUsers();
-        setUsers(fetchedUsers);
-      }
+      const res = await userService.getAllUsers({
+        search: searchTerm || undefined,
+        page,
+        limit,
+      });
+  
+      setUsers(res.items);
+      setTotalPages(res.pages);
     } catch (err) {
       setError((err as Error).message);
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchUsers();
-  }, []);
-
+  }, [page, searchTerm]);
+  
   const handleRoleChange = async (userId: string, newRole: UserRole) => {
     const originalUsers = [...users];
     // Optimistic update

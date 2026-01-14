@@ -53,17 +53,26 @@ async function updateProfile(profileData: Partial<UserProfile>) {
 /**
  * [ADMIN] Preia toți utilizatorii din sistem.
  */
-async function getAllUsers(): Promise<AdminUser[]> {
-    // Presupunem că acest endpoint există, dar nu e în schema.
-    const { data, error } = await api.GET('/admin/users');
+async function getAllUsers(params?: {
+  search?: string;
+  page?: number;
+  limit?: number;
+}): Promise<AdminUsersResponse> {
+  const query: Record<string, any> = {};
+  if (params?.search) query.search = params.search;
+  if (params?.page) query.page = params.page;
+  if (params?.limit) query.limit = params.limit;
 
-    if (error) {
-        toast.error('Failed to fetch users.');
-        console.error('Failed to fetch users:', error);
-        return [];
-    }
-    return (data as AdminUser[]) || [];
+  const { data, error } = await api.GET('/admin/users', { params: { query } });
+
+  if (error) {
+    toast.error('Failed to fetch users.');
+    throw new Error('Could not retrieve users.');
+  }
+
+  return data as AdminUsersResponse;
 }
+
 
 /**
  * [ADMIN] Actualizează rolul unui utilizator.
