@@ -11,7 +11,7 @@ export const HeroSection: React.FC = () => {
              p-4 sm:p-6 md:p-10 lg:px-[5%] 
              bg-[url('/frame-2.jpg')] bg-cover bg-center 
              bg-black/40 bg-blend-overlay 
-             h-[500px] lg:h-[500px]"
+             h-screen lg:h-[500px]"
       aria-label="Hero section"
     >
       <h1
