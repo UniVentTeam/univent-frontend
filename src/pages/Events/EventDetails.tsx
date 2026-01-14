@@ -123,8 +123,8 @@ const EventDetails = () => {
     return (
       <div className="bg-[var(--bg-page)] min-h-screen">
         {/* ================= HERO ================= */}
-        <div className="relative h-[480px] w-full">
-          {/* IMAGINE */}
+        <div className="relative h-[360px] sm:h-[420px] md:h-[480px] w-full">
+        {/* IMAGINE */}
           <div
             className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${event.coverImageUrl})` }}
@@ -152,12 +152,12 @@ const EventDetails = () => {
           </button>
 
           {/* ================= OVERLAY (MAI JOS) ================= */}
-          <div className="absolute left-0 right-0 bottom-[-260px] md:bottom-[-90px] z-40">
-            <div className="max-w-7xl mx-auto px-6">
-              <div className="grid grid-cols-[2fr_1fr] gap-8 items-stretch">
-                {/* INFO EVENIMENT */}
-                <div className="bg-[var(--bg-card)] rounded-[28px] p-10 shadow-xl">
-                  <span
+          <div className="absolute left-0 right-0 bottom-[-180px] sm:bottom-[-220px] lg:relative lg:bottom-auto z-40 lg:mt-[-90px]">
+          <div className="max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-[2fr_1fr] gap-4 sm:gap-6 lg:gap-8 items-stretch">
+          {/* INFO EVENIMENT */}
+          <div className="bg-[var(--bg-card)] rounded-[24px] md:rounded-[28px] p-5 sm:p-7 md:p-10 shadow-xl">
+          <span
                     className="inline-flex items-center mb-4 px-3 py-1 text-xs font-semibold rounded-full capitalize"
                     style={{
                       backgroundColor: 'var(--color-academic-bg)',
@@ -167,12 +167,12 @@ const EventDetails = () => {
                     {event.type}
                   </span>
 
-                  <h1 className="text-4xl font-bold tracking-tight mb-6 text-[var(--text-primary)]">
-                    {event.title}
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4 md:mb-6 text-[var(--text-primary)]">
+                  {event.title}
                   </h1>
 
-                  <div className="flex flex-wrap gap-x-10 gap-y-5 text-sm text-[var(--text-secondary)]">
-                    <div className="flex items-center gap-3">
+                  <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-x-8 sm:gap-y-4 text-sm text-[var(--text-secondary)]">
+                  <div className="flex items-center gap-3">
                       <CalendarDays className="w-5 h-5 text-[var(--color-accent)]" />
                       <span>
                         {new Date(event.startAt).toLocaleDateString()}
@@ -193,8 +193,8 @@ const EventDetails = () => {
 
                 {/* CARD ÎNSCRIERE */}
                 {/* CARD ÎNSCRIERE */}
-                <div className="bg-[var(--bg-card)] rounded-[28px] p-10 shadow-xl h-full flex flex-col">
-                  <h2 className="text-lg font-semibold mb-6 text-[var(--text-primary)]">
+                <div className="bg-[var(--bg-card)] rounded-[24px] md:rounded-[28px] p-5 sm:p-7 md:p-10 shadow-xl h-full flex flex-col lg:min-w-[340px]">
+                <h2 className="text-lg font-semibold mb-6 text-[var(--text-primary)]">
                     Înscriere la eveniment
                   </h2>
 
@@ -248,9 +248,9 @@ const EventDetails = () => {
         </div>
 
         {/* ================= CONȚINUT PRINCIPAL ================= */}
-        <div className="max-w-5xl mx-auto px-6 pt-[340px] md:pt-[160px] pb-28 space-y-14">
-          <section className="bg-[var(--bg-card)] rounded-[28px] p-12 shadow">
-            <h2 className="text-xl font-semibold mb-6 text-[var(--text-primary)]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-[240px] sm:pt-[300px] lg:pt-16 pb-16 sm:pb-24 md:pb-28 space-y-8 sm:space-y-12 md:space-y-14">
+        <section className="bg-[var(--bg-card)] rounded-[24px] md:rounded-[28px] p-5 sm:p-8 md:p-12 shadow">
+        <h2 className="text-xl font-semibold mb-6 text-[var(--text-primary)]">
               Despre acest eveniment
             </h2>
 
@@ -287,10 +287,10 @@ const EventDetails = () => {
 
           {/* RECENZII */}
           {/* RECENZII */}
-          <section className="bg-[var(--bg-card)] rounded-[28px] p-12 shadow">
-            {/* HEADER */}
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-xl font-semibold text-[var(--text-primary)]">Recenzii</h2>
+          <section className="bg-[var(--bg-card)] rounded-[24px] md:rounded-[28px] p-5 sm:p-8 md:p-12 shadow">
+          {/* HEADER */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6 sm:mb-8">
+          <h2 className="text-xl font-semibold text-[var(--text-primary)]">Recenzii</h2>
 
               {reviews.length > 0 && (
                 <span className="text-yellow-500 font-medium">
@@ -376,8 +376,8 @@ const EventDetails = () => {
             {/* LISTA RECENZII */}
             <div className="space-y-8">
               {reviews.map((review) => (
-                <div key={review.id} className="flex gap-5 border-t border-[var(--border-base)] pt-8">
-                  {/* AVATAR */}
+                <div key={review.id} className="flex gap-4 sm:gap-5 border-t border-[var(--border-base)] pt-6 sm:pt-8">
+                {/* AVATAR */}
                   <div className="w-12 h-12 rounded-full bg-[var(--bg-muted)] flex items-center justify-center font-semibold">
                     {review.userName
                       .split(' ')
