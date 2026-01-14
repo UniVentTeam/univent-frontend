@@ -10,8 +10,7 @@ export const HeroSection: React.FC = () => {
       className="hero-section flex flex-row lg:flex-row w-full items-center justify-between gap-4 lg:gap-8 
              p-4 sm:p-6 md:p-10 lg:px-[5%] 
              bg-[url('/frame-2.jpg')] bg-cover bg-center 
-             bg-black/40 bg-blend-overlay 
-             h-screen lg:h-[500px]"
+             bg-black/40 bg-blend-overlay"
       aria-label="Hero section"
     >
       <h1
