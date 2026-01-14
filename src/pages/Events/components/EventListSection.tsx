@@ -44,7 +44,7 @@ export const EventListSection: React.FC<EventListSectionProps> = ({ events }) =>
   };
 
   return (
-    <section className="mt-[100px] grid gap-6 px-4 py-8 grid-cols-[repeat(auto-fill,minmax(600px,1fr))]">
+    <section className="mt-[100px] grid gap-6 px-4 py-8 grid-cols-1 [@media(min-width:1000px)]:grid-cols-2">
       {events.map((event) => {
         const displayCategory = event.organizers?.[0]?.name || 'Eveniment';
         const displayLocation = event.locationName || 'Locație';
