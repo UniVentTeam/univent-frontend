@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { events as eventsData } from "./data/eventsData";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 /* ================= TYPES ================= */
 
@@ -50,13 +49,11 @@ const transformEvents = (rawEvents: typeof eventsData): Event[] => {
       time,
       location: evt.location || undefined,
       organizer: evt.organizer || undefined,
-      associationId: evt.associationId || undefined,
-      faculty: evt.faculty || undefined, // ✅ AICI e FIX-ul
+      association: evt.associationId || undefined,
+      faculty: evt.faculty || undefined,
     };
   });
 };
-
-
 
 const EVENTS: Event[] = transformEvents(eventsData);
 
@@ -68,10 +65,8 @@ const unique = (arr: (string | undefined)[]) =>
 const EventCalendar: React.FC = () => {
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState<Date>(today);
-  const [selectedFilters, setSelectedFilters] = useState<EventType[]>([]);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
-  /* ---- DROPDOWN FILTER STATES ---- */
+  /* ---- FILTER STATES ---- */
   const [eventType, setEventType] = useState<EventType | "">("");
   const [association, setAssociation] = useState("");
   const [faculty, setFaculty] = useState("");
@@ -80,30 +75,22 @@ const EventCalendar: React.FC = () => {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
 
-  /* ---- DROPDOWN STYLE (DARK MODE FIX) ---- */
+  /* ---- SELECTED DAY ---- */
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+
+  /* ---- DROPDOWN STYLE ---- */
   const dropdownClass =
-    "px-2 py-1 text-xs rounded border " +
-    "bg-white text-black border-gray-300 " +
+    "px-2 py-1 text-xs rounded border bg-white text-black border-gray-300 " +
     "dark:bg-gray-800 dark:text-white dark:border-gray-600 " +
     "focus:outline-none focus:ring-1 focus:ring-blue-500";
-
-  const toggleFilter = (value: EventType) => {
-    setSelectedFilters((filters) =>
-      filters.includes(value)
-        ? filters.filter((f) => f !== value)
-        : [...filters, value]
-    );
-    setSelectedDate(null);
-  };
 
   const ASSOCIATIONS = unique(EVENTS.map((e) => e.association));
   const FACULTIES = unique(EVENTS.map((e) => e.faculty));
   const ORGANIZERS = unique(EVENTS.map((e) => e.organizer));
   const LOCATIONS = unique(EVENTS.map((e) => e.location));
 
+  /* ---- FILTER EVENTS ---- */
   const filteredEvents = EVENTS.filter((evt) => {
-    if (selectedFilters.length && !selectedFilters.includes(evt.type))
-      return false;
     if (eventType && evt.type !== eventType) return false;
     if (association && evt.association !== association) return false;
     if (faculty && evt.faculty !== faculty) return false;
@@ -114,12 +101,14 @@ const EventCalendar: React.FC = () => {
     return true;
   });
 
+  /* ---- GROUP BY DATE ---- */
   const eventsByDate: Record<string, Event[]> = {};
   filteredEvents.forEach((evt) => {
     if (!eventsByDate[evt.date]) eventsByDate[evt.date] = [];
     eventsByDate[evt.date].push(evt);
   });
 
+  /* ---- CALENDAR LOGIC ---- */
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth();
   const firstDay = new Date(year, month, 1).getDay();
@@ -140,53 +129,31 @@ const EventCalendar: React.FC = () => {
         <div className="sticky top-0 z-10 flex items-center justify-between p-4 mb-2 text-white bg-blue-600 rounded-lg">
           <div className="flex items-center gap-2">
             <button
-              onClick={() =>
-                setCurrentMonth(new Date(year, month - 1, 1))
-              }
+              onClick={() => setCurrentMonth(new Date(year, month - 1, 1))}
               className="px-2 py-1 bg-blue-400 rounded"
             >
               {"<"}
             </button>
-            <h2 className="text-2xl font-bold">
+
+            <h2 className="text-xl font-bold">
               {monthName} {year}
             </h2>
+
             <button
-              onClick={() =>
-                setCurrentMonth(new Date(year, month + 1, 1))
-              }
+              onClick={() => setCurrentMonth(new Date(year, month + 1, 1))}
               className="px-2 py-1 bg-blue-400 rounded"
             >
               {">"}
             </button>
           </div>
-
-          {/* EXISTING TYPE PILLS */}
-          <div className="flex items-center gap-2">
-            {FILTERS.map((f) => (
-              <button
-                key={f.value}
-                onClick={() => toggleFilter(f.value)}
-                className={`px-3 py-1 rounded-full text-sm ${
-                  selectedFilters.includes(f.value)
-                    ? "bg-white text-blue-600"
-                    : "bg-blue-300 text-white"
-                }`}
-              >
-                {f.label}
-              </button>
-            ))}
-            <ThemeToggle />
-          </div>
         </div>
 
-        {/* ===== DROPDOWN FILTER ROW ===== */}
-        <div className="flex flex-wrap items-center justify-start gap-1 mb-3">
+        {/* ===== FILTERS ===== */}
+        <div className="flex flex-wrap items-center gap-1 mb-3">
           <select
             value={eventType}
-            onChange={(e) =>
-              setEventType(e.target.value as EventType | "")
-            }
-            className={`${dropdownClass} w-[120px] [&>option]:bg-gray-800 [&>option]:text-white`}
+            onChange={(e) => setEventType(e.target.value as EventType | "")}
+            className={`${dropdownClass} w-[120px]`}
           >
             <option value="">Event type</option>
             {FILTERS.map((f) => (
@@ -199,7 +166,7 @@ const EventCalendar: React.FC = () => {
           <select
             value={association}
             onChange={(e) => setAssociation(e.target.value)}
-            className={`${dropdownClass} w-[140px] [&>option]:bg-gray-800 [&>option]:text-white`}
+            className={`${dropdownClass} w-[140px]`}
           >
             <option value="">Association</option>
             {ASSOCIATIONS.map((a) => (
@@ -210,7 +177,7 @@ const EventCalendar: React.FC = () => {
           <select
             value={faculty}
             onChange={(e) => setFaculty(e.target.value)}
-            className={`${dropdownClass} w-[120px] [&>option]:bg-gray-800 [&>option]:text-white`}
+            className={`${dropdownClass} w-[120px]`}
           >
             <option value="">Faculty</option>
             {FACULTIES.map((f) => (
@@ -221,7 +188,7 @@ const EventCalendar: React.FC = () => {
           <select
             value={organizer}
             onChange={(e) => setOrganizer(e.target.value)}
-            className={`${dropdownClass} w-[140px] [&>option]:bg-gray-800 [&>option]:text-white`}
+            className={`${dropdownClass} w-[140px]`}
           >
             <option value="">Organizer</option>
             {ORGANIZERS.map((o) => (
@@ -232,7 +199,7 @@ const EventCalendar: React.FC = () => {
           <select
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            className={`${dropdownClass} w-[120px] [&>option]:bg-gray-800 [&>option]:text-white`}
+            className={`${dropdownClass} w-[120px]`}
           >
             <option value="">Location</option>
             {LOCATIONS.map((l) => (
@@ -256,7 +223,7 @@ const EventCalendar: React.FC = () => {
         </div>
 
         {/* ===== CALENDAR ===== */}
-        <div className="grid grid-cols-7 gap-0 border border-gray-300 dark:border-gray-700">
+        <div className="grid grid-cols-7 border border-gray-300 dark:border-gray-700">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
             <div
               key={day}
@@ -268,9 +235,7 @@ const EventCalendar: React.FC = () => {
 
           {calendarDays.map((day, idx) => {
             const dateStr = day
-              ? `${year}-${String(month + 1).padStart(2, "0")}-${String(
-                  day
-                ).padStart(2, "0")}`
+              ? `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`
               : "";
 
             const dayEvents =
@@ -279,7 +244,14 @@ const EventCalendar: React.FC = () => {
             return (
               <div
                 key={idx}
-                className="h-24 p-1 border cursor-pointer"
+                onClick={() => {
+                  if (dayEvents.length) setSelectedDate(dateStr);
+                }}
+                className={`h-24 p-1 border cursor-pointer ${
+                  dayEvents.length
+                    ? "hover:bg-blue-50 dark:hover:bg-gray-800"
+                    : ""
+                }`}
               >
                 <div className="font-bold text-right">{day}</div>
 
@@ -307,6 +279,38 @@ const EventCalendar: React.FC = () => {
             );
           })}
         </div>
+
+        {/* ===== EVENT DETAILS ===== */}
+        {selectedDate && eventsByDate[selectedDate] && (
+          <div className="p-4 mt-4 bg-white border rounded-lg dark:bg-gray-900 dark:border-gray-700">
+            <h3 className="mb-3 text-sm font-semibold text-gray-600 dark:text-gray-300">
+              Events on {selectedDate}
+            </h3>
+
+            <div className="flex flex-col gap-3">
+              {eventsByDate[selectedDate].map((evt) => (
+                <div
+                  key={evt.id}
+                  className="p-3 border rounded-md bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+                >
+                  <div className="flex justify-between">
+                    <span className="font-medium">{evt.title}</span>
+                    {evt.time && (
+                      <span className="text-xs text-gray-500">{evt.time}</span>
+                    )}
+                  </div>
+
+                  <div className="mt-1 text-xs text-gray-500 space-y-0.5">
+                    {evt.location && <div>📍 {evt.location}</div>}
+                    {evt.organizer && <div>👤 {evt.organizer}</div>}
+                    {evt.faculty && <div>🎓 {evt.faculty}</div>}
+                    {evt.association && <div>🏛 {evt.association}</div>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
       </div>
     </div>
