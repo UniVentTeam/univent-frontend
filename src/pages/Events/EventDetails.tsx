@@ -6,8 +6,10 @@ import { eventService } from '@/api/eventService';
 import { CalendarDays, MapPin, Users } from 'lucide-react';
 import { reviewService, type Review } from '@/api/reviewService';
 import { ticketService } from '@/api/ticketService';
+import { useTranslation } from 'react-i18next';
 
 const EventDetails = () => {
+  const { t } = useTranslation();
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
@@ -107,7 +109,7 @@ const EventDetails = () => {
   if (!event) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#F5F8FB]">
-        <h2 className="text-2xl font-semibold">Evenimentul nu a fost găsit</h2>
+        <h2 className="text-2xl font-semibold">{t('event_details.not_found')}</h2>
       </div>
     );
   }
@@ -115,7 +117,7 @@ const EventDetails = () => {
   if (isLoadingEvent) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[var(--bg-page)]">
-        <p className="text-[var(--text-secondary)]">Se încarcă evenimentul...</p>
+        <p className="text-[var(--text-secondary)]">{t('event_details.loading')}</p>
       </div>
     );
   }
@@ -148,7 +150,7 @@ const EventDetails = () => {
             onClick={() => navigate(-1)}
             className="absolute top-6 left-6 z-30 rounded-full bg-white/90 px-4 py-2 text-sm font-medium shadow backdrop-blur"
           >
-            ← Înapoi
+            {t('event_details.back')}
           </button>
 
           {/* ================= OVERLAY (MAI JOS) ================= */}
@@ -195,30 +197,30 @@ const EventDetails = () => {
                 {/* CARD ÎNSCRIERE */}
                 <div className="bg-[var(--bg-card)] rounded-[24px] md:rounded-[28px] p-5 sm:p-7 md:p-10 shadow-xl h-full flex flex-col lg:min-w-[340px]">
                 <h2 className="text-lg font-semibold mb-6 text-[var(--text-primary)]">
-                    Înscriere la eveniment
+                    {t('event_details.registration_title')}
                   </h2>
 
                   {!user ? (
                     <>
                       <div className="rounded-2xl bg-[var(--bg-muted)] px-6 py-14 text-center text-sm text-[var(--text-secondary)] font-medium">
-                        Autentifică-te pentru a te putea înscrie la acest eveniment
+                        {t('event_details.login_to_register')}
                       </div>
 
                       <button
                         onClick={() => navigate('/auth/login')}
                         className="mt-6 w-full rounded-xl btn-primary py-3 text-sm font-semibold"
                       >
-                        Autentificare
+                        {t('event_details.login')}
                       </button>
                     </>
                   ) : event.isRegistered ? (
                     <>
                       <div className="rounded-2xl bg-[var(--color-green-100)] px-6 py-10 text-center text-sm font-medium text-[var(--color-green-500)]">
-                        Ești deja înscris la acest eveniment
+                        {t('event_details.already_registered')}
                       </div>
 
                       <p className="mt-4 text-center text-sm text-[var(--text-secondary)]">
-                        Vei primi notificări și acces la eveniment.
+                        {t('event_details.already_registered_info')}
                       </p>
                     </>
                   ) : (
@@ -232,11 +234,11 @@ const EventDetails = () => {
                           isRegistering && 'opacity-70 cursor-wait'
                         )}
                       >
-                        {isRegistering ? 'Se face înscrierea...' : 'Înscrie-te la eveniment'}
+                        {isRegistering ? t('event_details.registering') : t('event_details.register_button')}
                       </button>
 
                       <p className="mt-4 text-center text-sm text-[var(--text-secondary)]">
-                        Vei primi o notificare de confirmare după înscriere.
+                        {t('event_details.register_info')}
                       </p>
                     </>
                   )}
@@ -251,7 +253,7 @@ const EventDetails = () => {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-[240px] sm:pt-[300px] lg:pt-16 pb-16 sm:pb-24 md:pb-28 space-y-8 sm:space-y-12 md:space-y-14">
         <section className="bg-[var(--bg-card)] rounded-[24px] md:rounded-[28px] p-5 sm:p-8 md:p-12 shadow">
         <h2 className="text-xl font-semibold mb-6 text-[var(--text-primary)]">
-              Despre acest eveniment
+              {t('event_details.about_title')}
             </h2>
 
             {/* DESCRIERE */}
@@ -261,7 +263,7 @@ const EventDetails = () => {
               </p>
             ) : (
               <p className="text-sm text-[var(--text-secondary)] italic">
-                Nu există o descriere pentru acest eveniment.
+                {t('event_details.no_description')}
               </p>
             )}
 
@@ -269,7 +271,7 @@ const EventDetails = () => {
             {event.agenda?.length > 0 && (
               <div className="mt-8">
                 <h3 className="font-semibold mb-3 text-[var(--text-primary)]">
-                  Agenda evenimentului
+                  {t('event_details.agenda_title')}
                 </h3>
 
                 <ul className="list-disc list-inside space-y-2 text-[var(--text-secondary)]">
@@ -290,7 +292,7 @@ const EventDetails = () => {
           <section className="bg-[var(--bg-card)] rounded-[24px] md:rounded-[28px] p-5 sm:p-8 md:p-12 shadow">
           {/* HEADER */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6 sm:mb-8">
-          <h2 className="text-xl font-semibold text-[var(--text-primary)]">Recenzii</h2>
+          <h2 className="text-xl font-semibold text-[var(--text-primary)]">{t('event_details.reviews_title')}</h2>
 
               {reviews.length > 0 && (
                 <span className="text-yellow-500 font-medium">
@@ -304,14 +306,14 @@ const EventDetails = () => {
             {!user && (
               <div className="mb-8 flex flex-col items-center gap-4 rounded-2xl bg-[var(--bg-muted)] px-6 py-6 text-center">
                 <p className="text-sm font-medium text-[var(--text-secondary)]">
-                  Autentifică-te pentru a lăsa o recenzie
+                  {t('event_details.login_to_review')}
                 </p>
 
                 <button
                   onClick={() => navigate('/auth/login')}
                   className="rounded-xl btn-primary px-6 py-2 text-sm font-semibold"
                 >
-                  Autentificare
+                  {t('event_details.login')}
                 </button>
               </div>
             )}
@@ -319,14 +321,14 @@ const EventDetails = () => {
             {/* CTA – LOGAT DAR NEÎNSCRIS */}
             {user && !event.isRegistered && (
               <div className="mb-8 rounded-xl bg-[var(--bg-muted)] py-3 text-center text-sm text-gray-600">
-                Doar participanții pot lăsa recenzii la acest eveniment.
+                {t('event_details.only_participants_review')}
               </div>
             )}
 
             {/* FORMULAR – DOAR PARTICIPANȚI */}
             {user && event.isRegistered && (
               <div className="mb-10 rounded-2xl bg-[var(--bg-muted)] p-6">
-                <h3 className="mb-4 text-sm font-semibold text-[var(--text-primary)]">Lasă o recenzie</h3>
+                <h3 className="mb-4 text-sm font-semibold text-[var(--text-primary)]">{t('event_details.leave_review_title')}</h3>
 
                 {/* STELE */}
                 <div className="flex items-center gap-2 mb-4">
@@ -349,7 +351,7 @@ const EventDetails = () => {
                 <textarea
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  placeholder="Scrie părerea ta despre eveniment..."
+                  placeholder={t('event_details.review_placeholder')}
                   className="w-full rounded-xl border border-gray-200 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   rows={3}
                 />
@@ -360,17 +362,17 @@ const EventDetails = () => {
                   disabled={isSubmittingReview || !comment.trim()}
                   className="mt-4 rounded-xl btn-primary px-6 py-2 text-sm font-semibold text-white hover:btn-primary transition disabled:opacity-60"
                 >
-                  {isSubmittingReview ? 'Se trimite...' : 'Trimite recenzia'}
+                  {isSubmittingReview ? t('event_details.sending_review') : t('event_details.submit_review')}
                 </button>
               </div>
             )}
 
             {/* LOADING */}
-            {isLoadingReviews && <p className="text-sm text-[var(--text-secondary)]">Se încarcă recenziile...</p>}
+            {isLoadingReviews && <p className="text-sm text-[var(--text-secondary)]">{t('event_details.loading_reviews')}</p>}
 
             {/* EMPTY */}
             {!isLoadingReviews && reviews.length === 0 && (
-              <p className="text-sm text-[var(--text-secondary)]">Acest eveniment nu are încă recenzii.</p>
+              <p className="text-sm text-[var(--text-secondary)]">{t('event_details.no_reviews')}</p>
             )}
 
             {/* LISTA RECENZII */}

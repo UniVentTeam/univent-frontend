@@ -187,7 +187,10 @@ export const HeaderSection: React.FC = () => {
             <>
               {/* MOBILE MENU */}
               <button
-                onClick={() => setMenuOpen((v) => !v)}
+                onClick={() => {
+                  setMenuOpen((v) => !v);
+                  setUserOpen(false);
+                }}
                 className="
     h-10 w-10
     rounded-full
@@ -227,7 +230,10 @@ export const HeaderSection: React.FC = () => {
 
               {/* USER */}
               <button
-                onClick={() => setUserOpen((v) => !v)}
+                onClick={() => {
+                  setUserOpen((v) => !v);
+                  setMenuOpen(false);
+                }}
                 className="flex items-center gap-2 rounded-full px-2 py-1.5 hover:bg-[var(--bg-muted)] transition"
               >
                 <div className="w-10 h-10 rounded-full bg-[var(--color-accent)] text-white font-bold flex items-center justify-center">
