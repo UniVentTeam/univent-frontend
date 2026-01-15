@@ -66,7 +66,7 @@ const EventCalendar: React.FC = () => {
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState<Date>(today);
 
-  /* ---- DROPDOWN FILTER STATES ---- */
+  /* ---- FILTER STATES ---- */
   const [eventType, setEventType] = useState<EventType | "">("");
   const [association, setAssociation] = useState("");
   const [faculty, setFaculty] = useState("");
@@ -75,10 +75,12 @@ const EventCalendar: React.FC = () => {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
 
+  /* ---- SELECTED DAY ---- */
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+
   /* ---- DROPDOWN STYLE ---- */
   const dropdownClass =
-    "px-2 py-1 text-xs rounded border " +
-    "bg-white text-black border-gray-300 " +
+    "px-2 py-1 text-xs rounded border bg-white text-black border-gray-300 " +
     "dark:bg-gray-800 dark:text-white dark:border-gray-600 " +
     "focus:outline-none focus:ring-1 focus:ring-blue-500";
 
@@ -87,6 +89,7 @@ const EventCalendar: React.FC = () => {
   const ORGANIZERS = unique(EVENTS.map((e) => e.organizer));
   const LOCATIONS = unique(EVENTS.map((e) => e.location));
 
+  /* ---- FILTER EVENTS ---- */
   const filteredEvents = EVENTS.filter((evt) => {
     if (eventType && evt.type !== eventType) return false;
     if (association && evt.association !== association) return false;
@@ -98,12 +101,14 @@ const EventCalendar: React.FC = () => {
     return true;
   });
 
+  /* ---- GROUP BY DATE ---- */
   const eventsByDate: Record<string, Event[]> = {};
   filteredEvents.forEach((evt) => {
     if (!eventsByDate[evt.date]) eventsByDate[evt.date] = [];
     eventsByDate[evt.date].push(evt);
   });
 
+  /* ---- CALENDAR LOGIC ---- */
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth();
   const firstDay = new Date(year, month, 1).getDay();
@@ -143,8 +148,8 @@ const EventCalendar: React.FC = () => {
           </div>
         </div>
 
-        {/* ===== DROPDOWN FILTER ROW ===== */}
-        <div className="flex flex-wrap items-center justify-start gap-1 mb-3">
+        {/* ===== FILTERS ===== */}
+        <div className="flex flex-wrap items-center gap-1 mb-3">
           <select
             value={eventType}
             onChange={(e) => setEventType(e.target.value as EventType | "")}
@@ -218,7 +223,7 @@ const EventCalendar: React.FC = () => {
         </div>
 
         {/* ===== CALENDAR ===== */}
-        <div className="grid grid-cols-7 gap-0 border border-gray-300 dark:border-gray-700">
+        <div className="grid grid-cols-7 border border-gray-300 dark:border-gray-700">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
             <div
               key={day}
@@ -233,10 +238,21 @@ const EventCalendar: React.FC = () => {
               ? `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`
               : "";
 
-            const dayEvents = day && eventsByDate[dateStr] ? eventsByDate[dateStr] : [];
+            const dayEvents =
+              day && eventsByDate[dateStr] ? eventsByDate[dateStr] : [];
 
             return (
-              <div key={idx} className="h-24 p-1 border cursor-pointer">
+              <div
+                key={idx}
+                onClick={() => {
+                  if (dayEvents.length) setSelectedDate(dateStr);
+                }}
+                className={`h-24 p-1 border cursor-pointer ${
+                  dayEvents.length
+                    ? "hover:bg-blue-50 dark:hover:bg-gray-800"
+                    : ""
+                }`}
+              >
                 <div className="font-bold text-right">{day}</div>
 
                 <div className="flex flex-col gap-0.5 text-xs">
@@ -263,6 +279,39 @@ const EventCalendar: React.FC = () => {
             );
           })}
         </div>
+
+        {/* ===== EVENT DETAILS ===== */}
+        {selectedDate && eventsByDate[selectedDate] && (
+          <div className="p-4 mt-4 bg-white border rounded-lg dark:bg-gray-900 dark:border-gray-700">
+            <h3 className="mb-3 text-sm font-semibold text-gray-600 dark:text-gray-300">
+              Events on {selectedDate}
+            </h3>
+
+            <div className="flex flex-col gap-3">
+              {eventsByDate[selectedDate].map((evt) => (
+                <div
+                  key={evt.id}
+                  className="p-3 border rounded-md bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+                >
+                  <div className="flex justify-between">
+                    <span className="font-medium">{evt.title}</span>
+                    {evt.time && (
+                      <span className="text-xs text-gray-500">{evt.time}</span>
+                    )}
+                  </div>
+
+                  <div className="mt-1 text-xs text-gray-500 space-y-0.5">
+                    {evt.location && <div>📍 {evt.location}</div>}
+                    {evt.organizer && <div>👤 {evt.organizer}</div>}
+                    {evt.faculty && <div>🎓 {evt.faculty}</div>}
+                    {evt.association && <div>🏛 {evt.association}</div>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
