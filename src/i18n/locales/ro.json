@@ -241,6 +241,31 @@
       }
     }
   },
+  "event_details": {
+    "not_found": "Evenimentul nu a fost găsit",
+    "loading": "Se încarcă evenimentul...",
+    "back": "← Înapoi",
+    "registration_title": "Înscriere la eveniment",
+    "login_to_register": "Autentifică-te pentru a te putea înscrie la acest eveniment",
+    "login": "Autentificare",
+    "already_registered": "Ești deja înscris la acest eveniment",
+    "already_registered_info": "Vei primi notificări și acces la eveniment.",
+    "registering": "Se face înscrierea...",
+    "register_button": "Înscrie-te la eveniment",
+    "register_info": "Vei primi o notificare de confirmare după înscriere.",
+    "about_title": "Despre acest eveniment",
+    "no_description": "Nu există o descriere pentru acest eveniment.",
+    "agenda_title": "Agenda evenimentului",
+    "reviews_title": "Recenzii",
+    "login_to_review": "Autentifică-te pentru a lăsa o recenzie",
+    "only_participants_review": "Doar participanții pot lăsa recenzii la acest eveniment.",
+    "leave_review_title": "Lasă o recenzie",
+    "review_placeholder": "Scrie părerea ta despre eveniment...",
+    "sending_review": "Se trimite...",
+    "submit_review": "Trimite recenzia",
+    "loading_reviews": "Se încarcă recenziile...",
+    "no_reviews": "Acest eveniment nu are încă recenzii."
+  },
   "roles": {
     "student": "Student",
     "organizer": "Organizator",

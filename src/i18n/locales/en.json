@@ -241,6 +241,31 @@
       }
     }
   },
+  "event_details": {
+    "not_found": "Event not found",
+    "loading": "Loading event...",
+    "back": "← Back",
+    "registration_title": "Event Registration",
+    "login_to_register": "Log in to register for this event",
+    "login": "Log In",
+    "already_registered": "You are already registered for this event",
+    "already_registered_info": "You will receive notifications and access to the event.",
+    "registering": "Registering...",
+    "register_button": "Register for event",
+    "register_info": "You will receive a confirmation notification after registration.",
+    "about_title": "About this event",
+    "no_description": "No description for this event.",
+    "agenda_title": "Event Agenda",
+    "reviews_title": "Reviews",
+    "login_to_review": "Log in to leave a review",
+    "only_participants_review": "Only participants can leave reviews for this event.",
+    "leave_review_title": "Leave a review",
+    "review_placeholder": "Write your opinion about the event...",
+    "sending_review": "Sending...",
+    "submit_review": "Submit review",
+    "loading_reviews": "Loading reviews...",
+    "no_reviews": "This event has no reviews yet."
+  },
   "roles": {
     "student": "Student",
     "organizer": "Organizer",
