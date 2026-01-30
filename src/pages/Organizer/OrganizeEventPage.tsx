@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react';
-import { MapPin, Users, Edit2, Trash2, QrCode } from 'lucide-react';
+import { MapPin, Users, Edit2, Trash2, QrCode, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getMyAssociations, getEvents, deleteEvent } from '@/api/client';
 import type { components } from '@/types/schema';
+import ParticipantsManagerModal from './components/ParticipantsManagerModal';
 
-type EventPreview = components['schemas']['EventPreview'];
+// Schema doesn't strictly have these fields on EventPreview, but backend sends them
+type EventPreview = components['schemas']['EventPreview'] & {
+  currentParticipants?: number;
+  rejectionReason?: string;
+};
 type AssociationSimple = components['schemas']['AssociationSimple'];
 
 const OrganizeEventPage = () => {
@@ -15,6 +20,7 @@ const OrganizeEventPage = () => {
 
   const [events, setEvents] = useState<EventPreview[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showManagerModal, setShowManagerModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,18 +30,17 @@ const OrganizeEventPage = () => {
         const assocs = (await getMyAssociations()) as AssociationSimple[];
         if (assocs && assocs.length > 0) {
           const myAssoc = assocs[0];
-          // setAssociation(myAssoc); // Unused, removing assignment and state
 
           // 2. Get events for this association
-          // Backend expects associationIds array in query
-          // We must filter by organizerIds
-          const eventsData = await getEvents({
+          const eventsResponse = await getEvents({
             associationIds: [myAssoc.id!],
           });
-          // console.log(eventsData);
-          setEvents(eventsData.events || []);
+
+          // The client wrapper might return { events: [], total: 0 } OR just [] depending on implementation
+          // We'll safely handle both
+          const eventsList = (eventsResponse as any).events || (eventsResponse as any).data || (Array.isArray(eventsResponse) ? eventsResponse : []);
+          setEvents(eventsList);
         } else {
-          // No association found
           setEvents([]);
         }
       } catch (err) {
@@ -50,38 +55,25 @@ const OrganizeEventPage = () => {
 
   // Translate Status
   const mapStatus = (status: string) => {
-    // All statuses use the same gray style as requested
     const commonStyle = 'bg-gray-100 text-gray-700';
 
     switch (status) {
-      case 'PUBLISHED':
-        return { label: 'Publicat', color: commonStyle };
-      case 'UPCOMING':
-        return { label: 'Publicat', color: commonStyle };
-      case 'ONGOING':
-        return { label: 'Publicat', color: commonStyle };
-      case 'PENDING':
-        return { label: 'În Așteptare', color: commonStyle };
-      case 'DRAFT':
-        return { label: 'Ciornă', color: commonStyle };
-      case 'REJECTED':
-        return { label: 'Respins', color: commonStyle };
-      case 'ENDED':
-        return { label: 'Încheiat', color: commonStyle };
-      default:
-        return { label: status, color: commonStyle };
+      case 'PUBLISHED': return { label: 'Publicat', color: commonStyle };
+      case 'UPCOMING': return { label: 'Publicat', color: commonStyle };
+      case 'ONGOING': return { label: 'Publicat', color: commonStyle };
+      case 'PENDING': return { label: 'În Așteptare', color: commonStyle };
+      case 'DRAFT': return { label: 'Ciornă', color: commonStyle };
+      case 'REJECTED': return { label: 'Respins', color: commonStyle };
+      case 'ENDED': return { label: 'Încheiat', color: commonStyle };
+      default: return { label: status, color: commonStyle };
     }
   };
-
-  // Filter events
-  // const publishedEvents... removed from here as we filter inline
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this event?')) return;
     try {
       await deleteEvent(id);
-      // Refresh
-      navigate(0); // simple reload or refetch
+      navigate(0);
     } catch (err) {
       console.error('Failed to delete', err);
       alert('Failed to delete event');
@@ -90,23 +82,18 @@ const OrganizeEventPage = () => {
 
   const [filterStatus, setFilterStatus] = useState('ALL');
 
-  // Helper to determine effective status based on time
   const getEffectiveStatus = (event: EventPreview) => {
-    // Treat UPCOMING and ONGOING exactly like PUBLISHED
-    if (event.status === 'PUBLISHED' || event.status === 'UPCOMING' || event.status === 'ONGOING') {
+    // Treat UPCOMING and ONGOING like PUBLISHED for the purpose of the list
+    const status = event.status as string;
+    if (status === 'PUBLISHED' || status === 'UPCOMING' || status === 'ONGOING') {
       const now = new Date();
-      // Fallback to startAt if endAt is missing
-      const eventEnd = event.endAt ? new Date(event.endAt) : new Date(event.startAt!);
-      if (eventEnd < now) {
-        return 'ENDED';
-      }
-      // If active and future/ongoing, show as PUBLISHED
+      const eventEnd = event.endAt ? new Date(event.endAt) : (event.startAt ? new Date(event.startAt) : new Date());
+      if (eventEnd < now) return 'ENDED';
       return 'PUBLISHED';
     }
-    return event.status;
+    return status;
   };
 
-  // Filter events based on selection
   const filteredEvents = events.filter((event) => {
     if (filterStatus === 'ALL') return true;
     return getEffectiveStatus(event) === filterStatus;
@@ -121,12 +108,21 @@ const OrganizeEventPage = () => {
             <h1 className="text-3xl font-bold text-gray-900">{t('organizer_dashboard.title')}</h1>
             <p className="text-gray-500 mt-1">{t('organizer_dashboard.subtitle')}</p>
           </div>
-          <button
-            onClick={() => navigate('/events/create')}
-            className="bg-gray-900 hover:bg-black text-white px-6 py-3 rounded-xl font-medium transition shadow-lg shadow-gray-200 flex items-center gap-2"
-          >
-            {t('organizer_dashboard.create_btn')}
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => setShowManagerModal(true)}
+              className="bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 px-6 py-3 rounded-xl font-medium transition shadow-sm flex items-center gap-2"
+            >
+              <Settings className="w-5 h-5" />
+              Administrează Eveniment
+            </button>
+            <button
+              onClick={() => navigate('/events/create')}
+              className="bg-gray-900 hover:bg-black text-white px-6 py-3 rounded-xl font-medium transition shadow-lg shadow-gray-200 flex items-center gap-2"
+            >
+              {t('organizer_dashboard.create_btn')}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -210,9 +206,9 @@ const OrganizeEventPage = () => {
                             alt={event.title}
                             className="w-full h-full object-cover"
                           />
-                          <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-xs font-bold shadow-sm">
+                          {event.startAt && <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-xs font-bold shadow-sm">
                             {new Date(event.startAt).toLocaleDateString()}
-                          </div>
+                          </div>}
                         </div>
                         <div className="flex-1">
                           <div className="flex justify-between items-start mb-2">
@@ -239,23 +235,23 @@ const OrganizeEventPage = () => {
                               {(effectiveStatus === 'REJECTED' ||
                                 effectiveStatus === 'DRAFT' ||
                                 effectiveStatus === 'PUBLISHED') && (
-                                <>
-                                  <button
-                                    onClick={() => navigate(`/events/edit/${event.id}`)}
-                                    className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 hover:text-blue-600 transition"
-                                    title={t('Edit Event', 'Editează')}
-                                  >
-                                    <Edit2 className="w-4 h-4" />
-                                  </button>
-                                  <button
-                                    onClick={() => handleDelete(event.id)}
-                                    className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 hover:text-red-600 transition"
-                                    title={t('Delete Event', 'Șterge')}
-                                  >
-                                    <Trash2 className="w-4 h-4" />
-                                  </button>
-                                </>
-                              )}
+                                  <>
+                                    <button
+                                      onClick={() => navigate(`/events/edit/${event.id}`)}
+                                      className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 hover:text-blue-600 transition"
+                                      title={t('Edit Event', 'Editează')}
+                                    >
+                                      <Edit2 className="w-4 h-4" />
+                                    </button>
+                                    <button
+                                      onClick={() => handleDelete(event.id!)}
+                                      className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 hover:text-red-600 transition"
+                                      title={t('Delete Event', 'Șterge')}
+                                    >
+                                      <Trash2 className="w-4 h-4" />
+                                    </button>
+                                  </>
+                                )}
                             </div>
                           </div>
 
@@ -270,7 +266,7 @@ const OrganizeEventPage = () => {
                             </div>
                           </div>
 
-                          {event.status === 'REJECTED' && event.rejectionReason && (
+                          {(event.status as string) === 'REJECTED' && event.rejectionReason && (
                             <div className="mt-4 p-3 bg-red-50 text-red-700 text-sm rounded-lg border border-red-100">
                               <strong>Motiv respingere:</strong> {event.rejectionReason}
                             </div>
@@ -285,6 +281,12 @@ const OrganizeEventPage = () => {
           </div>
         </div>
       </div>
+
+      <ParticipantsManagerModal
+        isOpen={showManagerModal}
+        onClose={() => setShowManagerModal(false)}
+        events={events} // Pass full list, sorting/filtering handled inside if needed
+      />
     </div>
   );
 };

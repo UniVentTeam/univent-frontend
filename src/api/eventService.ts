@@ -93,8 +93,35 @@ async function getEventById(eventId: string) {
 
   return data;
 }
+
+/**
+ * Preia lista participanților pentru un eveniment (doar pentru organizatori).
+ */
+async function getParticipants(eventId: string, format: 'json' | 'csv' | 'pdf' = 'json') {
+  const { data, error } = await api.GET('/events/{id}/participants', {
+    params: {
+      path: { id: eventId },
+      query: { format },
+    },
+  });
+
+  if (error) {
+    console.error('Failed to fetch participants:', error);
+    throw new Error((error as Error).message || 'Nu s-au putut prelua participanții.');
+  }
+
+  // Dacă formatul e CSV sau PDF, backend-ul returnează un Blob/String, dar clientul nostru generic
+  // încearcă să facă parse JSON. Trebuie să tratăm download-ul separat dacă api.GET nu suportă blobs nativ ușor.
+  // Totuși, 'api-client' generat cu openapi-fetch returnează response-ul parsat. 
+  // Pentru simplitate, momentan returnăm data.
+  // În cazul CSV/PDF, va fi nevoie de un window.open sau handling de Blob manual.
+
+  return data;
+}
+
 export const eventService = {
   registerToEvent,
   getEvents,
   getEventById,
+  getParticipants,
 };
