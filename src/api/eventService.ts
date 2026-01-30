@@ -119,9 +119,29 @@ async function getParticipants(eventId: string, format: 'json' | 'csv' | 'pdf' =
   return data;
 }
 
+/**
+ * Preia recenziile pentru un eveniment.
+ */
+async function getEventReviews(eventId: string) {
+  const { data, error } = await api.GET('/events/{id}/reviews', {
+    params: {
+      path: { id: eventId },
+    },
+  });
+
+  if (error) {
+    console.error('Failed to fetch reviews:', error);
+    // Nu aruncăm eroare critică pentru statistici, returnăm array gol
+    return [];
+  }
+
+  return data;
+}
+
 export const eventService = {
   registerToEvent,
   getEvents,
   getEventById,
   getParticipants,
+  getEventReviews,
 };

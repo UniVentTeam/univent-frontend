@@ -75,9 +75,13 @@ export const EventDetailsModal = ({ eventId, onClose, onApprove, onReject }: Eve
                                     <div className="flex items-start gap-3 text-sm">
                                         <Calendar className="w-4 h-4 text-blue-500 mt-1 shrink-0" />
                                         <div>
-                                            <p className="font-semibold text-gray-900">Data & Ora</p>
+                                            <p className="font-semibold text-gray-900">Perioada</p>
                                             <p className="text-gray-600">
-                                                {new Date(event.startAt).toLocaleDateString()} at {new Date(event.startAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                {new Date(event.startAt).toLocaleDateString()} {new Date(event.startAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                <br />
+                                                <span className="text-gray-400 text-xs">până la</span>
+                                                <br />
+                                                {new Date(event.endAt).toLocaleDateString()} {new Date(event.endAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                             </p>
                                         </div>
                                     </div>

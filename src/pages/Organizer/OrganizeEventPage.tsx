@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { getMyAssociations, getEvents, deleteEvent } from '@/api/client';
 import type { components } from '@/types/schema';
 import ParticipantsManagerModal from './components/ParticipantsManagerModal';
+import EventStatistics from '../Statistics/EventStatistics';
 
 // Schema doesn't strictly have these fields on EventPreview, but backend sends them
 type EventPreview = components['schemas']['EventPreview'] & {
@@ -143,10 +144,10 @@ const OrganizeEventPage = () => {
                   Toate Evenimentele
                 </button>
                 <button
-                  className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition ${activeTab === 'Analytics' ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50'}`}
-                  onClick={() => setActiveTab('Analytics')}
+                  className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition ${activeTab === 'Statistici' ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50'}`}
+                  onClick={() => setActiveTab('Statistici')}
                 >
-                  Analytics
+                  Statistici
                 </button>
               </div>
             </div>
@@ -154,121 +155,121 @@ const OrganizeEventPage = () => {
 
           {/* Main List */}
           <div className="lg:col-span-3 space-y-12">
-            {/* Filter Dropdown */}
-            <div className="flex justify-end">
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="bg-white border border-gray-200 text-gray-700 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block p-2.5 shadow-sm"
-              >
-                <option value="ALL">Toate Evenimentele</option>
-                <option value="PUBLISHED">Publicat</option>
-                <option value="PENDING">În Așteptare</option>
-                <option value="REJECTED">Respins</option>
-                <option value="ENDED">Încheiat</option>
-                <option value="DRAFT">Ciornă</option>
-              </select>
-            </div>
-
-            {loading ? (
-              <div className="text-center py-20 text-gray-500">Loading events...</div>
-            ) : events.length === 0 ? (
-              <div className="bg-white rounded-3xl p-12 text-center border border-gray-100">
-                <p className="text-gray-500 mb-6">Nu ai creat niciun eveniment încă.</p>
-                <button
-                  onClick={() => navigate('/events/create')}
-                  className="bg-blue-500 text-white px-6 py-3 rounded-xl font-medium"
-                >
-                  Creează Primul Eveniment
-                </button>
-              </div>
-            ) : filteredEvents.length === 0 ? (
-              <div className="text-center py-20 text-gray-500">
-                <p>Nu există evenimente cu statusul selectat.</p>
-              </div>
+            {activeTab === 'Statistici' ? (
+              <EventStatistics events={events} />
             ) : (
-              <div className="grid grid-cols-1 gap-6">
-                {filteredEvents.map((event) => {
-                  const effectiveStatus = getEffectiveStatus(event);
-                  const statusInfo = mapStatus(effectiveStatus);
-                  return (
-                    <div
-                      key={event.id}
-                      className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition group"
+              <>
+                {/* Filter Dropdown */}
+                <div className="flex justify-end">
+                  <select
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                    className="bg-white border border-gray-200 text-gray-700 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block p-2.5 shadow-sm"
+                  >
+                    <option value="ALL">Toate Evenimentele</option>
+                    <option value="PUBLISHED">Publicat</option>
+                    <option value="PENDING">În Așteptare</option>
+                    <option value="REJECTED">Respins</option>
+                    <option value="ENDED">Încheiat</option>
+                    <option value="DRAFT">Ciornă</option>
+                  </select>
+                </div>
+
+                {loading ? (
+                  <div className="text-center py-20 text-gray-500">Loading events...</div>
+                ) : events.length === 0 ? (
+                  <div className="bg-white rounded-3xl p-12 text-center border border-gray-100">
+                    <p className="text-gray-500 mb-6">Nu ai creat niciun eveniment încă.</p>
+                    <button
+                      onClick={() => navigate('/events/create')}
+                      className="bg-blue-500 text-white px-6 py-3 rounded-xl font-medium"
                     >
-                      <div className="flex flex-col md:flex-row gap-6">
-                        <div className="w-full md:w-48 h-32 bg-gray-100 rounded-xl overflow-hidden relative">
-                          <img
-                            src={
-                              event.coverImageUrl ||
-                              'https://images.unsplash.com/photo-1544531586-fde5298cdd40?q=80&w=2670'
-                            }
-                            alt={event.title}
-                            className="w-full h-full object-cover"
-                          />
-                          {event.startAt && <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-xs font-bold shadow-sm">
-                            {new Date(event.startAt).toLocaleDateString()}
-                          </div>}
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex justify-between items-start mb-2">
-                            <div>
-                              <span
-                                className={`inline-block px-2 py-1 rounded-md text-xs font-bold mb-2 ${statusInfo.color}`}
-                              >
-                                {statusInfo.label}
-                              </span>
-                              <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition">
-                                {event.title}
-                              </h3>
+                      Creează Primul Eveniment
+                    </button>
+                  </div>
+                ) : filteredEvents.length === 0 ? (
+                  <div className="text-center py-20 text-gray-500">
+                    <p>Nu există evenimente cu statusul selectat.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 gap-6">
+                    {filteredEvents.map((event) => {
+                      const effectiveStatus = getEffectiveStatus(event);
+                      const statusInfo = mapStatus(effectiveStatus);
+                      return (
+                        <div
+                          key={event.id}
+                          className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition group"
+                        >
+                          <div className="flex flex-col md:flex-row gap-6">
+                            <div className="w-full md:w-48 h-32 bg-gray-100 rounded-xl overflow-hidden relative">
+                              <img
+                                src={
+                                  event.coverImageUrl ||
+                                  'https://images.unsplash.com/photo-1544531586-fde5298cdd40?q=80&w=2670'
+                                }
+                                alt={event.title}
+                                className="w-full h-full object-cover"
+                              />
+                              {event.startAt && <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-xs font-bold shadow-sm">
+                                {new Date(event.startAt).toLocaleDateString()}
+                              </div>}
                             </div>
-                            <div className="flex gap-2 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="flex-1">
+                              <div className="flex justify-between items-start mb-2">
+                                <div>
+                                  <span
+                                    className={`inline-block px-2 py-1 rounded-md text-xs font-bold mb-2 ${statusInfo.color}`}
+                                  >
+                                    {statusInfo.label}
+                                  </span>
+                                  <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition">
+                                    {event.title}
+                                  </h3>
+                                </div>
+                                <div className="flex gap-2 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
 
-                              {(effectiveStatus === 'REJECTED' ||
-                                effectiveStatus === 'DRAFT' ||
-                                effectiveStatus === 'PUBLISHED') && (
-                                  <>
-                                    <button
-                                      onClick={() => navigate(`/events/edit/${event.id}`)}
-                                      className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 hover:text-blue-600 transition"
-                                      title={t('Edit Event', 'Editează')}
-                                    >
-                                      <Edit2 className="w-4 h-4" />
-                                    </button>
-                                    <button
-                                      onClick={() => handleDelete(event.id!)}
-                                      className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 hover:text-red-600 transition"
-                                      title={t('Delete Event', 'Șterge')}
-                                    >
-                                      <Trash2 className="w-4 h-4" />
-                                    </button>
-                                  </>
-                                )}
+                                  <button
+                                    onClick={() => navigate(`/events/edit/${event.id}`)}
+                                    className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 hover:text-blue-600 transition"
+                                    title={t('Edit Event', 'Editează')}
+                                  >
+                                    <Edit2 className="w-4 h-4" />
+                                  </button>
+                                  <button
+                                    onClick={() => handleDelete(event.id!)}
+                                    className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 hover:text-red-600 transition"
+                                    title={t('Delete Event', 'Șterge')}
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              </div>
+
+                              <div className="flex flex-wrap gap-4 text-sm text-gray-500 mt-4">
+                                <div className="flex items-center gap-1.5">
+                                  <Users className="w-4 h-4" />
+                                  <span>{event.currentParticipants || 0} enrolled</span>
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                  <MapPin className="w-4 h-4" />
+                                  <span>{event.locationName}</span>
+                                </div>
+                              </div>
+
+                              {(event.status as string) === 'REJECTED' && event.rejectionReason && (
+                                <div className="mt-4 p-3 bg-red-50 text-red-700 text-sm rounded-lg border border-red-100">
+                                  <strong>Motiv respingere:</strong> {event.rejectionReason}
+                                </div>
+                              )}
                             </div>
                           </div>
-
-                          <div className="flex flex-wrap gap-4 text-sm text-gray-500 mt-4">
-                            <div className="flex items-center gap-1.5">
-                              <Users className="w-4 h-4" />
-                              <span>{event.currentParticipants || 0} enrolled</span>
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                              <MapPin className="w-4 h-4" />
-                              <span>{event.locationName}</span>
-                            </div>
-                          </div>
-
-                          {(event.status as string) === 'REJECTED' && event.rejectionReason && (
-                            <div className="mt-4 p-3 bg-red-50 text-red-700 text-sm rounded-lg border border-red-100">
-                              <strong>Motiv respingere:</strong> {event.rejectionReason}
-                            </div>
-                          )}
                         </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
