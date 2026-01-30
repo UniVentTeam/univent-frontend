@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { eventService } from '@/api/eventService';
 import { CalendarDays, MapPin, Users } from 'lucide-react';
 import { reviewService, type Review } from '@/api/reviewService';
-import { ticketService } from '@/api/ticketService';
 import { useTranslation } from 'react-i18next';
 
 const EventDetails = () => {
@@ -21,7 +20,6 @@ const EventDetails = () => {
 
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoadingReviews, setIsLoadingReviews] = useState(true);
-  const [isCheckingRegistration, setIsCheckingRegistration] = useState(true);
 
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
@@ -126,7 +124,7 @@ const EventDetails = () => {
       <div className="bg-[var(--bg-page)] min-h-screen">
         {/* ================= HERO ================= */}
         <div className="relative h-[360px] sm:h-[420px] md:h-[480px] w-full">
-        {/* IMAGINE */}
+          {/* IMAGINE */}
           <div
             className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${event.coverImageUrl})` }}
@@ -155,11 +153,11 @@ const EventDetails = () => {
 
           {/* ================= OVERLAY (MAI JOS) ================= */}
           <div className="absolute left-0 right-0 bottom-[-180px] sm:bottom-[-220px] lg:relative lg:bottom-auto z-40 lg:mt-[-90px]">
-          <div className="max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-[2fr_1fr] gap-4 sm:gap-6 lg:gap-8 items-stretch">
-          {/* INFO EVENIMENT */}
-          <div className="bg-[var(--bg-card)] rounded-[24px] md:rounded-[28px] p-5 sm:p-7 md:p-10 shadow-xl">
-          <span
+            <div className="max-w-7xl mx-auto px-6">
+              <div className="grid lg:grid-cols-[2fr_1fr] gap-4 sm:gap-6 lg:gap-8 items-stretch">
+                {/* INFO EVENIMENT */}
+                <div className="bg-[var(--bg-card)] rounded-[24px] md:rounded-[28px] p-5 sm:p-7 md:p-10 shadow-xl">
+                  <span
                     className="inline-flex items-center mb-4 px-3 py-1 text-xs font-semibold rounded-full capitalize"
                     style={{
                       backgroundColor: 'var(--color-academic-bg)',
@@ -170,11 +168,11 @@ const EventDetails = () => {
                   </span>
 
                   <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4 md:mb-6 text-[var(--text-primary)]">
-                  {event.title}
+                    {event.title}
                   </h1>
 
                   <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-x-8 sm:gap-y-4 text-sm text-[var(--text-secondary)]">
-                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3">
                       <CalendarDays className="w-5 h-5 text-[var(--color-accent)]" />
                       <span>
                         {new Date(event.startAt).toLocaleDateString()}
@@ -196,7 +194,7 @@ const EventDetails = () => {
                 {/* CARD ÎNSCRIERE */}
                 {/* CARD ÎNSCRIERE */}
                 <div className="bg-[var(--bg-card)] rounded-[24px] md:rounded-[28px] p-5 sm:p-7 md:p-10 shadow-xl h-full flex flex-col lg:min-w-[340px]">
-                <h2 className="text-lg font-semibold mb-6 text-[var(--text-primary)]">
+                  <h2 className="text-lg font-semibold mb-6 text-[var(--text-primary)]">
                     {t('event_details.registration_title')}
                   </h2>
 
@@ -251,8 +249,8 @@ const EventDetails = () => {
 
         {/* ================= CONȚINUT PRINCIPAL ================= */}
         <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-[240px] sm:pt-[300px] lg:pt-16 pb-16 sm:pb-24 md:pb-28 space-y-8 sm:space-y-12 md:space-y-14">
-        <section className="bg-[var(--bg-card)] rounded-[24px] md:rounded-[28px] p-5 sm:p-8 md:p-12 shadow">
-        <h2 className="text-xl font-semibold mb-6 text-[var(--text-primary)]">
+          <section className="bg-[var(--bg-card)] rounded-[24px] md:rounded-[28px] p-5 sm:p-8 md:p-12 shadow">
+            <h2 className="text-xl font-semibold mb-6 text-[var(--text-primary)]">
               {t('event_details.about_title')}
             </h2>
 
@@ -267,7 +265,6 @@ const EventDetails = () => {
               </p>
             )}
 
-            {/* AGENDA */}
             {event.agenda?.length > 0 && (
               <div className="mt-8">
                 <h3 className="font-semibold mb-3 text-[var(--text-primary)]">
@@ -281,6 +278,64 @@ const EventDetails = () => {
                 </ul>
               </div>
             )}
+
+            {/* DOCUMENT ATAȘAT */}
+            {event.documentUrl && (
+              <div className="mt-8 pt-8 border-t border-[var(--border-base)]">
+                <h3 className="font-semibold mb-3 text-[var(--text-primary)]">
+                  Documente Atașate
+                </h3>
+                <a
+                  href={(() => {
+                    if (!event.documentUrl) return '#';
+
+                    // Verificare de bază URL Cloudinary
+                    if (!event.documentUrl.includes('/upload/')) return event.documentUrl;
+
+                    // Dacă avem un nume, încercăm să forțăm descărcarea cu acel nume
+                    if (event.documentName) {
+                      try {
+                        const parts = event.documentUrl.split('/upload/');
+                        if (parts.length === 2) {
+                          // Eliminăm extensia din nume pentru a evita duplicarea dacă Cloudinary o adaugă
+                          const nameWithoutExt = event.documentName.lastIndexOf('.') !== -1
+                            ? event.documentName.substring(0, event.documentName.lastIndexOf('.'))
+                            : event.documentName;
+
+                          // Curățare strictă: doar caractere alfanumerice
+                          const safeName = nameWithoutExt.replace(/[^a-zA-Z0-9_-]/g, '_');
+
+                          // Folosim fl_attachment:nume
+                          return `${parts[0]}/upload/fl_attachment:${safeName}/${parts[1]}`;
+                        }
+                      } catch (e) {
+                        return event.documentUrl;
+                      }
+                    }
+
+                    // Fallback: forțăm descărcarea generică
+                    const parts = event.documentUrl.split('/upload/');
+                    return `${parts[0]}/upload/fl_attachment/${parts[1]}`;
+                  })()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 p-4 bg-[var(--bg-muted)] hover:bg-[var(--bg-muted-hover)] rounded-xl transition group w-full sm:w-fit"
+                >
+                  <div className="bg-red-100 text-red-600 p-2 rounded-lg group-hover:bg-red-200 transition">
+                    {/* Using Type icon from lucide-react if imported, or generic FileText if available. We have Users, MapPin... let's check imports. Type is imported in EditEvent but not here. */}
+                    {/* Importing FileText or Download would be good. Let's just use what we have or add import. */}
+                    {/* I see MapPin, CalendarDays, Users. I should add FileText to imports. */}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /></svg>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-[var(--text-primary)] group-hover:text-blue-600 transition">
+                      {event.documentName || "Descarcă Document"}
+                    </span>
+                    <span className="text-xs text-[var(--text-secondary)]">Click pentru a vizualiza/descărca</span>
+                  </div>
+                </a>
+              </div>
+            )}
           </section>
 
 
@@ -290,9 +345,9 @@ const EventDetails = () => {
           {/* RECENZII */}
           {/* RECENZII */}
           <section className="bg-[var(--bg-card)] rounded-[24px] md:rounded-[28px] p-5 sm:p-8 md:p-12 shadow">
-          {/* HEADER */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6 sm:mb-8">
-          <h2 className="text-xl font-semibold text-[var(--text-primary)]">{t('event_details.reviews_title')}</h2>
+            {/* HEADER */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6 sm:mb-8">
+              <h2 className="text-xl font-semibold text-[var(--text-primary)]">{t('event_details.reviews_title')}</h2>
 
               {reviews.length > 0 && (
                 <span className="text-yellow-500 font-medium">
@@ -379,7 +434,7 @@ const EventDetails = () => {
             <div className="space-y-8">
               {reviews.map((review) => (
                 <div key={review.id} className="flex gap-4 sm:gap-5 border-t border-[var(--border-base)] pt-6 sm:pt-8">
-                {/* AVATAR */}
+                  {/* AVATAR */}
                   <div className="w-12 h-12 rounded-full bg-[var(--bg-muted)] flex items-center justify-center font-semibold">
                     {review.userName
                       .split(' ')

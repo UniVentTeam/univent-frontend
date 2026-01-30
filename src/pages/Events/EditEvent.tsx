@@ -22,6 +22,9 @@ const EditEvent = () => {
         description: '',
         coverImage: null as File | null,
         existingCoverUrl: '', // To show preview of existing image
+        document: null as File | null,
+        existingDocumentUrl: '',
+        existingDocumentName: '',
     });
 
     const [loading, setLoading] = useState(true); // Loading initial data
@@ -74,6 +77,9 @@ const EditEvent = () => {
                     description: event.description || '',
                     coverImage: null,
                     existingCoverUrl: event.coverImageUrl || '',
+                    document: null,
+                    existingDocumentUrl: event.documentUrl || '',
+                    existingDocumentName: event.documentName || '',
                 });
             } catch (err) {
                 console.error("Failed to load event", err);
@@ -126,7 +132,6 @@ const EditEvent = () => {
             if (form.startDate && effectiveEndDate && form.startTime && form.endTime) {
                 const startDateObj = new Date(`${form.startDate}T${form.startTime}`);
                 const endDateObj = new Date(`${effectiveEndDate}T${form.endTime}`);
-                const now = new Date();
 
                 if (status === 'PENDING') {
                     if (startDateObj >= endDateObj) {
@@ -162,6 +167,9 @@ const EditEvent = () => {
 
             if (form.coverImage) {
                 formData.append('coverImage', form.coverImage);
+            }
+            if (form.document) {
+                formData.append('document', form.document);
             }
 
             await updateEvent(id, formData);
@@ -412,6 +420,45 @@ const EditEvent = () => {
                                 </span>
                                 <span className="text-xs mt-1">
                                     {form.coverImage ? "Click to change" : t('create_event.labels.upload_subtext')}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Upload Document */}
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-gray-900">Document (PDF/DOC) - opțional</label>
+
+                            {/* Existing Document Preview */}
+                            {form.existingDocumentName && !form.document && (
+                                <div className="mb-2 p-3 bg-blue-50 border border-blue-100 rounded-lg flex items-center gap-3">
+                                    <div className="bg-blue-100 p-2 rounded-lg">
+                                        <Type className="w-5 h-5 text-blue-600" />
+                                    </div>
+                                    <div className="flex-1 overflow-hidden">
+                                        <p className="text-sm font-bold text-blue-900 truncate">{form.existingDocumentName}</p>
+                                        <p className="text-xs text-blue-600">Document curent</p>
+                                    </div>
+                                    {/* Link to view? Maybe not needed here, just info */}
+                                </div>
+                            )}
+
+                            <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-8 flex flex-col items-center justify-center text-gray-400 hover:border-blue-500 hover:text-blue-500 transition bg-gray-50 group">
+                                <input
+                                    type="file"
+                                    accept=".pdf,.doc,.docx"
+                                    onChange={(e) => {
+                                        if (e.target.files && e.target.files[0]) {
+                                            setForm(prev => ({ ...prev, document: e.target.files![0] }));
+                                        }
+                                    }}
+                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                />
+                                <Upload className="w-8 h-8 mb-2 group-hover:scale-110 transition" />
+                                <span className="font-semibold">
+                                    {form.document ? form.document.name : (form.existingDocumentName ? "Înlocuiește documentul" : "Încarcă un document")}
+                                </span>
+                                <span className="text-xs mt-1">
+                                    {form.document ? "Click to change" : "PDF, DOC, DOCX"}
                                 </span>
                             </div>
                         </div>
