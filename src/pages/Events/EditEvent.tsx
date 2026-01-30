@@ -12,7 +12,8 @@ const EditEvent = () => {
     const [form, setForm] = useState({
         title: '',
         type: '',
-        date: '',
+        startDate: '',
+        endDate: '',
         startTime: '',
         endTime: '',
         location: '',
@@ -26,6 +27,7 @@ const EditEvent = () => {
     const [loading, setLoading] = useState(true); // Loading initial data
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [isMultiDay, setIsMultiDay] = useState(false);
 
     // Fetch Event Data
     useEffect(() => {
@@ -34,26 +36,36 @@ const EditEvent = () => {
             try {
                 const event = await getEventById(id) as any;
 
-                // Parse dates logic corrected for Drafts
-                let dateStr = '';
+                // Parse dates logic
+                let startDateStr = '';
+                let endDateStr = '';
                 let startTimeStr = '';
                 let endTimeStr = '';
+                let multiDay = false;
 
                 if (event.startAt) {
                     const start = new Date(event.startAt);
-                    dateStr = start.toISOString().split('T')[0];
+                    startDateStr = start.toISOString().split('T')[0];
                     startTimeStr = start.toTimeString().slice(0, 5);
                 }
 
                 if (event.endAt) {
                     const end = new Date(event.endAt);
+                    endDateStr = end.toISOString().split('T')[0];
                     endTimeStr = end.toTimeString().slice(0, 5);
                 }
+
+                if (startDateStr && endDateStr && startDateStr !== endDateStr) {
+                    multiDay = true;
+                }
+
+                setIsMultiDay(multiDay);
 
                 setForm({
                     title: event.title || '',
                     type: event.type || '',
-                    date: dateStr,
+                    startDate: startDateStr,
+                    endDate: endDateStr,
                     startTime: startTimeStr,
                     endTime: endTimeStr,
                     location: event.locationName || '',
@@ -95,7 +107,8 @@ const EditEvent = () => {
         try {
             // Logic similar to Create: if PENDING (Publishing), validate all.
             if (status === 'PENDING') {
-                if (!form.date || !form.startTime || !form.endTime || !form.title || !form.type || !form.location) {
+                const effectiveEndDate = isMultiDay ? form.endDate : form.startDate;
+                if (!form.startDate || !effectiveEndDate || !form.startTime || !form.endTime || !form.title || !form.type || !form.location) {
                     throw new Error("Vă rugăm să completați toate câmpurile pentru a publica.");
                 }
 
@@ -108,16 +121,25 @@ const EditEvent = () => {
 
             // Construct dates properly
             let startAt = '', endAt = '';
-            if (form.date && form.startTime && form.endTime) {
-                const startDate = new Date(`${form.date}T${form.startTime}`);
-                const endDate = new Date(`${form.date}T${form.endTime}`);
+            const effectiveEndDate = isMultiDay ? form.endDate : form.startDate;
 
-                if (startDate >= endDate && status === 'PENDING') {
-                    throw new Error("Ora de început trebuie să fie înaintea orei de final.");
+            if (form.startDate && effectiveEndDate && form.startTime && form.endTime) {
+                const startDateObj = new Date(`${form.startDate}T${form.startTime}`);
+                const endDateObj = new Date(`${effectiveEndDate}T${form.endTime}`);
+                const now = new Date();
+
+                if (status === 'PENDING') {
+                    if (startDateObj >= endDateObj) {
+                        throw new Error("Data/Ora de început trebuie să fie înaintea datei/orei de final.");
+                    }
+                    // Allow editing past events? Probably not start date if it passed? 
+                    // For now let's keep it simple: if editing, maybe don't restrict past/future as strictly or assume user knows.
+                    // But if resubmitting for approval, maybe check?
+                    // Let's rely on standard logic: start must be < end.
                 }
 
-                startAt = startDate.toISOString();
-                endAt = endDate.toISOString();
+                startAt = startDateObj.toISOString();
+                endAt = endDateObj.toISOString();
             }
 
             // Build FormData
@@ -224,24 +246,37 @@ const EditEvent = () => {
                                     </select>
                                 </div>
                             </div>
+                            {/* Empty spacer or removal */}
+                        </div>
 
+                        {/* Date & Time Grid (Start) */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-gray-900">{t('create_event.labels.date')}</label>
+                                <label className="text-sm font-bold text-gray-900">Data Început</label>
                                 <div className="relative">
                                     <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                                     <input
                                         type="date"
-                                        // min={new Date().toISOString().split('T')[0]} // Allow past dates for editing? Maybe not.
-                                        value={form.date}
-                                        onChange={e => handleChange('date', e.target.value)}
+                                        // min={new Date().toISOString().split('T')[0]} // Allow past dates for editing
+                                        value={form.startDate}
+                                        onChange={e => handleChange('startDate', e.target.value)}
                                         className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition font-medium text-gray-600"
                                     />
                                 </div>
+                                {/* Toggle Switch Multi-day */}
+                                <div
+                                    className="flex items-center gap-3 mt-4 cursor-pointer group"
+                                    onClick={() => setIsMultiDay(!isMultiDay)}
+                                >
+                                    <div className={`w-9 h-5 flex items-center rounded-full p-0.5 transition-colors duration-300 ${isMultiDay ? 'bg-blue-600' : 'bg-gray-300'}`}>
+                                        <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${isMultiDay ? 'translate-x-4' : 'translate-x-0'}`} />
+                                    </div>
+                                    <label className="text-sm font-bold text-gray-700 select-none cursor-pointer group-hover:text-blue-600 transition">
+                                        Eveniment pe mai multe zile?
+                                    </label>
+                                </div>
                             </div>
-                        </div>
 
-                        {/* Time Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <label className="text-sm font-bold text-gray-900">{t('create_event.labels.start_time')}</label>
                                 <div className="relative">
@@ -254,6 +289,28 @@ const EditEvent = () => {
                                     />
                                 </div>
                             </div>
+                        </div>
+
+                        {/* Date & Time Grid (End) */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {isMultiDay ? (
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-900">Data Sfârșit</label>
+                                    <div className="relative">
+                                        <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                                        <input
+                                            type="date"
+                                            min={form.startDate || undefined}
+                                            value={form.endDate}
+                                            onChange={e => handleChange('endDate', e.target.value)}
+                                            className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition font-medium text-gray-600"
+                                        />
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="hidden md:block"></div>
+                            )}
+
                             <div className="space-y-2">
                                 <label className="text-sm font-bold text-gray-900">{t('create_event.labels.end_time')}</label>
                                 <div className="relative">

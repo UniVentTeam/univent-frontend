@@ -139,7 +139,12 @@ export const AdminRequestsTab = (): React.JSX.Element => {
                                 <div className="space-y-2 text-sm text-gray-500 mb-6 flex-1">
                                     <div className="flex items-center gap-2">
                                         <Calendar className="w-4 h-4 text-gray-400" />
-                                        <span>{new Date(event.startAt).toLocaleDateString()} &middot; {new Date(event.startAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                        <div className="flex flex-col">
+                                            <span>{new Date(event.startAt).toLocaleDateString()} {new Date(event.startAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                            <span className="text-xs text-gray-400">
+                                                - {new Date(event.endAt).toLocaleDateString()} {new Date(event.endAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            </span>
+                                        </div>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <MapPin className="w-4 h-4 text-gray-400" />
