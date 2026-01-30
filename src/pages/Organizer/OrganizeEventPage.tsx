@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MapPin, Users, Edit2, Trash2, QrCode, Settings } from 'lucide-react';
+import { MapPin, Users, Edit2, Trash2, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getMyAssociations, getEvents, deleteEvent } from '@/api/client';
@@ -223,15 +223,7 @@ const OrganizeEventPage = () => {
                               </h3>
                             </div>
                             <div className="flex gap-2 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
-                              {effectiveStatus === 'PUBLISHED' && (
-                                <button
-                                  onClick={() => navigate(`/check-in/${event.id}`)}
-                                  className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 hover:text-green-600 transition"
-                                  title={t('organizer_dashboard.scan_qr_tooltip')}
-                                >
-                                  <QrCode className="w-4 h-4" />
-                                </button>
-                              )}
+
                               {(effectiveStatus === 'REJECTED' ||
                                 effectiveStatus === 'DRAFT' ||
                                 effectiveStatus === 'PUBLISHED') && (

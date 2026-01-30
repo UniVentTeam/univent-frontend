@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { X, Users, Download, ArrowLeft, Search, FileText } from 'lucide-react';
+import { X, Users, Download, ArrowLeft, Search, FileText, QrCode } from 'lucide-react';
 import { eventService } from '@/api/eventService';
 import type { components } from '@/types/schema';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/stores/authStore';
+import { useNavigate } from 'react-router-dom';
 
 type EventPreview = components['schemas']['EventPreview'] & {
     currentParticipants?: number;
@@ -25,6 +26,7 @@ const ParticipantsManagerModal: React.FC<ParticipantsManagerModalProps> = ({
     const [participants, setParticipants] = useState<UserProfile[]>([]);
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const navigate = useNavigate();
 
     // Reset state when modal opens/closes
     useEffect(() => {
@@ -188,6 +190,13 @@ const ParticipantsManagerModal: React.FC<ParticipantsManagerModalProps> = ({
                                     />
                                 </div>
                                 <div className="flex gap-2">
+                                    <button
+                                        onClick={() => navigate(`/check-in/${selectedEvent.id}`)}
+                                        className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg font-medium transition border border-blue-200"
+                                    >
+                                        <QrCode className="w-4 h-4" />
+                                        Scanează QR
+                                    </button>
                                     <button
                                         onClick={() => handleExport('csv')}
                                         className="flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 hover:bg-green-100 rounded-lg font-medium transition border border-green-200"
