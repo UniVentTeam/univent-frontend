@@ -20,6 +20,7 @@ const CreateEvent = () => {
     maxParticipants: '',
     description: '',
     coverImage: null as File | null,
+    document: null as File | null, // New field for document upload
   });
 
   const [loading, setLoading] = useState(false);
@@ -135,6 +136,9 @@ const CreateEvent = () => {
 
       if (form.coverImage) {
         formData.append('coverImage', form.coverImage);
+      }
+      if (form.document) {
+        formData.append('document', form.document);
       }
 
       await createEvent(formData);
@@ -366,7 +370,7 @@ const CreateEvent = () => {
 
 
 
-            {/* Upload Real */}
+            {/* Upload Cover */}
             <div className="space-y-2">
               <label className="text-sm font-bold text-gray-900">{t('create_event.labels.cover_image')}</label>
               <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-8 flex flex-col items-center justify-center text-gray-400 hover:border-blue-500 hover:text-blue-500 transition bg-gray-50 group">
@@ -382,6 +386,30 @@ const CreateEvent = () => {
                 </span>
                 <span className="text-xs mt-1">
                   {form.coverImage ? "Click to change" : t('create_event.labels.upload_subtext')}
+                </span>
+              </div>
+            </div>
+
+            {/* Upload Document */}
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-gray-900">Document (PDF/DOC) - opțional</label>
+              <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-8 flex flex-col items-center justify-center text-gray-400 hover:border-blue-500 hover:text-blue-500 transition bg-gray-50 group">
+                <input
+                  type="file"
+                  accept=".pdf,.doc,.docx"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      setForm(prev => ({ ...prev, document: e.target.files![0] }));
+                    }
+                  }}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+                <Upload className="w-8 h-8 mb-2 group-hover:scale-110 transition" />
+                <span className="font-semibold">
+                  {form.document ? form.document.name : "Încarcă un document (Regulament, Agenda, etc.)"}
+                </span>
+                <span className="text-xs mt-1">
+                  {form.document ? "Click to change" : "Sunt acceptate fisiere PDF sau Word"}
                 </span>
               </div>
             </div>
